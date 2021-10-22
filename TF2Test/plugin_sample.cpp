@@ -42,10 +42,6 @@ bool PluginSample::OnPluginLoad2(SG::IPluginManager* ifacemgr)
 		if (display)
 		{
 			ImGui::Text("Is on: %i", TF2::Interfaces::EngineClient->IsInGame());
-			if (TF2::Interfaces::ClientList && TF2::Interfaces::EngineClient->IsInGame())
-			{
-				auto pMe = TF2::IBaseEntityInternal::GetLocalPlayer();
-			}
 		}
 
 		return false;
