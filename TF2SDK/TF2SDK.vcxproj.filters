@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.hpp">
+    <ClInclude Include="TF2Config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entity\BaseEntity.hpp">
@@ -39,7 +39,7 @@
     <ClInclude Include="Studio\Studio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Consts.hpp">
+    <ClInclude Include="TF2Consts.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math\Vector.hpp">
@@ -135,6 +135,21 @@
     <ClInclude Include="Utils\bitbuf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\DebugOverlay.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Trace.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Trace.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameTrace.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameEnumerator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Impl\Entity\BaseEntity.cpp">
@@ -168,6 +183,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Impl\Utils\bitbuf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Impl\Engine\DebugOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Impl\Utils\Trace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Impl\GameProp\DataMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

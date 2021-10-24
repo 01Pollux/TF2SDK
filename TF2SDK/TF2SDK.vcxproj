@@ -25,7 +25,11 @@
     <ClInclude Include="Engine\Convar.hpp" />
     <ClInclude Include="Engine\Convar_Internal.hpp" />
     <ClInclude Include="Engine\CVar.hpp" />
+    <ClInclude Include="Engine\DebugOverlay.hpp" />
     <ClInclude Include="Engine\EngineIFace.hpp" />
+    <ClInclude Include="Engine\GameEnumerator.hpp" />
+    <ClInclude Include="Engine\GameTrace.hpp" />
+    <ClInclude Include="Engine\Trace.hpp" />
     <ClInclude Include="Engine\ModelInfo.hpp" />
     <ClInclude Include="Engine\NetChannel.hpp" />
     <ClInclude Include="Engine\SoundFlags.hpp" />
@@ -36,8 +40,8 @@
     <ClInclude Include="Studio\BoneCache.hpp" />
     <ClInclude Include="Studio\Consts.hpp" />
     <ClInclude Include="Utils\AutoList.hpp" />
-    <ClInclude Include="Config.hpp" />
-    <ClInclude Include="Consts.hpp" />
+    <ClInclude Include="TF2Config.hpp" />
+    <ClInclude Include="TF2Consts.hpp" />
     <ClInclude Include="Engine\ClientDll.hpp" />
     <ClInclude Include="Entity\BaseEntity.hpp" />
     <ClInclude Include="Entity\ClientEntity.hpp" />
@@ -55,6 +59,7 @@
     <ClInclude Include="Math\Vector.hpp" />
     <ClInclude Include="Utils\bitbuf.hpp" />
     <ClInclude Include="Utils\Thunks.hpp" />
+    <ClInclude Include="Utils\Trace.hpp" />
     <ClInclude Include="Utils\UtlAlloc.hpp" />
     <ClInclude Include="Utils\UtlMemory.hpp" />
     <ClInclude Include="Utils\UtlVector.hpp" />
@@ -62,10 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Impl\Engine\Convar.cpp" />
+    <ClCompile Include="Impl\Engine\DebugOverlay.cpp" />
     <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
     <ClCompile Include="Impl\Entity\BaseWeapon.cpp" />
     <ClCompile Include="Impl\Entity\EconEntity.cpp" />
+    <ClCompile Include="Impl\GameProp\DataMap.cpp" />
     <ClCompile Include="Impl\Utils\bitbuf.cpp" />
+    <ClCompile Include="Impl\Utils\Trace.cpp" />
     <ClCompile Include="Impl\Utils\Vector.cpp" />
     <ClCompile Include="Impl\Interfaces.cpp" />
     <ClCompile Include="Impl\Entity\BaseEntity.cpp" />

@@ -135,7 +135,7 @@ public:
 	DECL_RECVPROP(Angle_F,				"m_angRotation",		AngRotation, 0);
 
 	DECL_RECVPROP(ICollideable,			"m_Collision",			CollisionProp, 0);
-	DECL_RECVPROP(int,					"m_CollisionGroup",		CollisionGroup, 0);
+	DECL_RECVPROP(Const::EntCollisionGroup,"m_CollisionGroup",		CollisionGroup, 0);
 
 	DECL_RECVPROP(float,				"m_flSimulationTime",	SimulationTime, 0);
 	DECL_RECVPROP(float,				"m_flAnimTime",			AnimationTime, 0);
@@ -158,6 +158,18 @@ public:
 			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
 		}()
 	);
+
+	struct Fpp4 {
+		static IBaseEntityInternal* f(IBaseEntityInternal* pent)
+		{
+			return pent;
+	}
+		static void oo()
+		{
+		}
+	};
+	SG_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
+	SG_DECL_DATAMAP(IBaseEntityInternal,	uint32_t,			true,		"m_iEFlags",	EntFlags, 0);
 
 #undef DECL_RECVPROP
 };

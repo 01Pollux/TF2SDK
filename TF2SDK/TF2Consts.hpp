@@ -269,7 +269,7 @@ namespace DmgInfo
 
 
 // edict->movetype values
-enum class EntMoveType
+enum class EntMoveType : uint8_t
 {
 	// never moves
 	None,

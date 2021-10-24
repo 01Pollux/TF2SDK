@@ -187,28 +187,18 @@ struct EntityDataMap
 };
 
 
-//
-//
-//namespace PropFinder
-//{
-//	/// <summary>
-//	/// Find RecvProp from ClientClass
-//	/// </summary>
-//	/// <param name="pProp">[out] pointer to RecvProp*</param>
-//	/// <param name="pOffset">[out] pointer to offset</param>
-//	/// <returns>true if the prop exists, false otherwise</returns>
-//	SG_SDK_TF2
-//	bool FindDataMap(ClientClass* pClass, const char* prop_name, RecvProp** pProp, uint32_t* pOffset);
-//
-//	/// <summary>
-//	/// Find RecvProp from class name
-//	/// </summary>
-//	/// <param name="pProp">[out] pointer to RecvProp*</param>
-//	/// <param name="pOffset">[out] pointer to offset</param>
-//	/// <returns>true if the prop exists, false otherwise</returns>
-//	SG_SDK_TF2
-//	bool FindDataMap(const char* class_name, const char* prop_name, RecvProp** pProp, uint32_t* pOffset);
-//}
+
+namespace PropFinder
+{
+	/// <summary>
+	/// Find Datamap on an entity
+	/// </summary>
+	/// <param name="pProp">[out] pointer to RecvProp*</param>
+	/// <param name="pOffset">[out] pointer to offset</param>
+	/// <returns>true if the prop exists, false otherwise</returns>
+	SG_SDK_TF2
+	bool FindDataMap(EntityDataMap* datamap, const char* prop_name, DM_TypeDescription** pDesc, uint32_t* pOffset);
+}
 
 
 TF2_NAMESPACE_END();

@@ -197,5 +197,19 @@ SG_DECL_UNKOWN_PROP(																	\
 	ExtraOffset																			\
 )
 
+#define SG_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)		\
+SG_DECL_UNKOWN_PROP(																	\
+	Class, 																				\
+	Type, 																				\
+	[](auto datamap)																	\
+	{																					\
+		uint32_t offset{ };																\
+		PropFinder::FindDataMap(datamap, Prop_Name, nullptr, &offset);					\
+		return offset;																	\
+	}(((Class*)(offset_to_this()))->GetDataMap(Is_Pred)),								\
+	Custom_Name,																		\
+	ExtraOffset																			\
+)
+
 
 TF2_NAMESPACE_END();

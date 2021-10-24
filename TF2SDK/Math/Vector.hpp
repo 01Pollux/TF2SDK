@@ -270,11 +270,12 @@ public:
 		}																				\
 		return *this;																	\
 	}																					\
-	constexpr VectorXD& operator##SYMBOL##=(value_type other) noexcept					\
+	template<typename _VTy>																\
+	constexpr VectorXD& operator##SYMBOL##=(_VTy other) noexcept						\
 	{																					\
 		for (reference v : m_Data)														\
 		{																				\
-			v SYMBOL##= other;															\
+			v SYMBOL##= static_cast<value_type>(other);									\
 		}																				\
 		return *this;																	\
 	}																					\
@@ -292,7 +293,8 @@ public:
 		}																				\
 		return res;																		\
 	}																					\
-	_NODISCARD constexpr VectorXD operator##SYMBOL(value_type other) const noexcept		\
+	template<typename _VTy>																\
+	_NODISCARD constexpr VectorXD operator##SYMBOL(_VTy other) const noexcept			\
 	{																					\
 		VectorXD res{ };																\
 		auto rit = res.begin();															\
@@ -302,7 +304,7 @@ public:
 			meit++, rit++																\
 		)																				\
 		{																				\
-			*rit = *meit SYMBOL other;													\
+			*rit = *meit SYMBOL static_cast<value_type>(other);							\
 		}																				\
 		return res;																		\
 	}
@@ -314,6 +316,15 @@ public:
 
 
 #undef VECTORXD_IMPL_MATH_OP
+
+	VectorXD& operator=(value_type val) noexcept
+	{
+		for (auto meit = begin(); meit != end(); meit++)
+		{
+			*meit = val;
+		}
+		return *this;
+	}
 
 	_NODISCARD constexpr VectorXD operator-() const noexcept
 	{

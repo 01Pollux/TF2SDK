@@ -16,7 +16,6 @@ namespace Interfaces
 }
 
 
-
 struct ModelInfo;
 struct studiohdr_t;
 struct vcollide_t;
@@ -32,6 +31,17 @@ class IClientRenderable;
 class IPhysCollide;
 class EngTrace;
 class IModelLoadCallback;
+
+namespace Const
+{
+	enum class ModelType
+	{
+		Bad,
+		Brush,
+		Sprite,
+		Studio
+	};
+}
 
 class IVModelInfo_Internal
 {
@@ -52,7 +62,7 @@ public:
 	virtual void					GetModelBounds(const ModelInfo* model, Vector3D_F& mins, Vector3D_F& maxs) abstract;
 	virtual	void					GetModelRenderBounds(const ModelInfo* model, Vector3D_F& mins, Vector3D_F& maxs) abstract;
 	virtual int						GetModelFrameCount(const ModelInfo* model) abstract;
-	virtual int						GetModelType(const ModelInfo* model) abstract;
+	virtual Const::ModelType		GetModelType(const ModelInfo* model) abstract;
 	virtual void*					GetModelExtraData(const ModelInfo* model) abstract;
 	virtual bool					ModelHasMaterialProxy(const ModelInfo* model) abstract;
 	virtual bool					IsTranslucent(ModelInfo const* model) abstract;
@@ -196,4 +206,6 @@ struct ModelInfo
 		uint8_t			_PadSprite[16];
 	};
 };
+
+
 TF2_NAMESPACE_END();

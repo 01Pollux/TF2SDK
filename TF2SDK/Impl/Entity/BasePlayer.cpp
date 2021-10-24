@@ -175,8 +175,9 @@ namespace Utils
 		const Vector3D_F to_target = end - start;
 		VectorAngles(to_target, res);
 
+		ITFPlayer ps;
 		if (useLocalPunchAng)
-			res -= ITFPlayer(true)->PunchAngle;
+			res -= ITFPlayer(true)->PunchAngle.get();
 
 		ClampAngle(res);
 		return res;

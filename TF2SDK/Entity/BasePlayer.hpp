@@ -277,7 +277,7 @@ public:
 
 	Vector3D_F EyePosition() const
 	{
-		return VecOrigin.get() + ViewOffset;
+		return VecOrigin.get() + ViewOffset.get();
 	}
 
 	void EyeVectors(Vector3D_F* fwd = nullptr, Vector3D_F* right = nullptr, Vector3D_F* up = nullptr) const
