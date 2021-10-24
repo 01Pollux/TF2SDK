@@ -2,7 +2,7 @@
 
 #include <list>
 #include <memory>
-#include "Config.hpp"
+#include "TF2Config.hpp"
 
 TF2_NAMESPACE_BEGIN(::Utils);
 

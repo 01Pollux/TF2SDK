@@ -1,5 +1,5 @@
 
-#include "Config.hpp"
+#include "TF2Config.hpp"
 #include "Interfaces/GameData.hpp"
 #include "Utils/Thunks.hpp"
 

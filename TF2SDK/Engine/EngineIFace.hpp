@@ -3,7 +3,7 @@
 #include "Math/Vector.hpp"
 #include "Math/Matrix.hpp"
 #include "SoundFlags.hpp"
-#include "../Consts.hpp"
+#include "TF2Consts.hpp"
 
 TF2_NAMESPACE_BEGIN();
 

@@ -1,7 +1,7 @@
 #include "Interfaces/InterfacesSys.hpp"
 #include "Defines.hpp"
 
-#include "Config.hpp"
+#include "TF2Config.hpp"
 
 #include "Engine/ClientDll.hpp"
 #include "Client/EntityList.hpp"

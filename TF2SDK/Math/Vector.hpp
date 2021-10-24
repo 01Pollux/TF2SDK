@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <array>
 #include <cmath>
-#include "Config.hpp"
+#include "TF2Config.hpp"
 
 
 TF2_NAMESPACE_BEGIN();

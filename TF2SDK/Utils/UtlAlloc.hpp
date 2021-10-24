@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Config.hpp"
+#include "TF2Config.hpp"
 
 TF2_NAMESPACE_BEGIN(::Utils::VAlloc);
 

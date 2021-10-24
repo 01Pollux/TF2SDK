@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Config.hpp"
+#include "TF2Config.hpp"
 #include "UtlMemory.hpp"
 
 TF2_NAMESPACE_BEGIN(::Utils);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Config.hpp"
+#include "TF2Config.hpp"
 #include "ConVar_Internal.hpp"
 
 TF2_NAMESPACE_BEGIN();

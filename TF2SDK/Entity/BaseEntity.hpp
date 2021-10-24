@@ -3,7 +3,7 @@
 #include <Interfaces/GameData.hpp>
 #include "ClientEntity.hpp"
 #include "HandleEntity.hpp"
-#include "Consts.hpp"
+#include "TF2Consts.hpp"
 #include "Math/Vector.hpp"
 #include "GameProp/GameProp.hpp"
 

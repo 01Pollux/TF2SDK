@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Consts.hpp"
+#include "TF2Consts.hpp"
 
 TF2_NAMESPACE_BEGIN();
 
