@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TF2SDK", "TF2SDK\TF2SDK.vcxproj", "{E8A9B7AE-6B99-4591-A15D-F33918E90544}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cheat Pack 1", "Cheat Pack 1\Cheat Pack 1.vcxproj", "{953152BF-CD9F-4125-9AE6-A9799840FEC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{E8A9B7AE-6B99-4591-A15D-F33918E90544}.Release|x64.Build.0 = Release|x64
 		{E8A9B7AE-6B99-4591-A15D-F33918E90544}.Release|x86.ActiveCfg = Release|Win32
 		{E8A9B7AE-6B99-4591-A15D-F33918E90544}.Release|x86.Build.0 = Release|Win32
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Debug|x64.ActiveCfg = Debug|x64
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Debug|x64.Build.0 = Debug|x64
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Debug|x86.ActiveCfg = Debug|Win32
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Debug|x86.Build.0 = Debug|Win32
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Release|x64.ActiveCfg = Release|x64
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Release|x64.Build.0 = Release|x64
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Release|x86.ActiveCfg = Release|Win32
+		{953152BF-CD9F-4125-9AE6-A9799840FEC6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

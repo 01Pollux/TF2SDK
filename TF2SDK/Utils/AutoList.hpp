@@ -54,11 +54,5 @@ private:
 	static inline std::unique_ptr<container_type> Entries;
 };
 
-class MyCls : IAutoList<MyCls>
-{
-public:
-
-};
-
 
 TF2_NAMESPACE_END();
