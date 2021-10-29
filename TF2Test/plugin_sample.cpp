@@ -24,28 +24,7 @@ bool PluginSample::OnPluginLoad2(SG::IPluginManager* ifacemgr)
 {
 	ImGui::SetCurrentContext(SG::ImGuiLoader->GetContext());
 	TF2::Interfaces::SDKManager::Config tf2_config;
-	tf2_config.Engine.EngineClient = true;
-	tf2_config.Client.ClientDLL = true;
-	tf2_config.Client.ClientList = true;
-
-
 	m_TF2Sdk.init(SG::LibManager->OpenGameData(this), tf2_config, std::initializer_list{ "/GameData/Entity" });
 
-	SG::ImGuiLoader->AddCallback(
-		this,
-		"Tf2 Test",
-		[] () -> bool
-	{
-		static bool display = false;
-		ImGui::Checkbox("Display", &display);
-
-		if (display)
-		{
-			ImGui::Text("Is on: %i", TF2::Interfaces::EngineClient->IsInGame());
-		}
-
-		return false;
-	}
-	);
 	return true;
 }

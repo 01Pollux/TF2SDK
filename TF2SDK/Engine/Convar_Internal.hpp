@@ -182,7 +182,7 @@ public:
 	const char* HelpString{ };
 
 	// ConVar flags
-	uint32_t Flags;
+	uint32_t Flags{ };
 
 protected:
 	// ConVars add themselves to this list for the executable. 

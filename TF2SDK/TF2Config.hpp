@@ -24,6 +24,12 @@ namespace TF2 = SG::TF2;
 
 #define TF2_EXPORT_INTERFACE(CLASS, NAME, KEY)	\
 inline CLASS* NAME;								\
+static constexpr inline bool NAME##_Sig = false;\
+static constexpr const char* NAME##_Key = KEY
+
+#define TF2_EXPORT_INTERFACE_S(CLASS, NAME, KEY)\
+inline CLASS* NAME;								\
+static constexpr inline bool NAME##_Sig = true;	\
 static constexpr const char* NAME##_Key = KEY
 
 
@@ -90,6 +96,26 @@ struct SDKManager::Config
 		/// ICVar and IConCommandBase
 		/// </summary>
 		bool Convar : 1{ };
+
+		/// <summary>
+		/// ISpatialPartition
+		/// </summary>
+		bool SpatialPartition : 1{ };
+
+		/// <summary>
+		/// IEngineTrace
+		/// </summary>
+		bool ClientTrace : 1{ };
+
+		/// <summary>
+		/// IVDebugOverlay
+		/// </summary>
+		bool DebugOverlay : 1{ };
+
+		/// <summary>
+		/// IValveGlobalVars
+		/// </summary>
+		bool GlobalVars : 1{ };
 	} Engine;
 
 	struct
@@ -103,6 +129,26 @@ struct SDKManager::Config
 		/// IClientEntityList
 		/// </summary>
 		bool ClientList : 1{ };
+		
+		/// <summary>
+		/// IGameRules
+		/// </summary>
+		bool GameRules : 1{ };
+
+		/// <summary>
+		/// IPrediction
+		/// </summary>
+		bool Prediction : 1{ };
+
+		/// <summary>
+		/// IGameMovement
+		/// </summary>
+		bool GameMovement : 1{ };
+
+		/// <summary>
+		/// IClientTools
+		/// </summary>
+		bool ClientTools : 1{ };
 	} Client;
 
 	struct
@@ -111,17 +157,12 @@ struct SDKManager::Config
 		/// IBaseServertDLL
 		/// </summary>
 		bool ServerDLL : 1{ };
-	} Server;
 
-	struct
-	{
 		/// <summary>
-		/// IBaseEntity
-		/// Enable the use of CBaseEntity's signatures
-		/// 'CBaseEntity.signatures.tf2.json'
+		/// IServerTools
 		/// </summary>
-		bool BaseEntity : 1{ };
-	} Entity;
+		bool ServerTools : 1{ };
+	} Server;
 };
 
 

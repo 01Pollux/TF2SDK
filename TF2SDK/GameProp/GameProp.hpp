@@ -1,3 +1,4 @@
+#pragma once
 
 #include "RecvProp.hpp"
 #include "SendProp.hpp"
@@ -123,16 +124,17 @@ public:
 	_NODISCARD constexpr size_t size() const noexcept	{ return sizeof(type) / sizeof(std::remove_extent_t<type>); }
 
 	uintptr_t get_this() const noexcept					{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
+	uintptr_t get_this() noexcept						{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
 
 private:
 	pointer get_ptr() noexcept
 	{
-		return std::bit_cast<pointer>(get_this() + typeinfo::offset_to_prop());
+		return std::bit_cast<pointer>(get_this() + get_offset());
 	}
 
 	const_pointer get_ptr() const noexcept
 	{
-		return std::bit_cast<const_pointer>(get_this() + typeinfo::offset_to_prop());
+		return std::bit_cast<const_pointer>(get_this() + get_offset());
 	}
 
 	reference get_ref() noexcept
@@ -147,27 +149,60 @@ private:
 
 	size_t get_offset() const noexcept
 	{
-		return _TypeInfo::offset_to_prop();
+		if constexpr (_TypeInfo::use_this_ptr)
+		{
+			static uint32_t offset = _TypeInfo::offset_to_prop(get_this());
+			return offset;
+		}
+		else
+		{
+			static uint32_t offset = _TypeInfo::offset_to_prop();
+			return offset;
+		}
 	}
 };
 
 
 
 #define SG_DECL_UNKOWN_PROP(Class, Type, GETTER, CustomName, EXTRA)					\
-struct TypeInfo_##CustomName														\
+struct TypeInfo_##CustomName##Class													\
 {																					\
 	using type = Type;																\
+	static constexpr bool use_this_ptr = false;										\
 	static constexpr size_t offset_to_this() noexcept								\
 	{																				\
 		return offsetof(Class, CustomName);											\
 	}																				\
 	static size_t offset_to_prop() noexcept											\
 	{																				\
-		static uint32_t offset{ GETTER + EXTRA };									\
-		return offset;																\
+		return GETTER + EXTRA;														\
+	}																				\
+	static size_t offset_to_prop(uintptr_t) noexcept								\
+	{																				\
+		return 0;																	\
 	}																				\
 };																					\
-UnknowProp<TypeInfo_##CustomName> CustomName
+UnknowProp<TypeInfo_##CustomName##Class> CustomName
+
+#define SG_DECL_UNKOWN_PROP_THIS(Class, Type, GETTER, CustomName, EXTRA)			\
+struct TypeInfo_##CustomName##Class													\
+{																					\
+	using type = Type;																\
+	static constexpr bool use_this_ptr = true;										\
+	static constexpr size_t offset_to_this() noexcept								\
+	{																				\
+		return offsetof(Class, CustomName);											\
+	}																				\
+	static size_t offset_to_prop() noexcept											\
+	{																				\
+		return 0;																	\
+	}																				\
+	static size_t offset_to_prop(uintptr_t pthis) noexcept							\
+	{																				\
+		return GETTER + EXTRA;														\
+	}																				\
+};																					\
+UnknowProp<TypeInfo_##CustomName##Class> CustomName
 
 #define SG_DECL_RECVPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
 SG_DECL_UNKOWN_PROP(																	\
@@ -198,15 +233,15 @@ SG_DECL_UNKOWN_PROP(																	\
 )
 
 #define SG_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)		\
-SG_DECL_UNKOWN_PROP(																	\
+SG_DECL_UNKOWN_PROP_THIS(																\
 	Class, 																				\
 	Type, 																				\
-	[](auto datamap)																	\
+	[pthis](auto datamap)																\
 	{																					\
 		uint32_t offset{ };																\
 		PropFinder::FindDataMap(datamap, Prop_Name, nullptr, &offset);					\
 		return offset;																	\
-	}(((Class*)(offset_to_this()))->GetDataMap(Is_Pred)),								\
+	}(((Class*)(pthis))->GetDataMap(Is_Pred)),											\
 	Custom_Name,																		\
 	ExtraOffset																			\
 )

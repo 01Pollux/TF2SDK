@@ -8,17 +8,17 @@ class IClientEntity : public IClientUnknown, public IClientRenderable, public IC
 {
 public:
 	// Delete yourself.
-	virtual void			Release() = 0;
+	virtual void			Release() abstract;
 
 	// Network origin + angles
-	virtual const Vector3D_F&	GetAbsOrigin() const = 0;
-	virtual const Angle_F&	GetAbsAngles() const = 0;
+	virtual const Vector3D_F&	GetAbsOrigin() const abstract;
+	virtual const Angle_F&	GetAbsAngles() const abstract;
 
-	virtual CMouthInfo*		GetMouth() = 0;
+	virtual CMouthInfo*		GetMouth() abstract;
 
 	// Retrieve sound spatialization info for the specified sound on this entity
 	// Return false to indicate sound is not audible
-	virtual bool			GetSoundSpatialization(SpatializationInfo& info) = 0;
+	virtual bool			GetSoundSpatialization(SpatializationInfo& info) abstract;
 };
 
 TF2_NAMESPACE_END();

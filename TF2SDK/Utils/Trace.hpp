@@ -6,9 +6,9 @@
 
 TF2_NAMESPACE_BEGIN(::Utils);
 
-using TraceFilterCallback = std::function<bool(IBaseEntityInternal*, int)>;
+using TraceFilterCallback = std::function<bool(IBaseEntityInternal*, uint32_t)>;
 
-class GenericFilter : public ITraceFilter
+class FilterGeneric : public ITraceFilter
 {
 public:
 	Const::GameTraceType GetTraceType() const override
@@ -31,7 +31,7 @@ public:
 class FilterWorldOnly : public ITraceFilter
 {
 public:
-	bool ShouldHitEntity(IClientUnknown*, int) final
+	bool ShouldHitEntity(IClientUnknown*, uint32_t) final
 	{
 		return false;
 	}
@@ -46,7 +46,7 @@ public:
 class FilterWorldAndPropsOnly : public ITraceFilter
 {
 public:
-	bool ShouldHitEntity(IClientUnknown*, int) final
+	bool ShouldHitEntity(IClientUnknown*, uint32_t) final
 	{
 		return false;
 	}
@@ -58,10 +58,10 @@ public:
 };
 
 
-class FilterHitAll : public GenericFilter
+class FilterHitAll : public FilterGeneric
 {
 public:
-	bool ShouldHitEntity(IClientUnknown*, int) final
+	bool ShouldHitEntity(IClientUnknown*, uint32_t) final
 	{
 		return true;
 	}
@@ -73,82 +73,41 @@ public:
 };
 
 
-class FilterSimple : public GenericFilter
+class FilterSimple : public FilterGeneric
 {
 public:
-	FilterSimple(const IBaseEntityInternal* pIgnore = nullptr, const TraceFilterCallback& extra = nullptr) noexcept : m_IgnoreEntity(pIgnore), m_Callback(extra) { };
+	FilterSimple(
+		const IBaseEntityInternal* ignore = nullptr,
+		Const::EntCollisionGroup collision_group = Const::EntCollisionGroup::None, 
+		const TraceFilterCallback& extra = nullptr
+	) noexcept : m_IgnoreEntity(ignore), m_CollisionGroup(collision_group), m_Callback(extra) { };
 
-	SG_SDK_TF2 bool ShouldHitEntity(IClientUnknown* pUnk, int mask) override;
+	SG_SDK_TF2 bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override;
 
 protected:
-	const IBaseEntityInternal* m_IgnoreEntity{ };
+	const IBaseEntityInternal* m_IgnoreEntity;
+	const Const::EntCollisionGroup m_CollisionGroup;
 	const TraceFilterCallback m_Callback;
 };
 
 
-class FilterIgnoreAllExcept : public GenericFilter
+class FilterIgnoreAllExcept : public FilterSimple
 {
 public:
-	FilterIgnoreAllExcept(std::initializer_list<IBaseEntityInternal*> entries) noexcept : m_Entities(entries) { };
+	FilterIgnoreAllExcept(
+		std::vector<const IBaseEntityInternal*> entries,
+		const IBaseEntityInternal* ignore = nullptr,
+		Const::EntCollisionGroup collision_group = Const::EntCollisionGroup::None,
+		const TraceFilterCallback& extra = nullptr
+		) noexcept : FilterSimple(ignore, collision_group, extra), m_Entities(entries) { };
 
-	bool ShouldHitEntity(IClientUnknown* pUnk, int) override
+	bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override
 	{
-		if (!pUnk)
-			return false;
-
 		for (auto entity : m_Entities)
 			if (pUnk == entity)
-				return true;
+				return FilterSimple::ShouldHitEntity(pUnk, mask);
 
 		return false;
-	}
-
-	void reserve(size_t size)
-	{
-		m_Entities.reserve(size);
-	}
-
-	void add(IBaseEntityInternal* ent) noexcept
-	{
-		m_Entities.push_back(ent);
-	}
-
-protected:
-	std::vector<IBaseEntityInternal*> m_Entities;
-};
-
-class FilterIgnoreAllExceptOne : public GenericFilter
-{
-public:
-	FilterIgnoreAllExceptOne(const IBaseEntityInternal* ent) noexcept : Entity(ent) { };
-
-	bool ShouldHitEntity(IClientUnknown* pUnk, int) override
-	{
-		if (pUnk == Entity)
-			return true;
-
-		return false;
-	}
-
-protected:
-	const IBaseEntityInternal* Entity;
-};
-
-class FilterAcceptAllExcept : public GenericFilter
-{
-public:
-	FilterAcceptAllExcept(std::initializer_list<const IBaseEntityInternal*> entries) noexcept : m_Entities(entries) { };
-
-	bool ShouldHitEntity(IClientUnknown* incoming, int) override
-	{
-		if (!incoming)
-			return false;
-
-		for (auto entity : m_Entities)
-			if (incoming == entity)
-				return false;
-
-		return true;
 	}
 
 	void reserve(size_t size)
@@ -165,17 +124,79 @@ protected:
 	std::vector<const IBaseEntityInternal*> m_Entities;
 };
 
-class FilterAcceptAllExceptOne : public GenericFilter
+
+class FilterIgnoreAllExceptOne : public FilterSimple
 {
 public:
-	FilterAcceptAllExceptOne(const IBaseEntityInternal* ent) noexcept : m_Entity(ent) { };
+	FilterIgnoreAllExceptOne(
+		const IBaseEntityInternal* entity,
+		const IBaseEntityInternal* ignore = nullptr,
+		Const::EntCollisionGroup collision_group = Const::EntCollisionGroup::None,
+		const TraceFilterCallback& extra = nullptr
+	) noexcept : FilterSimple(ignore, collision_group, extra), m_Entity(entity) { };
 
-	bool ShouldHitEntity(IClientUnknown* pUnk, int) override
+	bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override
+	{
+		if (pUnk == m_Entity)
+			return FilterSimple::ShouldHitEntity(pUnk, mask);
+
+		return false;
+	}
+
+protected:
+	const IBaseEntityInternal* m_Entity;
+};
+
+
+class FilterAcceptAllExcept : public FilterSimple
+{
+public:
+	FilterAcceptAllExcept(
+		std::vector<const IBaseEntityInternal*> entries,
+		const IBaseEntityInternal* ignore = nullptr,
+		Const::EntCollisionGroup collision_group = Const::EntCollisionGroup::None,
+		const TraceFilterCallback& extra = nullptr
+	) noexcept : FilterSimple(ignore, collision_group, extra), m_Entities(entries) { };
+
+	bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override
+	{
+		for (auto entity : m_Entities)
+			if (pUnk == entity)
+				return false;
+
+		return FilterSimple::ShouldHitEntity(pUnk, mask);
+	}
+
+	void reserve(size_t size)
+	{
+		m_Entities.reserve(size);
+	}
+
+	void add(const IBaseEntityInternal* ent) noexcept
+	{
+		m_Entities.push_back(ent);
+	}
+
+protected:
+	std::vector<const IBaseEntityInternal*> m_Entities;
+};
+
+class FilterAcceptAllExceptOne : public FilterSimple
+{
+public:
+	FilterAcceptAllExceptOne(
+		const IBaseEntityInternal* entity,
+		const IBaseEntityInternal* ignore = nullptr,
+		Const::EntCollisionGroup collision_group = Const::EntCollisionGroup::None,
+		const TraceFilterCallback& extra = nullptr
+	) noexcept : FilterSimple(ignore, collision_group, extra), m_Entity(entity) { };
+
+	bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override
 	{
 		if (m_Entity == pUnk)
 			return false;
 
-		return pUnk != nullptr;
+		return FilterSimple::ShouldHitEntity(pUnk, mask);
 	}
 
 protected:

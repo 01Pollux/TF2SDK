@@ -191,7 +191,7 @@ namespace Const
 class ITraceFilter
 {
 public:
-	virtual bool ShouldHitEntity(IClientUnknown* pUnk, int contentsMask) abstract;
+	virtual bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t contentsMask) abstract;
 
 	virtual Const::GameTraceType GetTraceType() const abstract;
 };

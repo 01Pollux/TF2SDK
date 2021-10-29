@@ -350,77 +350,72 @@ enum class EntSolidType
 };
 
 
-enum class EntSolidFlags
+namespace EntSolidFlags
 {
 	// Ignore solid type + always call into the entity for ray tests
-	Custom_Ray_Test,
+	constexpr uint32_t Custom_Ray_Test			= 0x0001;
 	// Ignore solid type + always call into the entity for swept box tests
-	Custom_Box_Test,
+	constexpr uint32_t Custom_Box_Test			= 0x0002;
 	// Are we currently not solid?
-	Not_Solid,
+	constexpr uint32_t Not_Solid				= 0x0004;
 	// This is something may be collideable but fires touch functions
-	Trigger,
+	constexpr uint32_t Trigger					= 0x0008;
 	// even when it's not collideable (when the FSOLID_NOT_SOLID flag is set)
 	// You can't stand on this
-	Not_Standable,
+	constexpr uint32_t Not_Standable			= 0x0010;
 	// Contains volumetric contents (like water)
-	Volume_Contents,
+	constexpr uint32_t Volume_Contents			= 0x0020;
 	// Forces the collision rep to be world-aligned even if it's SOLID_BSP or SOLID_VPHYSICS
-	Force_World_Align,
+	constexpr uint32_t Force_World_Align		= 0x0040;
 	// Uses a special trigger bounds separate from the normal OBB
-	Use_Trigger_Bounds,
-	// Collisions are defined in root parent's local coordinate space
-	Root_Parents_Align,
+	constexpr uint32_t Use_Trigger_Bounds		= 0x0080;
+	// Collisions are defined in root pare	nt's local coordinate space
+	constexpr uint32_t Root_Parents_Align		= 0x0100;
 	// This trigger will touch debris objects
-	Trigger_Touch_Debris,
-
-	_Last_Enum
+	constexpr uint32_t Trigger_Touch_Debris		= 0x0200;
 };
 
-constexpr bool IsSolidType(EntSolidType solidType, EntSolidFlags solidFlags)
+constexpr bool IsSolidType(EntSolidType solidType, uint32_t solidFlags)
 {
-	return (solidType != EntSolidType::None) && (!(static_cast<size_t>(solidFlags) & static_cast<size_t>(EntSolidFlags::Not_Solid)));
+	return (solidType != EntSolidType::None) && (solidFlags & ~EntSolidFlags::Not_Solid);
 }
 
 
 // entity effects
-enum EntEffects
+namespace EntEffects
 {
 	// Performs bone merge on client side
-	BoneMerge,
+	constexpr uint32_t BoneMerge		= 0x001;
 	// DLIGHT centered at entity origin
-	BrightLight,
+	constexpr uint32_t BrightLight		= 0x002;
 	// player flashlight
-	DimLight,
+	constexpr uint32_t DimLight			= 0x004;
 	// don't interpolate the next frame
-	NoInterp,
+	constexpr uint32_t NoInterp			= 0x008;
 	// Don't cast no shadow
-	NoShadow,
+	constexpr uint32_t NoShadow			= 0x010;
 	// don't draw entity
-	NoDraw,
+	constexpr uint32_t NoDraw			= 0x020;
 	// Don't receive no shadow
-	NoReceiveShadow,	
+	constexpr uint32_t NoReceiveshadow	= 0x040;
 	// For use with EF_BONEMERGE. If this is set, then it places this ent's origin at its
-	BoneMerge_FastCull,
+	constexpr uint32_t BoneMerge_FastCull= 0x080;
 
 	// parent and uses the parent's bbox + the max extents of the aiment.
 	// Otherwise, it sets up the parent's bones every frame to figure out where to place
 	// the aiment, which is inefficient because it'll setup the parent's bones even if
 	// the parent is not in the PVS.
 	// blink an item so that the user notices it.
-	ItemBlink,
+	constexpr uint32_t ItemBlink		= 0x100;
 	// always assume that the parent entity is animating
-	ParentAnimate,
+	constexpr uint32_t ParentAnimate	= 0x200;
 
-	_Highest_Enum
+	static constexpr size_t Bits = 3;
+	static constexpr size_t Mask = (1 << Bits) - 1;
+
+	// How many bits does the muzzle flash parity thing get?
+	static constexpr size_t MuzzleFlash_Bits = 2;
 };
-
-static constexpr size_t EntEffects_Bits = 3;
-static constexpr size_t EntEffects_Mask = (1 << EntEffects_Bits) - 1;
-
-// How many bits does the muzzle flash parity thing get?
-static constexpr size_t EntEffects_MuzzleFlash_Bits = 2;
-
 
 // Trains
 static constexpr size_t SpawFlags_Train_WaitRetrigger = 1;

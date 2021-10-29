@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client\ClientTools.hpp" />
     <ClInclude Include="Client\EntityList.hpp" />
+    <ClInclude Include="Client\GameRules.hpp" />
+    <ClInclude Include="Engine\GlobalVars.hpp" />
+    <ClInclude Include="Client\Prediction.hpp" />
     <ClInclude Include="Client\UserCmd.hpp" />
     <ClInclude Include="Engine\AppSystem.hpp" />
     <ClInclude Include="Engine\Convar.hpp" />
@@ -29,6 +33,8 @@
     <ClInclude Include="Engine\EngineIFace.hpp" />
     <ClInclude Include="Engine\GameEnumerator.hpp" />
     <ClInclude Include="Engine\GameTrace.hpp" />
+    <ClInclude Include="Utils\Checksum.hpp" />
+    <ClInclude Include="Utils\KeyValues.hpp" />
     <ClInclude Include="Engine\Trace.hpp" />
     <ClInclude Include="Engine\ModelInfo.hpp" />
     <ClInclude Include="Engine\NetChannel.hpp" />
@@ -37,6 +43,7 @@
     <ClInclude Include="Entity\BasePlayer.hpp" />
     <ClInclude Include="Entity\BaseWeapon.hpp" />
     <ClInclude Include="GameProp\GameProp.hpp" />
+    <ClInclude Include="Server\ServerTools.hpp" />
     <ClInclude Include="Studio\BoneCache.hpp" />
     <ClInclude Include="Studio\Consts.hpp" />
     <ClInclude Include="Utils\AutoList.hpp" />
@@ -58,6 +65,7 @@
     <ClInclude Include="Math\Matrix.hpp" />
     <ClInclude Include="Math\Vector.hpp" />
     <ClInclude Include="Utils\bitbuf.hpp" />
+    <ClInclude Include="Utils\Prediction.hpp" />
     <ClInclude Include="Utils\Thunks.hpp" />
     <ClInclude Include="Utils\Trace.hpp" />
     <ClInclude Include="Utils\UtlAlloc.hpp" />
@@ -66,6 +74,7 @@
     <ClInclude Include="Utils\Vector.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Impl\Client\Gamerules.cpp" />
     <ClCompile Include="Impl\Engine\Convar.cpp" />
     <ClCompile Include="Impl\Engine\DebugOverlay.cpp" />
     <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
@@ -73,6 +82,9 @@
     <ClCompile Include="Impl\Entity\EconEntity.cpp" />
     <ClCompile Include="Impl\GameProp\DataMap.cpp" />
     <ClCompile Include="Impl\Utils\bitbuf.cpp" />
+    <ClCompile Include="Impl\Utils\Checksum.cpp" />
+    <ClCompile Include="Impl\Utils\KeyValues.cpp" />
+    <ClCompile Include="Impl\Utils\Prediction.cpp" />
     <ClCompile Include="Impl\Utils\Trace.cpp" />
     <ClCompile Include="Impl\Utils\Vector.cpp" />
     <ClCompile Include="Impl\Interfaces.cpp" />

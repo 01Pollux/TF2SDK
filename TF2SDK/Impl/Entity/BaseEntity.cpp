@@ -142,5 +142,11 @@ SG_SDK_TF2 bool IBaseEntityInternal::IsHealthKit() const noexcept
 	return mdl ? strstr(mdl->ModelName, "healthkit") != nullptr : false;
 }
 
+void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel)
+{
+	static Utils::IMemberFuncThunk<IBaseEntityInternal*, Vector3D_F&> estimate_velocity(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
+	estimate_velocity(this, vel);
+}
+
 
 TF2_NAMESPACE_END();

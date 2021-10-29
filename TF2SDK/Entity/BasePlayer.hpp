@@ -294,44 +294,44 @@ public:
 	SG_SDK_TF2 void 
 		RemoveCond(Const::ETFCond cond);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		"CTFPlayer", "m_Shared",				PlayerShared, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			"CTFPlayer", "m_PlayerClass",			PlayerClass, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		Const::EntClassID::CTFPlayer, "m_Shared",				PlayerShared, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			Const::EntClassID::CTFPlayer, "m_PlayerClass",			PlayerClass, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					"CTFPlayer", "m_nDisguiseTeam",			DisguiseTeam, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					"CTFPlayer", "m_nDisguiseClass",		DisguiseClass, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					"CTFPlayer", "m_iDisguiseTargetIndex",	DisguiseTargetIndex, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					"CTFPlayer", "m_iDisguiseHealth",		DisguiseHealth, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IHandleEntity,			"CTFPlayer", "m_hDisguiseWeapon",		DisguiseWeaponb, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseTeam",		DisguiseTeam, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseClass",		DisguiseClass, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseTargetIndex",	DisguiseTargetIndex, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseHealth",		DisguiseHealth, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IHandleEntity,			Const::EntClassID::CTFPlayer, "m_hDisguiseWeapon",		DisguiseWeaponb, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flMaxspeed",			MaxSpeed, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flCloakMeter",			CloakMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flChargeMeter",			ChargeMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flRageMeter",			RageMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flHypeMeter",			HypeMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_flEnergyDrinkMeter",	EnergyDrinkMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					"CTFPlayer", "m_bRageDraining",			RageDraining, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					"CTFPlayer", "m_bFeignDeathReady",		FeignDeathReady, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					"CTFPlayer", "m_bShieldEquipped",		IsShieldEquipped, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flMaxspeed",			MaxSpeed, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flCloakMeter",			CloakMeter, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flChargeMeter",		ChargeMeter, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flRageMeter",			RageMeter, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flHypeMeter",			HypeMeter, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flEnergyDrinkMeter",	EnergyDrinkMeter, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bRageDraining",		RageDraining, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bFeignDeathReady",		FeignDeathReady, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_bShieldEquipped",		IsShieldEquipped, 0);
 
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						"CTFPlayer", "m_angEyeAngles[0]",		EyeAngles, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						"CTFPlayer", "m_vecPunchAngle",			PunchAngle, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						"CTFPlayer", "m_vecViewOffset[0]",		ViewOffset, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						"CTFPlayer", "m_vecVelocity[0]",		Velocity, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_angEyeAngles[0]",		EyeAngles, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_vecPunchAngle",		PunchAngle, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecViewOffset[0]",		ViewOffset, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecVelocity[0]",		Velocity, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle[Const::MaxPlayers], "CTFPlayer", "m_hMyWeapons",			MyWeapons, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					"CTFPlayer", "m_hActiveWeapon",			ActiveWeapon, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					"CTFPlayer", "m_hObserverTarget",		ObserverTarget, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,		"CTFPlayer", "m_iObserverMode",			ObserverMode, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle[Const::MaxPlayers], Const::EntClassID::CTFPlayer, "m_hMyWeapons",			MyWeapons, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					Const::EntClassID::CTFPlayer, "m_hActiveWeapon",		ActiveWeapon, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					Const::EntClassID::CTFPlayer, "m_hObserverTarget",		ObserverTarget, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,		Const::EntClassID::CTFPlayer, "m_iObserverMode",		ObserverMode, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,			"CTFPlayer", "m_lifeState",				LifeState, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,					"CTFPlayer", "m_iClass",				Class, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,					"CTFPlayer", "m_nStreaks",				Streaks, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,							"CTFPlayer", "m_iHealth",				CurrentHealth, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,							"CTFPlayer", "m_flDeathTime",			DeathTime, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,			Const::EntClassID::CTFPlayer, "m_lifeState",			LifeState, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,					Const::EntClassID::CTFPlayer, "m_iClass",				Class, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,					Const::EntClassID::CTFPlayer, "m_nStreaks",				Streaks, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,							Const::EntClassID::CTFPlayer, "m_iHealth",				CurrentHealth, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,							Const::EntClassID::CTFPlayer, "m_flDeathTime",			DeathTime, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		"CTFPlayer", "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		"CTFPlayer", "m_bPlayerDominated",		PlayerDominated, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		Const::EntClassID::CTFPlayer, "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		Const::EntClassID::CTFPlayer, "m_bPlayerDominated",		PlayerDominated, 0);
 };
 
 

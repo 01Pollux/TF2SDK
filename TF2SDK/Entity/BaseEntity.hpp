@@ -121,6 +121,11 @@ public:
 	SG_SDK_TF2 bool
 		IsHealthKit() const noexcept;
 
+	SG_SDK_TF2 void EstimateAbsVelocity(Vector3D_F& vel);
+	
+	/// <summary>
+	/// Tests whether the entity is class id
+	/// </summary>
 	bool IsClassID(Const::EntClassID id) const
 	{
 		return this->GetClientClass()->ClassID == id;
@@ -134,8 +139,14 @@ public:
 	DECL_RECVPROP(Vector3D_F,			"m_vecForce",			VecForce, 0);
 	DECL_RECVPROP(Angle_F,				"m_angRotation",		AngRotation, 0);
 
-	DECL_RECVPROP(ICollideable,			"m_Collision",			CollisionProp, 0);
-	DECL_RECVPROP(Const::EntCollisionGroup,"m_CollisionGroup",		CollisionGroup, 0);
+	DECL_RECVPROP(ICollideable,				"m_Collision",			CollisionProp, 0);
+	DECL_RECVPROP(Vector3D_F,				"m_vecMinsPreScaled",	MinsPrescaled, 0);
+	DECL_RECVPROP(Vector3D_F,				"m_vecMaxsPreScaled",	MaxsPrescaled, 0);
+	DECL_RECVPROP(Vector3D_F,				"m_vecMins",			Mins, 0);
+	DECL_RECVPROP(Vector3D_F,				"m_vecMaxs",			Maxs, 0);
+	DECL_RECVPROP(Const::EntSolidType,		"m_nSolidType",			SolidType, 0);
+	DECL_RECVPROP(uint32_t,					"m_usSolidFlags",		SolidFlags, 0);
+	DECL_RECVPROP(Const::EntCollisionGroup,	"m_CollisionGroup",		CollisionGroup, 0);
 
 	DECL_RECVPROP(float,				"m_flSimulationTime",	SimulationTime, 0);
 	DECL_RECVPROP(float,				"m_flAnimTime",			AnimationTime, 0);

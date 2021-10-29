@@ -79,7 +79,7 @@ public:
 
 	// Return a SOLID_ define.
 	virtual Const::EntSolidType		GetSolid() const abstract;
-	virtual Const::EntSolidFlags	GetSolidFlags() const abstract;
+	virtual uint32_t				GetSolidFlags() const abstract;
 
 	// Gets at the containing class...
 	virtual IClientUnknown* GetIClientUnknown() abstract;

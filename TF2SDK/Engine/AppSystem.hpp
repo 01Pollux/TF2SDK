@@ -16,4 +16,10 @@ public:
 	virtual void Shutdown() abstract;
 };
 
+class IBaseInterface
+{
+public:
+	virtual	~IBaseInterface() = default;
+};
+
 TF2_NAMESPACE_END();

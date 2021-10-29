@@ -1,19 +1,18 @@
 
 #include "Utils/Trace.hpp"
 #include "Engine/ModelInfo.hpp"
+#include "Client/GameRules.hpp"
 
 TF2_NAMESPACE_BEGIN(::Utils);
 
 
-bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, int mask)
+bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 {
 	IBaseEntity pEnt(pUnk->GetBaseEntity());
 	if (!pEnt)
 		return false;
 
-	ICollideable* pCol = pEnt->CollisionProp.data();
-
-	Const::EntSolidType solidtype = pCol->GetSolid();
+	Const::EntSolidType solidtype = pEnt->SolidType;
 	const ModelInfo* mdl = pEnt->GetModel();
 
 	if ((Interfaces::ModelInfo->GetModelType(mdl) != Const::ModelType::Brush) || (solidtype != Const::EntSolidType::BSP && solidtype != Const::EntSolidType::VPhysics))
@@ -44,10 +43,10 @@ bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, int mask)
 	}
 
 	// TODO: add TFGameRules::ShouldCollide
-
-	if (m_Callback && !m_Callback(pEnt.get(), mask))
+	if (!Interfaces::GameRules->ShouldCollide(m_CollisionGroup, pEnt->CollisionGroup))
 		return false;
-	else return true;
+	
+	return m_Callback ? m_Callback(pEnt.get(), mask) : true;
 }
 
 
