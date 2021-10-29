@@ -166,7 +166,7 @@ public:
 	DECL_RECVPROP(ITFParticleFactory,	"m_flElasticity",		ParticleProp, 
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
+			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
 		}()
 	);
 

@@ -657,17 +657,6 @@ struct PlayerInfo
 using QueryCvarCookie = int;
 static constexpr QueryCvarCookie QueryCvarCookie_Invalid = -1;
 
-enum class QueryCvarValueStatus
-{
-	// It got the value fine.
-	ValueIntact,
-	CvarNotFound,
-	// There's a ConCommand, but it's not a ConVar.
-	NotACvar,	
-	// The cvar was marked with FCVAR_SERVER_CAN_NOT_QUERY, so the server is not allowed to have its value.
-	CvarProtected
-};
-
 
 enum class TFTeam
 {

@@ -4,7 +4,6 @@
 
 TF2_NAMESPACE_BEGIN();
 
-
 class INetChannel;
 
 namespace Const
@@ -47,6 +46,14 @@ namespace Const
 		NetAddressType	Type;
 		unsigned char	IP[4];
 		unsigned short	Port;
+	};
+
+	enum class ConnectionStatus
+	{
+		Disconnected = 0,
+		Connecting,
+		ConnectionFailed,
+		Conntected
 	};
 }
 
@@ -150,30 +157,119 @@ public:
 };
 
 
-class INetMessageHandler_Internal
+#define PROCESS_NET_MESSAGE( name )	\
+	virtual bool Process##name( NET_##name *msg ) abstract
+
+#define PROCESS_CLC_MESSAGE( name )	\
+	virtual bool Process##name( CLC_##name *msg ) abstract
+
+#define PROCESS_SVC_MESSAGE( name )	\
+	virtual bool Process##name( SVC_##name *msg ) abstract
+
+
+class NET_Tick;
+class NET_StringCmd;
+class NET_SetConVar;
+class NET_SignonState;
+
+class INetMessageHandler
 {
 public:
-	virtual ~INetMessageHandler_Internal() = default;
-
-	virtual bool ProcessTick(void*) abstract;
-	virtual bool ProcessStringCmd(void*) abstract;
-	virtual bool ProcessSetConVar(void*) abstract;
-	virtual bool ProcessSignonState(void*) abstract;
+	PROCESS_NET_MESSAGE(Tick);
+	PROCESS_NET_MESSAGE(StringCmd);
+	PROCESS_NET_MESSAGE(SetConVar);
+	PROCESS_NET_MESSAGE(SignonState);
 };
 
-class INetMessageHandler : public INetMessageHandler_Internal
+
+class CLC_ClientInfo;
+class CLC_Move;
+class CLC_VoiceData;
+class CLC_BaselineAck;
+class CLC_ListenEvents;
+class CLC_RespondCvarValue;
+class CLC_FileCRCCheck;
+class CLC_FileMD5Check;
+class CLC_SaveReplay;
+class CLC_CmdKeyValues;
+
+class IClientMessageHandler : public INetMessageHandler
 {
 public:
-	virtual bool ProcessClientInfo(void*) abstract;
-	virtual bool ProcessMove(void*) abstract;
-	virtual bool ProcessVoiceData(void*) abstract;
-	virtual bool ProcessBaseLineAck(void*) abstract;
-	virtual bool ProcessListenEvents(void*) abstract;
-	virtual bool ProcessQueryCVarValue(void*) abstract;
-	virtual bool ProcessFileCRCCheck(void*) abstract;
-	virtual bool ProcessFileMD5Check(void*) abstract;
-	virtual bool ProcessSaveReplay(void*) abstract;
-	virtual bool ProcessCmdKeyValues(void*) abstract;
+	virtual ~IClientMessageHandler(void) {};
+
+	PROCESS_CLC_MESSAGE(ClientInfo);
+	PROCESS_CLC_MESSAGE(Move);
+	PROCESS_CLC_MESSAGE(VoiceData);
+	PROCESS_CLC_MESSAGE(BaselineAck);
+	PROCESS_CLC_MESSAGE(ListenEvents);
+	PROCESS_CLC_MESSAGE(RespondCvarValue);
+	PROCESS_CLC_MESSAGE(FileCRCCheck);
+	PROCESS_CLC_MESSAGE(FileMD5Check);
+	PROCESS_CLC_MESSAGE(SaveReplay);
+	PROCESS_CLC_MESSAGE(CmdKeyValues);
+};
+
+
+class SVC_Print;
+class SVC_ServerInfo;
+class SVC_SendTable;
+class SVC_ClassInfo;
+class SVC_SetPause;
+class SVC_CreateStringTable;
+class SVC_UpdateStringTable;
+class SVC_VoiceInit;
+class SVC_VoiceData;
+class SVC_Sounds;
+class SVC_SetView;
+class SVC_FixAngle;
+class SVC_CrosshairAngle;
+class SVC_BSPDecal;
+class SVC_GameEvent;
+class SVC_UserMessage;
+class SVC_EntityMessage;
+class SVC_PacketEntities;
+class SVC_TempEntities;
+class SVC_Prefetch;
+class SVC_Menu;
+class SVC_GameEventList;
+class SVC_GetCvarValue;
+class SVC_CmdKeyValues;
+class SVC_SetPauseTimed;
+
+class IServerMessageHandler : public INetMessageHandler
+{
+public:
+	virtual ~IServerMessageHandler(void) = default;
+
+	// Returns dem file protocol version, or, if not playing a demo, just returns PROTOCOL_VERSION
+	virtual int GetDemoProtocolVersion() const abstract;
+
+	PROCESS_SVC_MESSAGE(Print);
+	PROCESS_SVC_MESSAGE(ServerInfo);
+	PROCESS_SVC_MESSAGE(SendTable);
+	PROCESS_SVC_MESSAGE(ClassInfo);
+	PROCESS_SVC_MESSAGE(SetPause);
+	PROCESS_SVC_MESSAGE(CreateStringTable);
+	PROCESS_SVC_MESSAGE(UpdateStringTable);
+	PROCESS_SVC_MESSAGE(VoiceInit);
+	PROCESS_SVC_MESSAGE(VoiceData);
+	PROCESS_SVC_MESSAGE(Sounds);
+	PROCESS_SVC_MESSAGE(SetView);
+	PROCESS_SVC_MESSAGE(FixAngle);
+	PROCESS_SVC_MESSAGE(CrosshairAngle);
+	PROCESS_SVC_MESSAGE(BSPDecal);
+	PROCESS_SVC_MESSAGE(GameEvent);
+	PROCESS_SVC_MESSAGE(UserMessage);
+	PROCESS_SVC_MESSAGE(EntityMessage);
+	PROCESS_SVC_MESSAGE(PacketEntities);
+	PROCESS_SVC_MESSAGE(TempEntities);
+	PROCESS_SVC_MESSAGE(Prefetch);
+	PROCESS_SVC_MESSAGE(Menu);
+	PROCESS_SVC_MESSAGE(GameEventList);
+	PROCESS_SVC_MESSAGE(GetCvarValue);
+	PROCESS_SVC_MESSAGE(CmdKeyValues);
+	PROCESS_SVC_MESSAGE(SetPauseTimed);
 };
 
 TF2_NAMESPACE_END();

@@ -43,4 +43,15 @@ public:
 	virtual int					GetMaxEntities() abstract;
 };
 
+class IClientEntityListener
+{
+public:
+	virtual void OnEntityCreated(IBaseEntityInternal* pEnt) { };
+	virtual void OnEntityDeleted(IBaseEntityInternal* pEnt) { };
+
+public:
+	SG_SDK_TF2 void AddEntityListener() noexcept;
+	SG_SDK_TF2 void RemoveEntityListener() noexcept;
+};
+
 TF2_NAMESPACE_END();

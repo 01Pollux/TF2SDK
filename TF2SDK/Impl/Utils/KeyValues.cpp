@@ -361,7 +361,6 @@ KeyValues* KeyValues::GetNextValue() noexcept
 	return pRet;
 }
 
-
 int KeyValues::GetInt(const char* keyName, int defaultValue) const noexcept
 {
 	const KeyValues* dat = FindKey(keyName);

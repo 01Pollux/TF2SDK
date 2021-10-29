@@ -99,7 +99,6 @@ public:
 	SG_SDK_TF2 const KeyValues* GetNextValue() const noexcept;
 	SG_SDK_TF2 KeyValues* GetNextValue() noexcept;
 
-
 	// Data access
 	int				GetInt(const char* keyName = nullptr, int defaultValue = 0) const noexcept;
 	uint64_t		GetUint64(const char* keyName = nullptr, uint64_t defaultValue = 0) const noexcept;

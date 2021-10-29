@@ -116,6 +116,11 @@ struct SDKManager::Config
 		/// IValveGlobalVars
 		/// </summary>
 		bool GlobalVars : 1{ };
+
+		/// <summary>
+		/// INetworkStringTableContainer
+		/// </summary>
+		bool NSTContainer : 1{ };
 	} Engine;
 
 	struct

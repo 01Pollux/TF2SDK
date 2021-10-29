@@ -31,7 +31,7 @@ int IBaseEntityInternal::GetHighestEntityIndex()
 {
 	static int* highest_ent_index =
 		IntPtr(Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
-			   Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList" }, "HighestEntityIndex").value_or(0)
+			   Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "HighestEntityIndex").value_or(0)
 		).get<int>();
 	return *highest_ent_index;
 }
@@ -54,7 +54,7 @@ bool IBaseEntityInternal::BadLocal()
 
 bool IBaseEntityInternal::IsBaseCombatWeapon() const noexcept
 {
-	static Utils::IMemberVFuncThunk<bool> is_combat_weapon{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity" }, "IsBaseCombatWeapon").value_or(-1) };
+	static Utils::IMemberVFuncThunk<bool> is_combat_weapon{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable" }, "IsBaseCombatWeapon").value_or(-1)};
 	return is_combat_weapon(this);
 }
 
@@ -62,12 +62,12 @@ SG_SDK_TF2 EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const no
 {
 	if (is_pred)
 	{
-		static Utils::IMemberVFuncThunk<EntityDataMap*> get_preddescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity" }, "GetPredDescMap").value_or(-1) };
+		static Utils::IMemberVFuncThunk<EntityDataMap*> get_preddescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetPredDescMap").value_or(-1) };
 		return get_preddescmap(this);
 	}
 	else
 	{
-		static Utils::IMemberVFuncThunk<EntityDataMap*> get_datadescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity" }, "GetDataDescMap").value_or(-1) };
+		static Utils::IMemberVFuncThunk<EntityDataMap*> get_datadescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetDataDescMap").value_or(-1) };
 		return get_datadescmap(this);
 	}
 }

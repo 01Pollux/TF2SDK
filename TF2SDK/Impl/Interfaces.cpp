@@ -12,6 +12,7 @@
 // IEngineTrace
 // IVDebugOverlay
 // IValveGlobalVars
+// INetworkStringTableContainer
 #include "Engine/ClientDll.hpp"
 #include "Engine/ModelInfo.hpp"
 #include "Engine/Convar.hpp"
@@ -19,6 +20,7 @@
 #include "Engine/Trace.hpp"
 #include "Engine/DebugOverlay.hpp"
 #include "Engine/GlobalVars.hpp"
+#include "Engine/NetStrTable.hpp"
 
 // ClientList
 // IGameRules
@@ -60,7 +62,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 
 		using CreateInterfaceFn = Utils::IFuncThunk<void*, const char*, int*>;
 		CreateInterfaceFn iface_factory[static_cast<size_t>(IFaceType::Count)]{ };
-
+		
 		std::array ifaces{
 			// engine library keys:
 			TF2_INTERFACE(Engine, EngineClient),
@@ -102,7 +104,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			}
 			else
 			{
-				*res = m_GameData->ReadSignature(iface_name).get();
+				*res = m_GameData->ReadSignature(name).get();
 			}
 		}
 	}

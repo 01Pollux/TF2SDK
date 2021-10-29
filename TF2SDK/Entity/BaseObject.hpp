@@ -112,7 +112,7 @@ public:
 	SG_DECL_RECVPROP(IDispenserInternal,	Utils::UtlVector<IBaseHandle>,Const::EntClassID::CObjectDispenser, "m_iMiniBombCounter",		HealingTargets,
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CObjectDispenser" }, "m_iMiniBombCounter__To__m_HealingTargets").value_or(0);
+			return Interfaces::SDKManager::Get()->ReadOffset({ "CObjectDispenser", "offsets" }, "m_iMiniBombCounter__To__m_HealingTargets").value_or(0);
 		}()
 	);
 };

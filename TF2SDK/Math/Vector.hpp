@@ -64,6 +64,11 @@ public:
 		return m_Data.data();
 	}
 
+	pointer data() noexcept
+	{
+		return m_Data.data();
+	}
+
 	constexpr auto operator<=>(const VectorXD&) const = default;
 
 	void negate() noexcept
