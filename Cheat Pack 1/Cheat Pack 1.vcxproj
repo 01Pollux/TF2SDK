@@ -184,9 +184,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cheats\AutoStab\AutoStab.cpp" />
+    <ClCompile Include="Cheats\AutoStab\Config.cpp" />
     <ClCompile Include="Cheats\AutoStab\Main.cpp" />
     <ClCompile Include="dllImpl.cpp" />
-    <ClCompile Include="plugin_sample.cpp" />
+    <ClCompile Include="cheat_pack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\AutoStab\AutoStab.hpp" />
@@ -196,6 +197,9 @@
   <ItemGroup>
     <None Include="Config.json" />
     <None Include="dllImpl.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Cheats\AutoStab\NatvisFile.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -168,6 +168,24 @@ struct SDKManager::Config
 		/// </summary>
 		bool ServerTools : 1{ };
 	} Server;
+
+	struct
+	{
+		/// <summary>
+		/// VGui::ISurface
+		/// </summary>
+		bool Surface;
+
+		/// <summary>
+		/// VGui::IPanel
+		/// </summary>
+		bool Panel;
+
+		/// <summary>
+		/// VGui::IInput
+		/// </summary>
+		bool InputSys;
+	} VGui;
 };
 
 

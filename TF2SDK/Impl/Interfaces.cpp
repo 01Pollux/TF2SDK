@@ -36,9 +36,15 @@
 #include "Engine/EngineIFace.hpp"
 #include "Server/ServerTools.hpp"
 
+// VGui::ISurface
+// VGui::IPanel
+// VGui::IInput
+#include "VGui/Surface.hpp"
+#include "VGui/Panel.hpp"
+#include "VGui/Input.hpp"
+
 
 TF2_NAMESPACE_BEGIN(::Interfaces)
-
 
 
 #define TF2_INTERFACE(CONFIG, NAME)	std::tuple{ NAME##_Key, config.CONFIG.NAME, std::bit_cast<void**>(&NAME), static_cast<size_t>(IFaceType::CONFIG), #CONFIG##"::CreateInterface", NAME##_Sig }
@@ -56,6 +62,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			Client,
 			Server,
 			VSTDLib,
+			VGui,
 
 			Count
 		};
@@ -86,7 +93,12 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 
 			// server library keys:
 			TF2_INTERFACE(Server, ServerDLL),
-			TF2_INTERFACE(Server, ServerTools)
+			TF2_INTERFACE(Server, ServerTools),
+
+			// vgui library keys:
+			TF2_INTERFACE(VGui, Surface),
+			TF2_INTERFACE(VGui, Panel),
+			TF2_INTERFACE(VGui, InputSys)
 		};
 
 		m_GameData->PushFiles({ "/GameData/Interfaces" });

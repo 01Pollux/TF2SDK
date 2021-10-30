@@ -3,13 +3,12 @@
 
 #include "ICheatIFace.hpp"
 
-
 class IGlobalCheatIFace : public SG::IPluginImpl
 {
 public:
 	void OnPluginPreLoad(SG::IPluginManager* ifacemgr) override
 	{
-		for (auto iface : ICheatIFace::GetEntries())
+		for (auto& iface : ICheatIFace::GetEntries())
 			iface->OnPluginPreLoad(ifacemgr);
 	}
 
@@ -27,9 +26,7 @@ public:
 		m_TF2Sdk.init(SG::LibManager->OpenGameData(this), tf2_config, std::initializer_list{ "/GameData/Entity" });
 
 		for (auto iface : ICheatIFace::GetEntries())
-		{
 			iface->OnPluginLoad();
-		}
 
 		return true;
 	}

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="plugin_sample.cpp">
+    <ClCompile Include="cheat_pack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllImpl.cpp">
@@ -25,6 +25,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cheats\AutoStab\AutoStab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats\AutoStab\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,5 +45,8 @@
   <ItemGroup>
     <None Include="dllImpl.hpp" />
     <None Include="Config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Cheats\AutoStab\NatvisFile.natvis" />
   </ItemGroup>
 </Project>

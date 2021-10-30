@@ -177,7 +177,7 @@ namespace Utils
 
 		ITFPlayer ps;
 		if (useLocalPunchAng)
-			res -= ITFPlayer(true)->PunchAngle.get();
+			res -= ILocalPlayer{}->PunchAngle.get();
 
 		ClampAngle(res);
 		return res;

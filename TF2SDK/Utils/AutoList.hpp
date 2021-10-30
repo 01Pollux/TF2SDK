@@ -11,7 +11,7 @@ template<typename _Ty>
 class IAutoList
 {
 public:
-	using container_type = std::list<_Ty*>;
+	using container_type = std::vector<_Ty*>;
 	
 	IAutoList()
 	{

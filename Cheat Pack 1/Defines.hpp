@@ -1,17 +1,17 @@
 #pragma once
 
 
-#define SG_PLUGIN_NAME			"ImGui Interface"
+#define SG_PLUGIN_NAME			"TF2 Cheat Pack #1"
 #define SG_PLUGIN_AUTHOR		"01Pollux"
-#define SG_PLUGIN_DESC			"Configure interface with ImGui GH:'ocornut/imgui' and ImPlot GH:'epezent/implot'"
-#define SG_PLUGIN_VERSION		"1.2.0.0"
+#define SG_PLUGIN_DESC			"Collection of multiple cheats all in one plugin"
+#define SG_PLUGIN_VERSION		"1.0.0.0"
 
 
 //#define SG_USING_PL_MANAGER		//	IPluginManager: PluginManager
 #define SG_USING_LIBRARY			//	ILibraryManager: LibManager
-//#define SG_USING_LOGGER			//	ILogger: Logger
+#define SG_USING_LOGGER			//	ILogger: Logger
 //#define SG_USING_EVENT_MANAGER	//	IEventManager: EventManager
-//#define SG_USING_DETOUR_MANAGER	//	IDetoursManager
+#define SG_USING_DETOUR_MANAGER	//	IDetoursManager
 #define SG_USING_IMGUI			//	IImGuiLoader
 //#define SG_USING_PROFILER			//	Profiler::Manager
 

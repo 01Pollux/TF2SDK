@@ -128,7 +128,7 @@ PredictionProjectileRet Prediction_Projectile(IBaseEntityInternal* pEnt, const V
     Vector3D_F last_pos = origin;
     Vector3D_F best_pos = origin;
 
-    const Vector3D_F local_eye_pos = ITFPlayer(true)->EyePosition();
+    const Vector3D_F local_eye_pos = ILocalPlayer{}->EyePosition();
     const float midpoint = static_cast<float>(local_eye_pos.distance_to(position) / speed);
 
     float current_time = std::max(midpoint - 1.5f, 0.01f);

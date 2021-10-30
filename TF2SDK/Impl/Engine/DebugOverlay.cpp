@@ -67,7 +67,7 @@ void NDebugOverlay::Line(const Vector3D_F& origin, const Vector3D_F& target, int
 	// Clip the line before sending so we 
 	// don't overflow the client message buffer
 	// --------------------------------------------------------------
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 
@@ -97,7 +97,7 @@ void NDebugOverlay::Line(const Vector3D_F& origin, const Vector3D_F& target, int
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const Vector3D_F& p3, int r, int g, int b, int a, bool noDepthTest, float duration)
 {
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 
@@ -163,7 +163,7 @@ void NDebugOverlay::Grid(const Vector3D_F& vPosition)
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Text(const Vector3D_F& origin, const char* text, float duration)
 {
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 
@@ -246,7 +246,7 @@ void NDebugOverlay::Cross3DOriented(const Vector3D_F& position, const Angle_F& a
 //--------------------------------------------------------------------------------
 void NDebugOverlay::DrawTickMarkedLine(const Vector3D_F& startPos, const Vector3D_F& endPos, float tickDist, int tickTextDist, int r, int g, int b, bool noDepthTest, float duration)
 {
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 
@@ -304,7 +304,7 @@ void NDebugOverlay::DrawTickMarkedLine(const Vector3D_F& startPos, const Vector3
 //------------------------------------------------------------------------------
 void NDebugOverlay::DrawGroundCrossHairOverlay(void)
 {
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 
@@ -499,7 +499,7 @@ void NDebugOverlay::Sphere(const Vector3D_F& center, float radius, int r, int g,
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Circle(const Vector3D_F& position, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration)
 {
-	ITFPlayer player(true);
+	ILocalPlayer player;
 	if (!player)
 		return;
 

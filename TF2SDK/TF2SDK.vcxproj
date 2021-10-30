@@ -36,6 +36,7 @@
     <ClInclude Include="Engine\GameTrace.hpp" />
     <ClInclude Include="Engine\NetMessages.hpp" />
     <ClInclude Include="Engine\NetStrTable.hpp" />
+    <ClInclude Include="Engine\VGui.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
     <ClInclude Include="Utils\KeyValues.hpp" />
     <ClInclude Include="Engine\Trace.hpp" />
@@ -75,6 +76,10 @@
     <ClInclude Include="Utils\UtlMemory.hpp" />
     <ClInclude Include="Utils\UtlVector.hpp" />
     <ClInclude Include="Utils\Vector.hpp" />
+    <ClInclude Include="VGui\Consts.hpp" />
+    <ClInclude Include="VGui\Input.hpp" />
+    <ClInclude Include="VGui\Panel.hpp" />
+    <ClInclude Include="VGui\Surface.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Impl\Client\EntityList.cpp" />
