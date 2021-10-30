@@ -29,139 +29,273 @@ namespace Const
 
 		Count,
 	};
+
 	enum class ETFCond
 	{
-		Invalid = -1,
-
-		Aiming,
+		//0: Revving Minigun, Sniper Rifle.Gives zoomed / revved pose
+		Slowed,
+		//1: Sniper Rifle zooming
 		Zoomed,
+		//2: Disguise smoke
 		Disguising,
+		//3: Disguise
 		Disguised,
-		Stealthed,
-		Invulnerable,
-		Teleported,
+		//4: Cloak effect
+		Cloaked,
+		//5: Invulnerability, removed when being healed or by another Uber effect
+		Ubercharged,
+		//6: Teleport trail effect
+		TeleportedGlow,
+		//7: Used for taunting, can remove to stop taunting
 		Taunting,
-		Invulnerable_wearingoff,
-		Stealthed_blink,
-		Selected_to_teleport,
-		Critboosted,
-		Tmpdamagebonus,
-		Feign_death,
-		Phase,
-		Stunned,
-		Offensebuff,
-		Shield_charge,
-		Demo_buff,
-		Energy_buff,
-		Radiusheal,
-		Health_buff,
-		Burning,
-		Health_overhealed,
-		Urine,
+		//8: Invulnerability expiration effect
+		UberchargeFading,
+		//9: Cloak flickering effect
+		CloakFlicker,
+		//10: Used for teleporting, does nothing applying 
+		Teleporting,
+		//11: Crit boost, removed when being healed or another Uber effect
+		Kritzkrieged,
+		//12: Temporary damage buff, something along with attribute 19
+		TmpDamageBonus,
+		//13: Dead Ringer damage resistance, gives TFCond_Cloaked
+		DeadRingered,
+		//14: Bonk! Atomic Punch effect
+		Bonked,
+		//15: Slow effect, can remove to remove stun effects
+		Dazed,
+		//16: Buff Banner mini-crits, icon, and glow
+		Buffed,
+		//17: Forced forward, charge effect
+		Charging,
+		//18: Eyelander eye glow
+		DemoBuff,
+		//19: Mini-crit effect
+		CritCola,
+		//20: Ring effect, rings disappear after a taunt ends
+		InHealRadius,
+		//21: Used for healing, does nothing applying
+		Healing,
+		//22: Ignite sound and vocals, can remove to remove afterburn
+		OnFire,
+		//23: Used for overheal, does nothing applying
+		Overhealed,
+		//24: Jarate effect
+		Jarated,
+		//25: Bleed effect
 		Bleeding,
-		Defensebuff,
-		Mad_milk,
-		Megaheal,
-		Regenondamagebuff,
-		Markedfordeath,
-		Nohealingdamagebuff,
-		Speed_boost,
-		Critboosted_pumpkin,
-		Critboosted_user_buff,
-		Critboosted_demo_charge,
-		Sodapopper_hype,
-		Critboosted_first_blood,
-		Critboosted_bonus_time,
-		Critboosted_ctf_capture,
-		Critboosted_on_kill,
-		Cannot_switch_from_melee,
-		Defensebuff_no_crit_block,
+		//26: Battalion's Backup's defense, icon, and glow
+		DefenseBuffed,
+		//27: Mad Milk effect
+		Milked,
+		//28: Quick-Fix Ubercharge's knockback/stun immunity and visual effect
+		MegaHeal,
+		//29: Concheror's speed boost, heal on hit, icon, and glow
+		RegenBuffed,
+		//30: Fan o' War marked-for-death effect
+		MarkedForDeath,
+		//31: Mini-crits, blocks healing, glow, no weapon mini - crit effects
+		NoHealingDamageBuff,
+		//32: Disciplinary Action speed boost
+		SpeedBuffAlly,
+		//33: Halloween pumpkin crit-boost
+		HalloweenCritCandy,
+		//34: Crit-boost and doubles Sentry Gun fire-rate
+		CritCanteen,
+		//35: Crit glow, adds TFCond_Charging when charge meter is below 75%
+		CritDemoCharge,
+		//36: Soda Popper multi-jump effect
+		CritHype,
+		//37: Arena first blood crit-boost
+		CritOnFirstBlood,
+		//38: End-of-round crit-boost (May not remove correctly?)
+		CritOnWin,
+		//39: Intelligence capture crit-boost
+		CritOnFlagCapture,
+		//40: Crit-boost from crit-on-kill weapons
+		CritOnKill,
+		//41: Prevents switching once melee is out
+		RestrictToMelee,
+		//42: MvM Bomb Carrier defense buff (TFCond_DefenseBuffed without crit resistance)
+		DefenseBuffNoCritBlock,
+		//43: No longer functions
 		Reprogrammed,
-		Critboosted_rage_buff,
-		Defensebuff_high,
-		Snipercharge_rage_buff,
-		Disguise_wearingoff,
-		Markedfordeath_silent,
-		Disguised_as_dispenser,
+		//44: Phlogistinator crit-boost
+		CritMmmph,
+		//45: Old Phlogistinator defense buff
+		DefenseBuffMmmph,
+		//46: Hitman's Heatmaker no-unscope and faster Sniper charge
+		FocusBuff,
+		//47: Enforcer damage bonus removed
+		DisguiseRemoved,
+		//48: Marked-for-death without sound effect
+		MarkedForDeathSilent,
+		//49: Dispenser disguise when crouching, max movement speed, sentries ignore player
+		DisguisedAsDispenser,
+		//50: Sapper sparkle effect in MvM
 		Sapped,
-		Invulnerable_hide_unless_damaged,
-		Invulnerable_user_buff,
-		Halloween_bomb_head,
-		Halloween_thriller,
-		Radiusheal_on_damage,
-		Critboosted_card_effect,
-		Invulnerable_card_effect,
-		Medigun_uber_bullet_resist,
-		Medigun_uber_blast_resist,
-		Medigun_uber_fire_resist,
-		Medigun_small_bullet_resist,
-		Medigun_small_blast_resist,
-		Medigun_small_fire_resist,
-		Stealthed_user_buff,
-		Medigun_debuff,
-		Stealthed_user_buff_fading,
-		Bullet_immune,
-		Blast_immune,
-		Fire_immune,
-		Prevent_death,
-		Mvm_bot_stun_radiowave,
-		Halloween_speed_boost,
-		Halloween_quick_heal,
-		Halloween_giant,
-		Halloween_tiny,
-		Halloween_in_hell,
-		Halloween_ghost_mode,
-		Minicritboosted_on_kill,
-		Obscured_smoke,
-		Parachute_active = 8,
-		Blastjumping,
-		Halloween_kart,
-		Halloween_kart_dash,
-		Balloon_head,
-		Melee_only,
-		Swimming_curse,
-		Freeze_input,
-		Halloween_kart_cage,
-		Donotuse_0,
-		Rune_strength,
-		Rune_haste,
-		Rune_regen,
-		Rune_resist,
-		Rune_vampire,
-		Rune_reflect,
-		Rune_precision,
-		Rune_agility,
-		Grapplinghook,
-		Grapplinghook_safefall,
-		Grapplinghook_latched,
-		Grapplinghook_bleeding,
-		Afterburn_immune,
-		Rune_knockout,
-		Rune_imbalance,
-		Critboosted_rune_temp,
-		Passtime_interception,
-		Swimming_no_effects,
-		Purgatory,
-		Rune_king,
-		Rune_plague,
-		Rune_supernova,
+		//51: Out-of-bounds robot invulnerability effect
+		UberchargedHidden,
+		//52: Invulnerability effect and Sentry Gun damage resistance
+		UberchargedCanteen,
+		//53: Bomb head effect (does not explode)
+		HalloweenBombHead,
+		//54: Forced Thriller taunting
+		HalloweenThriller,
+		//55: Radius healing, adds TFCond_InHealRadius, TFCond_Healing.Removed when a taunt ends, but this condition stays but does nothing
+		RadiusHealOnDamage,
+		//56: Miscellaneous crit-boost
+		CritOnDamage,
+		//57: Miscellaneous invulnerability
+		UberchargedOnTakeDamage,
+		//58: Vaccinator Uber bullet resistance
+		UberBulletResist,
+		//59: Vaccinator Uber blast resistance
+		UberBlastResist,
+		//60: Vaccinator Uber fire resistance
+		UberFireResist,
+		//61: Vaccinator healing bullet resistance
+		SmallBulletResist,
+		//62: Vaccinator healing blast resistance
+		SmallBlastResist,
+		//63: Vaccinator healing fire resistance
+		SmallFireResist,
+		//64: Cloaked until next attack
+		Stealthed,
+		//65: Unknown
+		MedigunDebuff,
+		//66: Cloaked, will appear for a few seconds on attackand cloak again
+		StealthedUserBuffFade,
+		//67: Full bullet immunity
+		BulletImmune,
+		//68: Full blast immunity
+		BlastImmune,
+		//69: Full fire immunity
+		FireImmune,
+		//70: Survive to 1 health, then the condition is removed 
+		PreventDeath,
+		//71: Stuns bots and applies radio effect
+		MVMBotRadiowave,
+		//72: Speed boost, non - melee fire rate and reload, infinite air jumps 
+		HalloweenSpeedBoost,
+		//73: Healing effect, adds TFCond_Healing along with TFCond_MegaHeal temporarily
+		HalloweenQuickHeal,
+		//74: Double size, x10 max health increase, ammo regeneration, and forced thirdperson
+		HalloweenGiant,
+		//75: Half size and increased head size
+		HalloweenTiny,
+		//76: Applies TFCond_HalloweenGhostMode when the player dies
+		HalloweenInHell,
+		//77: Becomes a ghost unable to attack but can fly
+		HalloweenGhostMode,
+		//78: Mini-crits effect
+		MiniCritOnKill,
+		//79: 75% chance to dodge an attack
+		DodgeChance,
+		//79: 75% chance to dodge an attack
+		ObscuredSmoke = 79,
+		//80: Parachute effect, removed when touching the ground
+		Parachute,
+		//81: Player is blast jumping
+		BlastJumping,
+		//82: Player forced into a Halloween kart
+		HalloweenKart,
+		//83: Forced forward if in TFCond_HalloweenKart, zoom in effect, and dash animations
+		HalloweenKartDash,
+		//84: Big head and lowered gravity
+		BalloonHead,
+		//85: Forced melee, along with TFCond_SpeedBuffAllyand TFCond_HalloweenTiny
+		MeleeOnly,
+		//86: Swim in the air with Jarate overlay
+		SwimmingCurse,
+		//87: Prevents player from using controls
+		HalloweenKartNoTurn,
+		//87: Prevents player from using controls
+		FreezeInput = 87,
+		//88: Puts a cage around the player if in TFCond_HalloweenKart, otherwise crashes
+		HalloweenKartCage,
+		//89: Has a powerup
+		HasRune,
+		//90: Double damage and no damage falloff
+		RuneStrength,
+		//91: Double fire rate, reload speed, clipand ammo size, and 30 % faster movement speed
+		RuneHaste,
+		//92: Regen ammo, health, and metal
+		RuneRegen,
+		//93: Takes 1/2 damage and critical immunity
+		RuneResist,
+		//94: Takes 3/4 damage, gain health on damage, and 40 % increase in max health
+		RuneVampire,
+		//95: Attacker takes damage and knockback on hitting the player and 50% increase in max health
+		RuneWarlock,
+		//96: Less bullet spread, no damage falloff, 250 % faster projectiles, and double damage, faster charge, and faster re - zoom for Sniper Rifles
+		RunePrecision,
+		//97: Increased movement speed, grappling hook speed, jump height,and instant weapon switch
+		RuneAgility,
+		//98: Used when a player fires their grappling hook, no effect applying or removing
+		GrapplingHook,
+		//99: Used when a player is pulled by their grappling hook, no effect applying or removing
+		GrapplingHookSafeFall,
+		//100: Used when a player latches onto a wall, no effect applying or removing
+		GrapplingHookLatched,
+		//101: Used when a player is hit by attacker's grappling hook
+		GrapplingHookBleeding,
+		//102: Deadringer afterburn immunity
+		AfterburnImmune,
+		//103: Melee and grappling hook only, increased max health, knockback immunity, x4 more damage against buildings, and knockbacks a powerup off a victim on hit
+		RuneKnockout,
+		//104: Prevents gaining a crit-boost or Uber powerups
+		RuneImbalance,
+		//105: Crit-boost effect
+		CritRuneTemp,
+		//106: Used when a player intercepts the Jack/Ball
+		PasstimeInterception,
+		//107: Swimming in the air without animations or overlay
+		SwimmingNoEffects,
+		//108: Refills max health,short Uber, escaped the underworld message on removal
+		EyeaductUnderworld,
+		//109: Increased max health and applies TFCond_KingAura
+		KingRune,
+		//110: Radius health kit stealing, increased max health, TFCond_Plague on touching a victim
+		PlagueRune,
+		//111: Charge meter passively increasing, when charged activiated causes radius Bonk stun
+		SupernovaRune,
+		//112: Plague sound effect and message, blocks King powerup health regen
 		Plague,
-		King_buffed,
-		Team_glows,
-		Knocked_into_air,
-		Competitive_winner,
-		Competitive_loser,
-		Healing_debuff,
-		Passtime_penalty_debuff,
-		Grappled_to_player,
-		Grappled_by_player,
-		Parachute_deployed,
+		//113: Increased fire rate, reload speed, and health regen to players in a radius
+		KingAura,
+		//114: Outline and health meter of teammates (and disguised spies)
+		SpawnOutline,
+		//115: Used when a player is airblasted
+		KnockedIntoAir,
+		//116: Unknown
+		CompetitiveWinner,
+		//117: Unknown
+		CompetitiveLoser,
+		//118: Healing debuff from Medics and dispensers
+		HealingDebuff,
+		//119: Marked-for-death effect
+		PasstimePenaltyDebuff,
+		//120: Prevents taunting and some Grappling Hook actions
+		GrappledToPlayer,
+		//121: Unknown
+		GrappledByPlayer,
+		//122: Parachute deployed, prevents reopening it
+		ParachuteDeployed,
+		//123: Gas Passer effect
 		Gas,
-		Burning_pyro,
-		Rocketpack,
-		Lost_footing,
-		Air_current,
-		Halloween_hell_heal,
+		//124: Dragon's Fury afterburn on Pyros
+		BurningPyro,
+		//125: Thermal Thruster launched effects, prevents reusing
+		RocketPack,
+		//126: Less ground friction
+		LostFooting,
+		//127: Reduced air control and friction
+		AirCurrent,
+		// 128: Used when a player gets teleported to hell
+		HalloweenHellHeal,
+		// 129: Reduces effects of certain powerups
+		PowerupModeDominant,
 
 		Count,
 	};

@@ -2,13 +2,27 @@
 #include "AutoStab.hpp"
 #include "Interfaces/ImGui.hpp"
 
+#include <VGui/Engine.hpp>
+#include <VGui/Panel.hpp>
+
 bool AutoBackstab::OnRender()
 {
 	SG::ConfigState state;
 
-	if (ImGui::Checkbox("Enable", m_Enabled.data()))
+	if (ImGui::Checkbox(m_Enabled.key(), m_Enabled.data()))
 		state.set();
 	ImGui::SameLineHelp(m_Enabled);
+
+
+	if (ImGui::Checkbox(m_CheckUber.key(), m_CheckUber.data()))
+		state.set();
+	ImGui::SameLineHelp(m_CheckUber);
+
+	ImGui::SameLine();
+
+	if (ImGui::Checkbox(m_CheckInvisible.key(), m_CheckInvisible.data()))
+		state.set();
+	ImGui::SameLineHelp(m_CheckInvisible);
 
 	return state;
 }
@@ -16,12 +30,18 @@ bool AutoBackstab::OnRender()
 void AutoBackstab::OnSaveConfig(Json& cfg)
 {
 	Json& autostab = cfg["Auto-Backstab"];
-	autostab = m_Enabled;
+	m_Enabled.to_json(autostab);
+	m_CheckUber.to_json(autostab);
+	m_CheckInvisible.to_json(autostab);
 }
 
 void AutoBackstab::OnReloadConfig(const Json& cfg)
 {
 	auto iter = cfg.find("Auto-Backstab");
 	if (iter != cfg.end())
-		iter->get_to(m_Enabled);
+	{
+		m_Enabled.from_json(*iter);
+		m_CheckUber.from_json(*iter);
+		m_CheckInvisible.from_json(*iter);
+	}
 }

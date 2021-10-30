@@ -127,10 +127,12 @@ public:
 		if (len)
 		{
 			this->operator/=(static_cast<value_type>(len));
+			return len;
 		}
 		else
 		{
 			fill(static_cast<value_type>(0));
+			return 0.f;
 		}
 	}
 

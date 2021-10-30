@@ -121,6 +121,11 @@ struct SDKManager::Config
 		/// INetworkStringTableContainer
 		/// </summary>
 		bool NSTContainer : 1{ };
+
+		/// <summary>
+		/// VGui::IEngineVGui
+		/// </summary>
+		bool EngineVGUI;
 	} Engine;
 
 	struct
@@ -185,11 +190,6 @@ struct SDKManager::Config
 		/// VGui::IInput
 		/// </summary>
 		bool InputSys;
-
-		/// <summary>
-		/// VGui::IEngineVGui
-		/// </summary>
-		bool EngineVGUI;
 	} VGui;
 };
 

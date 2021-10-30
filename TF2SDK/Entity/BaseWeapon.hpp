@@ -53,6 +53,7 @@ public:
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CWeaponMedigun,	"m_nChargeResistType",	ChargeResistType, 0);
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	ReadyToBackstab, 0);
+	SG_DECL_RECVPROP(IBaseWeaponInternal,	IBaseHandle,		Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	BackstabVictim, -4);
 };
 using IBaseWeapon = IBaseEntityWrapper<IBaseWeaponInternal>;
 

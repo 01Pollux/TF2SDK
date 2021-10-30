@@ -1,9 +1,8 @@
 
+#include <array>
 #include <Interfaces/GameData.hpp>
 
 #include "AutoStab.hpp"
-
-#include <Engine/Convar.hpp>
 
 #include <Entity/BasePlayer.hpp>
 #include <Entity/BaseWeapon.hpp>
@@ -28,10 +27,11 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 		return false;
 	}
 
-	config.Engine.Convar = true;
+	config.Engine.EngineVGUI = true;
+
 	config.Client.ClientList = true;
 	config.Client.ClientDLL = true;
-	config.VGui.EngineVGUI = true;
+
 	config.VGui.Panel = true;
 
 	return true;
@@ -40,19 +40,6 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 void AutoBackstab::OnPluginLoad()
 {
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Auto Backstab", std::bind(&AutoBackstab::OnRender, this));
-	auto panel = TF2::Interfaces::EngineVGUI->GetPanel(TF2::Const::VGui::PanelType::GameUI);
-	SG::ImGuiLoader->SetLockUnlockMouse(
-		[panel]()
-		{
-			TF2::Interfaces::Panel->SetMouseInputEnabled(panel, false);
-			TF2::Interfaces::Panel->SetKeyBoardInputEnabled(panel, false);
-		},
-		[panel]()
-		{
-			TF2::Interfaces::Panel->SetMouseInputEnabled(panel, true);
-			TF2::Interfaces::Panel->SetKeyBoardInputEnabled(panel, true);
-		}
-	);
 }
 
 
@@ -70,7 +57,6 @@ void AutoBackstab::OnPluginUnload()
 	if (m_CreateMove)
 		m_CreateMove.detach();
 	SG::DetourManager->ReleaseHook(m_CreateMove.instance());
-	SG::ImGuiLoader->SetLockUnlockMouse();
 }
 
 
@@ -81,7 +67,6 @@ SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 		return{ };
 
 	TF2::ILocalPlayer pMe;
-
 	if (pMe->Class != TF2::Const::TFClass::Spy)
 		return{ };
 
@@ -89,11 +74,47 @@ SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 		return{ };
 
 	TF2::IBaseWeapon pCurWpn(pMe->ActiveWeapon.get());
-
 	if (!pCurWpn || pCurWpn->GetWeaponSlot() != 2)
 		return{ };
 
 	if (pCurWpn->ReadyToBackstab)
+	{
+		if (!m_CheckUber || !m_CheckInvisible)
+		{
+			TF2::ITFPlayer pEnt(pCurWpn->BackstabVictim);
+			if (m_CheckUber)
+			{
+				constexpr std::array invun_conds{
+					TF2::Const::ETFCond::Ubercharged,
+					TF2::Const::ETFCond::UberchargedCanteen,
+					TF2::Const::ETFCond::UberchargedOnTakeDamage,
+					TF2::Const::ETFCond::Bonked,
+					TF2::Const::ETFCond::DefenseBuffMmmph,
+				};
+
+				for (auto cond : invun_conds)
+				{
+					if (pEnt->InCond(cond))
+						return{ };
+				}
+			}
+
+			if (m_CheckInvisible)
+			{
+				constexpr std::array invun_conds{
+					TF2::Const::ETFCond::Cloaked,
+					TF2::Const::ETFCond::Stealthed
+				};
+
+				for (auto cond : invun_conds)
+				{
+					if (pEnt->InCond(cond))
+						return{ };
+				}
+			}
+		}
+		
 		cmd->Buttons |= TF2::Const::UserCmd::Keys::Attack;
+	}
 	return{ };
 }
