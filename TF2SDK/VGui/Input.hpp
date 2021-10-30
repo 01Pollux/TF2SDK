@@ -25,13 +25,6 @@ namespace Interfaces
 
 namespace VGui
 {
-	class Panel;
-	class SurfacePlat;
-	class IHTMLEvents;
-	class IHTML;
-	class IVguiMatInfo;
-	class IImage;
-
 	class IInput : public IBaseInterface
 	{
 	public:

@@ -183,7 +183,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cheats\AutoStab\AutoStab.cpp" />
     <ClCompile Include="Cheats\AutoStab\Config.cpp" />
     <ClCompile Include="Cheats\AutoStab\Main.cpp" />
     <ClCompile Include="dllImpl.cpp" />

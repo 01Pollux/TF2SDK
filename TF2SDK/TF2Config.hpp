@@ -185,6 +185,11 @@ struct SDKManager::Config
 		/// VGui::IInput
 		/// </summary>
 		bool InputSys;
+
+		/// <summary>
+		/// VGui::IEngineVGui
+		/// </summary>
+		bool EngineVGUI;
 	} VGui;
 };
 

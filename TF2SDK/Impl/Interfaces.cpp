@@ -39,9 +39,11 @@
 // VGui::ISurface
 // VGui::IPanel
 // VGui::IInput
+// VGui::IEngineVGui
 #include "VGui/Surface.hpp"
 #include "VGui/Panel.hpp"
 #include "VGui/Input.hpp"
+#include "VGui/Engine.hpp"
 
 
 TF2_NAMESPACE_BEGIN(::Interfaces)
@@ -98,7 +100,8 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			// vgui library keys:
 			TF2_INTERFACE(VGui, Surface),
 			TF2_INTERFACE(VGui, Panel),
-			TF2_INTERFACE(VGui, InputSys)
+			TF2_INTERFACE(VGui, InputSys),
+			TF2_INTERFACE(VGui, EngineVGUI)
 		};
 
 		m_GameData->PushFiles({ "/GameData/Interfaces" });

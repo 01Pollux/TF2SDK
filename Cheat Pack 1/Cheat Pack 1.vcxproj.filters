@@ -24,9 +24,6 @@
     <ClCompile Include="Cheats\AutoStab\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cheats\AutoStab\AutoStab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cheats\AutoStab\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

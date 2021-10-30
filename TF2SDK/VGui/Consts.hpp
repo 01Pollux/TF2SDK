@@ -288,4 +288,15 @@ enum class KeyCode
 	KEY_XSTICK2_UP,								// VAXIS NEGATIVE
 };
 
+enum class PanelType
+{
+	Root,
+	GameUI,
+	Client,
+	Tools,
+	InGameScreen,
+	Game,
+	ClientTools
+};
+
 TF2_NAMESPACE_END();

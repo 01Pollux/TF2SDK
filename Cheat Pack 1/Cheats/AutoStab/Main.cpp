@@ -10,8 +10,8 @@
 
 #include <Client/UserCmd.hpp>
 
-#include <VGui/Surface.hpp>
-#include <VGui/Input.hpp>
+#include <VGui/Engine.hpp>
+#include <VGui/Panel.hpp>
 
 static AutoBackstab auto_stab;
 
@@ -31,8 +31,8 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 	config.Engine.Convar = true;
 	config.Client.ClientList = true;
 	config.Client.ClientDLL = true;
-	config.VGui.Surface = true;
-	config.VGui.InputSys = true;
+	config.VGui.EngineVGUI = true;
+	config.VGui.Panel = true;
 
 	return true;
 }
@@ -40,17 +40,17 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 void AutoBackstab::OnPluginLoad()
 {
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Auto Backstab", std::bind(&AutoBackstab::OnRender, this));
+	auto panel = TF2::Interfaces::EngineVGUI->GetPanel(TF2::Const::VGui::PanelType::GameUI);
 	SG::ImGuiLoader->SetLockUnlockMouse(
-		[]()
+		[panel]()
 		{
-			TF2::Interfaces::Surface->LockCursor();
-			TF2::Interfaces::Surface->SetCursorAlwaysVisible(false);
+			TF2::Interfaces::Panel->SetMouseInputEnabled(panel, false);
+			TF2::Interfaces::Panel->SetKeyBoardInputEnabled(panel, false);
 		},
-
-		[]()
+		[panel]()
 		{
-			TF2::Interfaces::Surface->UnlockCursor();
-			TF2::Interfaces::Surface->SetCursorAlwaysVisible(true);
+			TF2::Interfaces::Panel->SetMouseInputEnabled(panel, true);
+			TF2::Interfaces::Panel->SetKeyBoardInputEnabled(panel, true);
 		}
 	);
 }

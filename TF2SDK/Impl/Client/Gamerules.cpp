@@ -1,6 +1,12 @@
 
 #include <Interfaces/GameData.hpp>
+
+#include "Engine/GlobalVars.hpp"
+
 #include "Client/GameRules.hpp"
+
+#include "Entity/BaseEntity.hpp"
+
 #include "Utils/Thunks.hpp"
 
 
@@ -36,9 +42,22 @@ Const::GameType IGameRules::GetGameType() const
 			}
 		}
 
-		switch (PropFinder::FindRecvProp(gamerules, "m_nGameType", nullptr, &offset))
+		PropFinder::FindRecvProp(gamerules, "m_nGameType", nullptr, &offset);
+		int gametype = *std::bit_cast<int*>(std::bit_cast<uintptr_t>(this) + offset);
+		switch (gametype)
 		{
 		case 1:	return CaptureTheFlag;
+		case 2:
+		case 3:
+		{
+			for (int i = Interfaces::GlobalVars->MaxClients; i < IBaseEntityInternal::GetHighestEntityIndex(); i++)
+			{
+				IBaseEntity pEnt(i);
+				if (!pEnt)
+					continue;
+			}
+			break;
+		}
 		default: break;
 		}
 
