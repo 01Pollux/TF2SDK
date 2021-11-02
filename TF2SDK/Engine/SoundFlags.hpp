@@ -160,4 +160,37 @@ namespace SoundPacket
 	static const float Delay = 0.f;
 }
 
+struct SoundInfo
+{
+	// Sound Guid
+	int			Guid;
+	void*		FilenameHandle;		// filesystem filename handle - call IFilesystem to conver this to a string
+	int			SoundSource;
+	int			Channel;
+	// If a sound is being played through a speaker entity (e.g., on a monitor,), this is the
+	//  entity upon which to show the lips moving, if the sound has sentence data
+	int			SpeakerEntity;
+	float		Volume;
+	float		LastSpatializedVolume;
+	// Radius of this sound effect (spatialization is different within the radius)
+	float		Radius;
+	int			Pitch;
+	Vector3D_F*	Origin;
+	Vector3D_F*	Direction;
+
+	// if true, assume sound source can move and update according to entity
+	bool		UpdatePositions;
+	// true if playing linked sentence
+	bool		IsSentence;
+	// if true, bypass all dsp processing for this sound (ie: music)	
+	bool		DryMix;
+	// true if sound is playing through in-game speaker entity.
+	bool		Speaker;
+	// true if sound is playing with special DSP effect
+	bool		SpecialDSP;
+	// for snd_show, networked sounds get colored differently than local sounds
+	bool		FromServer;
+};
+
+
 TF2_NAMESPACE_END();

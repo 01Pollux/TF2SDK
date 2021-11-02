@@ -27,10 +27,12 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 		return false;
 	}
 
-	config.Engine.EngineVGUI = true;
+	config.Engine.Convar = true;
 
 	config.Client.ClientList = true;
 	config.Client.ClientDLL = true;
+
+	config.Server.ServerTools = true;
 
 	config.VGui.Panel = true;
 

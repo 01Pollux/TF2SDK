@@ -2,8 +2,11 @@
 #include "AutoStab.hpp"
 #include "Interfaces/ImGui.hpp"
 
-#include <VGui/Engine.hpp>
-#include <VGui/Panel.hpp>
+#include <Engine/Convar.hpp>
+
+#include <Server/ServerTools.hpp>
+
+#include <Entity/BasePlayer.hpp>
 
 bool AutoBackstab::OnRender()
 {
@@ -23,6 +26,18 @@ bool AutoBackstab::OnRender()
 	if (ImGui::Checkbox(m_CheckInvisible.key(), m_CheckInvisible.data()))
 		state.set();
 	ImGui::SameLineHelp(m_CheckInvisible);
+
+	if (ImGui::Button("ServerTools"))
+	{
+		auto st = TF2::Interfaces::ServerTools;
+		int ents = 0;
+		for (auto ent = st->FirstEntity(); ent; ent = st->NextEntity(ent))
+		{
+			ents++;
+			TF2::Interfaces::CVar->ConsolePrintf("%x\n", ent);
+		}
+		TF2::Interfaces::CVar->ConsolePrintf("Count: %i %x\n", ents, st->GetIServerEntity(TF2::ILocalPlayer().get()));
+	}
 
 	return state;
 }

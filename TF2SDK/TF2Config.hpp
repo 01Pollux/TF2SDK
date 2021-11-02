@@ -126,6 +126,11 @@ struct SDKManager::Config
 		/// VGui::IEngineVGui
 		/// </summary>
 		bool EngineVGUI;
+
+		/// <summary>
+		/// IEngineSound
+		/// </summary>
+		bool ClientSound;
 	} Engine;
 
 	struct

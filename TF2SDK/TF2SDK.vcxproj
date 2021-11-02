@@ -36,6 +36,8 @@
     <ClInclude Include="Engine\GameTrace.hpp" />
     <ClInclude Include="Engine\NetMessages.hpp" />
     <ClInclude Include="Engine\NetStrTable.hpp" />
+    <ClInclude Include="Engine\RecipientFilter.hpp" />
+    <ClInclude Include="Engine\Sounds.hpp" />
     <ClInclude Include="Engine\VGui.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
     <ClInclude Include="Utils\KeyValues.hpp" />

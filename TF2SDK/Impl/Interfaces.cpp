@@ -13,6 +13,7 @@
 // IVDebugOverlay
 // IValveGlobalVars
 // INetworkStringTableContainer
+// IEngineSound
 #include "Engine/ClientDll.hpp"
 #include "Engine/ModelInfo.hpp"
 #include "Engine/Convar.hpp"
@@ -21,6 +22,7 @@
 #include "Engine/DebugOverlay.hpp"
 #include "Engine/GlobalVars.hpp"
 #include "Engine/NetStrTable.hpp"
+#include "Engine/Sounds.hpp"
 
 // ClientList
 // IGameRules
@@ -82,6 +84,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			TF2_INTERFACE(Engine, DebugOverlay),
 			TF2_INTERFACE(Engine, GlobalVars),
 			TF2_INTERFACE(Engine, EngineVGUI),
+			TF2_INTERFACE(Engine, ClientSound),
 
 			// valve std library keys:
 			std::tuple{ CVar_Key, config.Engine.Convar, std::bit_cast<void**>(&CVar), static_cast<size_t>(IFaceType::VSTDLib), "ValveSTD::CreateInterface", false },
