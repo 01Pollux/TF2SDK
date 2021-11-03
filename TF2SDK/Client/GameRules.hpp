@@ -71,23 +71,6 @@ namespace Const
 		Stopwatch_Watching_Final_Rounds,
 		Stopwatch_Watching_Playing_Rounds
 	};
-
-	enum class GameType
-	{
-		Training,
-		SpecialModeDelivery,
-		Mvm,
-		Koth,
-		RobotDestruction,
-		CaptureTheFlag,
-		TeamCapture,
-		CapturePoint,
-		CapturePoint5,
-		Cart,
-		CartRace,
-		Arena,
-		Deathmatch
-	};
 }
 
 
@@ -95,7 +78,6 @@ class IGameRules
 {
 public:
 	SG_SDK_TF2 bool ShouldCollide(Const::EntCollisionGroup group0, Const::EntCollisionGroup group1);
-	SG_SDK_TF2 Const::GameType GetGameType() const;
 
 	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInWaitingForPlayers", InWaitingForPlayers, 0);
 	SG_DECL_RECVPROP(IGameRules, Const::TFTeam,		Const::EntClassID::CTFGameRulesProxy, "m_iWinningTeam",			WinningTeam, 0);

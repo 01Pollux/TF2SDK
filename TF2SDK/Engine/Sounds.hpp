@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SoundFlags.hpp"
-#include "RecipientFilter.hpp"
+#include "Client/RecipientFilter.hpp"
 
 #include "Math/Vector.hpp"
 #include "Utils/UtlVector.hpp"

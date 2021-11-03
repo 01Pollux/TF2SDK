@@ -121,7 +121,11 @@ public:
 	SG_SDK_TF2 bool
 		IsHealthKit() const noexcept;
 
-	SG_SDK_TF2 void EstimateAbsVelocity(Vector3D_F& vel);
+	/// <summary>
+	/// Get either local velocity or predicted velocity
+	/// </summary>
+	SG_SDK_TF2 void 
+		EstimateAbsVelocity(Vector3D_F& vel);
 	
 	/// <summary>
 	/// Tests whether the entity is class id
@@ -130,6 +134,17 @@ public:
 	{
 		return this->GetClientClass()->ClassID == id;
 	}
+
+	SG_SDK_TF2 int
+		LookupAttachment(const char* name);
+
+	bool GetAttachment(const char* name, Vector3D_F& origin, Angle_F& angles)
+	{
+		return GetAttachment(LookupAttachment(name), origin, angles);
+	}
+
+	SG_SDK_TF2 bool
+		GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles);
 
 
 #define DECL_RECVPROP(Type, Prop_Name, Custom_Name, Extra_Offset)	SG_DECL_RECVPROP(IBaseEntityInternal, Type, Const::EntClassID::CBaseAnimating, Prop_Name, Custom_Name, Extra_Offset)

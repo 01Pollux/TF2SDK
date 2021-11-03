@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\ClientTools.hpp" />
+    <ClInclude Include="Client\Effects.hpp" />
     <ClInclude Include="Client\EntityList.hpp" />
     <ClInclude Include="Client\GameRules.hpp" />
     <ClInclude Include="Engine\CNetChannel.hpp" />
@@ -36,9 +37,12 @@
     <ClInclude Include="Engine\GameTrace.hpp" />
     <ClInclude Include="Engine\NetMessages.hpp" />
     <ClInclude Include="Engine\NetStrTable.hpp" />
-    <ClInclude Include="Engine\RecipientFilter.hpp" />
+    <ClInclude Include="Client\RecipientFilter.hpp" />
     <ClInclude Include="Engine\Sounds.hpp" />
     <ClInclude Include="Engine\VGui.hpp" />
+    <ClInclude Include="Materials\Consts.hpp" />
+    <ClInclude Include="Materials\Material.hpp" />
+    <ClInclude Include="Materials\MaterialVar.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
     <ClInclude Include="Utils\KeyValues.hpp" />
     <ClInclude Include="Engine\Trace.hpp" />
@@ -76,6 +80,7 @@
     <ClInclude Include="Utils\Trace.hpp" />
     <ClInclude Include="Utils\UtlAlloc.hpp" />
     <ClInclude Include="Utils\UtlMemory.hpp" />
+    <ClInclude Include="Utils\UtlSymbol.hpp" />
     <ClInclude Include="Utils\UtlVector.hpp" />
     <ClInclude Include="Utils\Vector.hpp" />
     <ClInclude Include="VGui\Consts.hpp" />
@@ -85,6 +90,7 @@
     <ClInclude Include="VGui\Surface.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Impl\Client\Effects.cpp" />
     <ClCompile Include="Impl\Client\EntityList.cpp" />
     <ClCompile Include="Impl\Client\Gamerules.cpp" />
     <ClCompile Include="Impl\Engine\Convar.cpp" />

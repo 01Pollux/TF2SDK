@@ -132,7 +132,7 @@ SG_SDK_TF2 bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResu
 
 SG_SDK_TF2 void IBaseEntityInternal::SetModel(int modelidx)
 {
-	static Utils::IMemberFuncThunk<IBaseEntityInternal*, int> set_modelidx(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "SetModelIndex").get());
+	static Utils::IMemberFuncThunk<void, int> set_modelidx(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "SetModelIndex").get());
 	set_modelidx(this, modelidx);
 }
 
@@ -144,9 +144,20 @@ SG_SDK_TF2 bool IBaseEntityInternal::IsHealthKit() const noexcept
 
 void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel)
 {
-	static Utils::IMemberFuncThunk<IBaseEntityInternal*, Vector3D_F&> estimate_velocity(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
+	static Utils::IMemberFuncThunk<void, Vector3D_F&> estimate_velocity(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
 	estimate_velocity(this, vel);
 }
 
+int IBaseEntityInternal::LookupAttachment(const char* name)
+{
+	static Utils::IMemberVFuncThunk<int> lookup_attachment{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "LookupAttachment").value_or(-1) };
+	return lookup_attachment(this);
+}
+
+bool IBaseEntityInternal::GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles)
+{
+	static Utils::IMemberVFuncThunk<bool, int, Vector3D_F&, Angle_F&> get_attachment{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetAttachment").value_or(-1) };
+	return get_attachment(this, attach_pt, origin, angles);
+}
 
 TF2_NAMESPACE_END();
