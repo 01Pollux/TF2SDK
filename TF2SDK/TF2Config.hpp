@@ -184,18 +184,31 @@ struct SDKManager::Config
 		/// <summary>
 		/// VGui::ISurface
 		/// </summary>
-		bool Surface;
+		bool Surface : 1{ };
 
 		/// <summary>
 		/// VGui::IPanel
 		/// </summary>
-		bool Panel;
+		bool Panel : 1{ };
 
 		/// <summary>
 		/// VGui::IInput
 		/// </summary>
-		bool InputSys;
+		bool InputSys : 1{ };
 	} VGui;
+
+	struct
+	{
+		/// <summary>
+		/// IMaterialSystem
+		/// </summary>
+		bool MatSys : 1{ };
+
+		/// <summary>
+		/// IMaterialSystemConfig
+		/// </summary>
+		bool MatSysCfg : 1{ };
+	} Material;
 };
 
 

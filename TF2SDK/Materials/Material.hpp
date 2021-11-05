@@ -168,6 +168,11 @@ public:
 	virtual bool			WasReloadedFromWhitelist() abstract;
 
 	virtual bool			IsPrecached() const abstract;
+
+	static bool IsError(IMaterial* pMat)
+	{
+		return !pMat || pMat->IsErrorMaterial();
+	}
 };
 
 

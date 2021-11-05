@@ -47,6 +47,11 @@
 #include "VGui/Input.hpp"
 #include "VGui/Engine.hpp"
 
+// IMaterialSystem
+// IMaterialSystemConfig
+#include "Materials/MaterialSys.hpp"
+#include "Materials/MaterialCfg.hpp"
+
 
 TF2_NAMESPACE_BEGIN(::Interfaces)
 
@@ -67,6 +72,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			Server,
 			VSTDLib,
 			VGui,
+			Material,
 
 			Count
 		};
@@ -104,7 +110,11 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			// vgui library keys:
 			TF2_INTERFACE(VGui, Surface),
 			TF2_INTERFACE(VGui, Panel),
-			TF2_INTERFACE(VGui, InputSys)
+			TF2_INTERFACE(VGui, InputSys),
+
+			// materialsystem library keys:
+			TF2_INTERFACE(Material, MatSys),
+			TF2_INTERFACE(Material, MatSysCfg)
 		};
 
 		m_GameData->PushFiles({ "/GameData/Interfaces" });

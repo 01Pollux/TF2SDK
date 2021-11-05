@@ -189,11 +189,16 @@ enum class PreviewImageRetVal
 
 enum class MaterialPropertyTypes
 {
-	NeedLightmap = 0,					// bool
-	Opacity,								// int (enum MaterialPropertyOpacityTypes_t)
-	Reflectivity,							// vec3_t
-	NeedsBumpedLightmap				// bool
+	// bool
+	NeedLightmap = 0,					
+	// int (enum MaterialPropertyOpacityTypes_t)
+	Opacity,								
+	// vec3_t
+	Reflectivity,						
+	// bool
+	NeedsBumpedLightmap				
 };
+
 
 enum class ImageFormat
 {
@@ -247,5 +252,224 @@ enum class ImageFormat
 
 	Count
 };
+
+enum class MaterialThreadMode
+{
+	Single,
+	QueuedSingle,
+	QueuedMulti
+};
+
+enum class MaterialContextType
+{
+	Hardware,
+	Queued,
+	Null
+};
+
+
+// NOTE: All size modes will force the render target to be smaller than or equal to
+// the size of the framebuffer.
+enum class RenderTargetSizeMode
+{
+	NoChange = 0,			// Only allowed for render targets that don't want a depth buffer
+	// (because if they have a depth buffer, the render target must be less than or equal to the size of the framebuffer).
+	Default = 1,				// Don't play with the specified width and height other than making sure it fits in the framebuffer.
+	PicMip = 2,				// Apply picmip to the render target's width and height.
+	HDR = 3,					// frame_buffer_width / 4
+	FullFrameBuffer = 4,	// Same size as frame buffer, or next lower power of 2 if we can't do that.
+	OffScreen = 5,			// Target of specified size, don't mess with dimensions
+	FullFrameRoundedUp = 6, // Same size as the frame buffer, rounded up if necessary for systems that can't do non-power of two textures.
+	ReplayScreenshot = 7,	// Rounded down to power of 2, essentially...
+	Literal = 8,			// Use the size passed in. Don't clamp it to the frame buffer size. Really.
+	LiteralPicMip = 9		// Use the size passed in, don't clamp to the frame buffer size, but do apply picmip restrictions.
+
+};
+
+//-----------------------------------------------------------------------------
+// Flags to specify type of depth buffer used with RT
+//-----------------------------------------------------------------------------
+// GR - this is to add RT with no depth buffer bound
+enum class MaterialRenderTargetDepth
+{
+	Shared = 0x0,
+	Seperate = 0x1,
+	None = 0x2,
+	RT_Only = 0x3,
+};
+
+
+enum class ShaderParamType
+{
+	Texture,
+	Int,
+	Color,
+	Vec2,
+	Vec3,
+	Vec4,
+	EnvMap,
+	Float,
+	Bool,
+	FourCC,
+	Matrix,
+	Material,
+	String,
+	Matrix4x2
+};
+
+
+enum class MaterialMatrixMode
+{
+	View,
+	Projection,
+
+	// Texture matrices
+	Texture0,
+	Texture1,
+	Texture2,
+	Texture3,
+	Texture4,
+	Texture5,
+	Texture6,
+	Texture7,
+
+	Model,
+
+	// Total number of matrices
+	NumModes = Model + 1,
+	// Number of texture transforms
+	Transforms = Texture7 - Texture0 + 1
+};
+
+
+enum class LightType
+{
+	Disable,
+	Point,
+	Directional,
+	Spot
+};
+
+
+enum class MaterialPrimitiveType
+{
+	Points,
+	Lines,
+	Triangles,
+	Triangles_Strip,
+	// a single line loop
+	Line_Strip,
+	// this is a *single* polygon
+	Line_Loop,
+	Polygon,
+	Quads,
+	Instanced_Quads,
+
+	// This is used for static meshes that contain multiple types of
+	// primitive types.	When calling draw, you'll need to specify
+	// a primitive type.
+	Heterogenous
+};
+
+
+// acceptable property values for MATERIAL_PROPERTY_OPACITY
+enum class MaterialPropertyOpacityTypes
+{
+	AlphaTest,
+	Opaque,
+	Translucent
+};
+
+
+enum class MaterialBufferTypes
+{
+	Font,
+	Back
+};
+
+
+enum class MaterialCullMode
+{
+	// this culls polygons with counterclockwise winding
+	CCW,
+	// this culls polygons with clockwise winding
+	CW
+};
+
+
+enum class MaterialIndexFormat
+{
+	Unknown,
+	Bit16,
+	Bit32
+};
+
+
+enum class MaterialFogMode
+{
+	None, 
+	Linear,
+	BelowFogZ
+};
+
+
+enum class MaterialHeightClipMode
+{
+	Disable,
+	Render_AboveHeight,
+	Render_BelowHeight
+};
+
+
+enum class MaterialNonInteractiveMode
+{
+	None = -1,
+	Startup,
+	LevelLoad,
+
+	Count
+};
+
+
+namespace MorphFormatFlags
+{
+	static constexpr uint32_t Position	= 0x0001,	// 3D
+	static constexpr uint32_t Normal	= 0x0002,	// 3D
+	static constexpr uint32_t Wrinkle	= 0x0004,	// 1D
+	static constexpr uint32_t Speed		= 0x0008,	// 1D
+	static constexpr uint32_t Side		= 0x0010,	// 1D
+};
+
+
+enum class StencilOperation
+{
+	Keep = 1,
+	Zero,
+	Replace,
+	Incrast,
+	Decrast,
+	Invert,
+	Increment,
+	Decrement,
+	
+	ForceDword = 0x7fffffff
+};
+
+enum class StencilComparisonFunction
+{
+	Never = 1,
+	Less,
+	Equal,
+	LessEqual,
+	Greater,
+	NotEqual,
+	GreaterEqual,
+	Always,
+
+	ForceDword  = 0x7fffffff
+};
+
+
+
 
 TF2_NAMESPACE_END();
