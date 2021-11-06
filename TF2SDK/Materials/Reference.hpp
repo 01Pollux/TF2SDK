@@ -15,7 +15,6 @@ class IMaterialReference
 {
 public:
 	// constructor, destructor
-	IMaterialReference() = default;
 	SG_SDK_TF2 IMaterialReference(char const* pMaterialName = nullptr, const char* pTextureGroupName = nullptr, bool complain = true);
 	SG_SDK_TF2 ~IMaterialReference();
 

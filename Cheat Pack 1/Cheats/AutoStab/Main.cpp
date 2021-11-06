@@ -32,6 +32,8 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 void AutoBackstab::OnPluginLoad()
 {
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Auto Backstab", std::bind(&AutoBackstab::OnRender, this));
+	if (!SG::ThisPlugin->IsPluginPaused())
+		m_CreateMove.attach(false, SG::HookOrder::Any, std::bind(&AutoBackstab::OnCreateMove, this, std::placeholders::_2));
 }
 
 
@@ -48,7 +50,8 @@ void AutoBackstab::OnPluginUnload()
 {
 	if (m_CreateMove)
 		m_CreateMove.detach();
-	SG::DetourManager->ReleaseHook(m_CreateMove.instance());
+	if (m_CreateMove.instance())
+		SG::DetourManager->ReleaseHook(m_CreateMove.instance());
 }
 
 SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)

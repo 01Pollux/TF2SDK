@@ -50,11 +50,10 @@ class SDKManager
 public:
 	struct Config;
 
-	SG_SDK_TF2
-	void init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list);
+	SG_SDK_TF2 bool
+		init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list = { });
 
-	SG_SDK_TF2
-	~SDKManager();
+	SG_SDK_TF2 ~SDKManager();
 
 	void set_gamedata(SG::IGameData* new_gamedata) noexcept
 	{

@@ -58,9 +58,9 @@
 TF2_NAMESPACE_BEGIN(::Interfaces)
 
 
-#define TF2_INTERFACE(CONFIG, NAME)	std::tuple{ NAME##_Key, config.CONFIG.NAME, std::bit_cast<void**>(&NAME), static_cast<size_t>(IFaceType::CONFIG), #CONFIG##"::CreateInterface", NAME##_Sig }
+#define TF2_INTERFACE(CONFIG, NAME)		std::tuple{ NAME##_Key, config.CONFIG.NAME, std::bit_cast<void**>(&NAME), static_cast<size_t>(IFaceType::CONFIG), #CONFIG##"::CreateInterface", NAME##_Sig }
 
-void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list)
+__declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list)
 {
 	set_gamedata(game_data);
 	SDKManager::Manager = this;
@@ -97,7 +97,7 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			TF2_INTERFACE(Engine, GameEventMgr),
 
 			// valve std library keys:
-			std::tuple{ CVar_Key, config.Engine.Convar, std::bit_cast<void**>(&CVar), static_cast<size_t>(IFaceType::VSTDLib), "ValveSTD::CreateInterface", false },
+			std::tuple{ CVar_Key, config.Engine.Convar, std::bit_cast<void**>(&CVar), static_cast<size_t>(IFaceType::VSTDLib), "ValveSTD::CreateInterface", CVar_Sig },
 
 			// client library keys:
 			TF2_INTERFACE(Client, ClientList),
@@ -138,11 +138,14 @@ void SDKManager::init(SG::IGameData* game_data, const Config& config, std::initi
 			{
 				*res = m_GameData->ReadSignature(name).get();
 			}
+			if (!*res)
+				return false;
 		}
 	}
 
 	if (sig_list.size() > 0)
 		m_GameData->PushFiles(sig_list);
+	return true;
 }
 
 SDKManager::~SDKManager()

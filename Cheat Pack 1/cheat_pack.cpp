@@ -23,7 +23,8 @@ public:
 				return false;
 		}
 
-		m_TF2Sdk.init(SG::LibManager->OpenGameData(this), tf2_config, std::initializer_list{ "/GameData/Entity" });
+		if (!m_TF2Sdk.init(SG::LibManager->OpenGameData(this), tf2_config))
+			return false;
 
 		for (auto iface : ICheatIFace::GetEntries())
 			iface->OnPluginLoad();

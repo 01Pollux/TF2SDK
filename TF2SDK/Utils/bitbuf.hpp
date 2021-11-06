@@ -153,8 +153,14 @@ public:
 	const char* get_name() const noexcept { return DebugName; }
 	void set_name(const char* dbgname) noexcept { DebugName = dbgname; }
 
-	bool seek(int bitPos) { CurBit = bitPos; }
-	bool seek_relative(int bitPos) { return seek_relative(CurBit + bitPos); }
+	bool seek(int bitPos) 
+	{ 
+		if (bitPos < 0 || bitPos >= DataBits)
+			return false;
+		CurBit = bitPos;
+		return true;
+	}
+	bool seek_relative(int bitPos) { return seek(CurBit + bitPos); }
 
 	SG_SDK_TF2 int
 		read_bit();

@@ -19,7 +19,7 @@ namespace Const
 	enum class VertexCompressionType
 	{
 		// This indicates an uninitialized VertexCompressionType_t value
-		Invalid = 0xFFFFFFFF,
+		Invalid = -1,
 
 		// 'VERTEX_COMPRESSION_NONE' means that no elements of a vertex are compressed
 		None = 0,

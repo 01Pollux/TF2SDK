@@ -22,6 +22,7 @@ class IPooledVBAllocator;
 struct studiohdr_t;
 struct studiohwdata_t;
 struct DrawModelState_t;
+struct DrawModelInfo_t;
 struct ModelRenderInfo_t;
 struct StaticPropRenderInfo_t;
 struct model_t;
@@ -48,7 +49,7 @@ namespace Const
 		static constexpr uint32_t generate_stats		= 0x8000;
 	}
 
-	enum OverrideType
+	enum class OverrideType
 	{
 		Normal,
 		Build_Shadows,
@@ -56,13 +57,7 @@ namespace Const
 		SSAO_Depth_Write
 	};
 
-	enum class LightType
-	{
-		Disable,
-		Point,
-		Directional,
-		Spot
-	};
+	enum class LightType;
 }
 
 

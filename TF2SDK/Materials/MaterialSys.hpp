@@ -1144,23 +1144,4 @@ struct MaterialSystem_SortInfo_t
 	int			LightmapPageID;
 };
 
-struct LightDesc_t
-{
-	Const::LightType	Type;
-	Vector3D_F		Color;
-	Vector3D_F		Position;
-	Vector3D_F		Direction;
-	float			Range;
-	float			Falloff;
-	float			Attenuation0;
-	float			Attenuation1;
-	float			Attenuation2;
-	float			Theta;
-	float			Phi;
-	// These aren't used by DX8. . used for software lighting.
-	float			ThetaDot;
-	float			PhiDot;
-	unsigned int	Flags;
-};
-
 TF2_NAMESPACE_END();

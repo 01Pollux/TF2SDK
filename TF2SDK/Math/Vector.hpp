@@ -68,6 +68,16 @@ public:
 	{
 		return m_Data.data();
 	}
+	
+	constexpr const array_type& get() const noexcept
+	{
+		return m_Data;
+	}
+
+	array_type& get() noexcept
+	{
+		return m_Data;
+	}
 
 	constexpr auto operator<=>(const VectorXD&) const = default;
 

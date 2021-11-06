@@ -13,7 +13,7 @@
 //#define SG_USING_EVENT_MANAGER	//	IEventManager: EventManager
 #define SG_USING_DETOUR_MANAGER	//	IDetoursManager
 #define SG_USING_IMGUI			//	IImGuiLoader
-//#define SG_USING_PROFILER			//	Profiler::Manager
+#define SG_USING_PROFILER			//	Profiler::Manager
 
 
 

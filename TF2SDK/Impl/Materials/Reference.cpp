@@ -7,7 +7,7 @@
 TF2_NAMESPACE_BEGIN();
 
 
-IMaterialReference::IMaterialReference(char const* pMaterialName, const char* pTextureGroupName, bool bComplain) : m_Material(0)
+IMaterialReference::IMaterialReference(char const* pMaterialName, const char* pTextureGroupName, bool bComplain)
 {
 	if (pMaterialName)
 	{

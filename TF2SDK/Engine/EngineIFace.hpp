@@ -36,6 +36,7 @@ class IServer;
 struct ServerClass;
 struct SendTable;
 struct client_textmessage_t;
+struct PlayerInfo;
 struct PVSInfo_t;
 
 namespace Utils
@@ -351,7 +352,7 @@ public:
 	virtual void InsertServerCommand(const char* str) abstract;
 
 	// Fill in the player info structure for the specified player index (name, model, etc.)
-	virtual bool GetPlayerInfo(int ent_num, Const::PlayerInfo* pinfo) abstract;
+	virtual bool GetPlayerInfo(int ent_num, PlayerInfo* pinfo) abstract;
 
 	// Returns true if this client has been fully authenticated by Steam
 	virtual bool IsClientFullyAuthenticated(EngineEdict* pEdict) abstract;

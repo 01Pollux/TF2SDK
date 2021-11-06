@@ -152,7 +152,7 @@ namespace MaterialVarFlags2
 	static constexpr uint32_t lighting_vertex_lit						= (1 << 1);
 	static constexpr uint32_t lighting_lightmap							= (1 << 2);
 	static constexpr uint32_t lighting_bumped_lightmap					= (1 << 3);
-	static constexpr uint32_t lighting_mask								= Lighting_vertex_lit | Lighting_lightmap | Lighting_bumped_lightmap;
+	static constexpr uint32_t lighting_mask								= lighting_vertex_lit | lighting_lightmap | lighting_bumped_lightmap;
 
 	// Fixme: Should This Be A Part Of The Above Lighting Enums?
 	static constexpr uint32_t diffuse_bumpmapped_model					= (1 << 4);
@@ -433,11 +433,11 @@ enum class MaterialNonInteractiveMode
 
 namespace MorphFormatFlags
 {
-	static constexpr uint32_t Position	= 0x0001,	// 3D
-	static constexpr uint32_t Normal	= 0x0002,	// 3D
-	static constexpr uint32_t Wrinkle	= 0x0004,	// 1D
-	static constexpr uint32_t Speed		= 0x0008,	// 1D
-	static constexpr uint32_t Side		= 0x0010,	// 1D
+	static constexpr uint32_t Position	= 0x0001;	// 3D
+	static constexpr uint32_t Normal	= 0x0002;	// 3D
+	static constexpr uint32_t Wrinkle	= 0x0004;	// 1D
+	static constexpr uint32_t Speed		= 0x0008;	// 1D
+	static constexpr uint32_t Side		= 0x0010;	// 1D
 };
 
 

@@ -615,45 +615,6 @@ namespace StudioDraw
 	static constexpr uint32_t Transparency				= 1 << 31;
 }
 
-struct PlayerInfo
-{
-	char			Name[Const::MaxPlayer_Name];
-	int				UserId;
-	/// <summary>
-	/// global unique player identifer
-	/// </summary>
-	char			GlobalUId[Const::MaxPlayerGUID_Size + 1];
-	/// <summary>
-	/// friends identification number
-	/// </summary>
-	uint32_t		FriendsID;
-	/// <summary>
-	/// friends name
-	/// </summary>
-	char			FriendsName[Const::MaxPlayer_Name];
-	/// <summary>
-	/// true, if player is a bot controlled by game.dll
-	/// </summary>
-	bool			IsFakeplayer;
-	/// <summary>
-	/// true if player is the HLTV proxy
-	/// </summary>
-	bool			IsHLTV;
-	/// <summary>
-	/// true if player is the Replay proxy
-	/// </summary>
-	bool			IsReplay;
-	/// <summary>
-	/// custom files CRC for this player
-	/// </summary>
-	uint32_t		CustomFiles[Const::CustomFiles_Count];
-	/// <summary>
-	/// this counter increases each time the server downloaded a new file
-	/// </summary>
-	unsigned char	FilesDownloaded;
-};
-
-
 using QueryCvarCookie = int;
 static constexpr QueryCvarCookie QueryCvarCookie_Invalid = -1;
 
