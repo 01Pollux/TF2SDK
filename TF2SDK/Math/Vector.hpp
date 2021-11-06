@@ -404,5 +404,4 @@ using Color4_I32	= VectorXD<int32_t, 4>;
 using Color4_F		= VectorXD<float, 4>;
 
 
-
 TF2_NAMESPACE_END();

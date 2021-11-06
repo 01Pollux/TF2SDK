@@ -1,19 +1,19 @@
 
 #include <Interfaces/GameData.hpp>
 
-#include "AutoStab.hpp"
+#include "DisplayDead.hpp"
 
 #include <Entity/BasePlayer.hpp>
 #include <Entity/BaseWeapon.hpp>
 
 #include <Client/UserCmd.hpp>
 
-static AutoBackstab auto_stab;
+static DisplaySpecList auto_stab;
 
-bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
+bool DisplaySpecList::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 {
 	std::unique_ptr<SG::IGameData> game_data{ SG::LibManager->OpenGameData(SG::ThisPlugin) };
-	
+
 	SG::IntPtr clientmode = game_data->ReadSignature("ClientModePointer");
 	m_CreateMove = SG::DetourManager->LoadHook({ "CHLClient" }, "CreateMove", clientmode.get(), game_data.get());
 
@@ -29,29 +29,29 @@ bool AutoBackstab::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 	return true;
 }
 
-void AutoBackstab::OnPluginLoad()
+void DisplaySpecList::OnPluginLoad()
 {
-	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Auto Backstab", std::bind(&AutoBackstab::OnRender, this));
+	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Spectator list", std::bind(&DisplaySpecList::OnRender, this));
 }
 
 
-void AutoBackstab::OnPluginPauseChange(bool pausing)
+void DisplaySpecList::OnPluginPauseChange(bool pausing)
 {
 	if (!pausing)
-		m_CreateMove.attach(false, SG::HookOrder::Any, std::bind(&AutoBackstab::OnCreateMove, this, std::placeholders::_2));
+		m_CreateMove.attach(false, SG::HookOrder::Any, std::bind(&DisplaySpecList::OnCreateMove, this, std::placeholders::_2));
 	else
 		m_CreateMove.detach();
 }
 
 
-void AutoBackstab::OnPluginUnload()
+void DisplaySpecList::OnPluginUnload()
 {
 	if (m_CreateMove)
 		m_CreateMove.detach();
 	SG::DetourManager->ReleaseHook(m_CreateMove.instance());
 }
 
-SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
+SG::MHookRes DisplaySpecList::OnCreateMove(SG::PassArgs* pArgs)
 {
 	auto cmd = pArgs->get<TF2::Const::UserCmd*>(1);
 	if (!cmd || !cmd->CmdNumber)

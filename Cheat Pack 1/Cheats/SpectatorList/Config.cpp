@@ -1,8 +1,8 @@
 
 #include <Interfaces/ImGui.hpp>
-#include "AutoStab.hpp"
+#include "DisplayDead.hpp"
 
-bool AutoBackstab::OnRender()
+bool DisplaySpecList::OnRender()
 {
 	SG::ConfigState state;
 
@@ -23,7 +23,7 @@ bool AutoBackstab::OnRender()
 	return state;
 }
 
-void AutoBackstab::OnSaveConfig(Json& cfg)
+void DisplaySpecList::OnSaveConfig(Json& cfg)
 {
 	Json& autostab = cfg["Auto-Backstab"];
 	m_Enabled.to_json(autostab);
@@ -31,7 +31,7 @@ void AutoBackstab::OnSaveConfig(Json& cfg)
 	m_CheckInvisible.to_json(autostab);
 }
 
-void AutoBackstab::OnReloadConfig(const Json& cfg)
+void DisplaySpecList::OnReloadConfig(const Json& cfg)
 {
 	auto iter = cfg.find("Auto-Backstab");
 	if (iter != cfg.end())

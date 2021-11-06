@@ -35,11 +35,13 @@
     <ClInclude Include="Engine\EngineIFace.hpp" />
     <ClInclude Include="Engine\GameEnumerator.hpp" />
     <ClInclude Include="Engine\GameTrace.hpp" />
+    <ClInclude Include="Engine\ModelRenderer.hpp" />
     <ClInclude Include="Engine\NetMessages.hpp" />
     <ClInclude Include="Engine\NetStrTable.hpp" />
     <ClInclude Include="Client\RecipientFilter.hpp" />
     <ClInclude Include="Engine\Sounds.hpp" />
     <ClInclude Include="Engine\VGui.hpp" />
+    <ClInclude Include="Engine\GameEvent.hpp" />
     <ClInclude Include="Materials\Consts.hpp" />
     <ClInclude Include="Materials\Material.hpp" />
     <ClInclude Include="Materials\MaterialCfg.hpp" />

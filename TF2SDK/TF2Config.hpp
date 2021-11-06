@@ -125,12 +125,22 @@ struct SDKManager::Config
 		/// <summary>
 		/// VGui::IEngineVGui
 		/// </summary>
-		bool EngineVGUI;
+		bool EngineVGUI : 1{ };
 
 		/// <summary>
 		/// IEngineSound
 		/// </summary>
-		bool ClientSound;
+		bool ClientSound : 1{ };
+
+		/// <summary>
+		/// IVModelRender
+		/// </summary>
+		bool ModelRenderer : 1{ };
+
+		/// <summary>
+		/// IGameEventManager
+		/// </summary>
+		bool GameEventMgr : 1{ };
 	} Engine;
 
 	struct
