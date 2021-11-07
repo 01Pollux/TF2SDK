@@ -1,7 +1,9 @@
 
 #include <Interfaces/GameData.hpp>
 #include <imgui/imgui_internal.h>
+
 #include <User/Profiler.hpp>
+#include <User/FontAwesome_Icons.hpp>
 
 #include <Engine/ClientDll.hpp>
 #include <Engine/GlobalVars.hpp>
@@ -26,6 +28,7 @@ bool DisplaySpecList::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& confi
 
 void DisplaySpecList::OnPluginLoad()
 {
+	m_DisplayFont = SG::ImGuiLoader->FindFont("Arimo-Medium, medium");
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Spectator list", std::bind(&DisplaySpecList::OnRender, this));
 
 	ImGuiContextHook draw_hook;
@@ -108,7 +111,12 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* ctx, ImGuiContextHook* hook)
 	}
 
 	if (spectators.empty())
-		return;
+	{
+		spectators.emplace_back("[FP] ", "Waxel");
+		spectators.emplace_back("[FP] ", "Waxe151zt5z");
+		spectators.emplace_back("[TC] ", "topjkpzt");
+		spectators.emplace_back("[FC] ", "zatlpzektl)p");
+	}
 
 	const ImGuiWindowFlags background_flag = (spec_list.m_Locked ? ImGuiWindowFlags_NoMove : ImGuiWindowFlags_None);
 
@@ -121,10 +129,12 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* ctx, ImGuiContextHook* hook)
 	if (is_open)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, { spec_list.m_TextColor[0], spec_list.m_TextColor[1], spec_list.m_TextColor[2], spec_list.m_TextColor[3] });
+		ImGui::PushFont(spec_list.m_DisplayFont);
 		for (auto& name_and_mode : spectators)
 		{
 			ImGui::Text("[%s]%s", name_and_mode.Mode, name_and_mode.Name.c_str());
 		}
+		ImGui::PopFont();
 		ImGui::PopStyleColor();
 	}
 

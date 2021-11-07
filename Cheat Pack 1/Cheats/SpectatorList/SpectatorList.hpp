@@ -34,4 +34,5 @@ private:
 	SG::Config<int>		m_DisplayCount{ "Display count", TF2::Const::MaxPlayers };
 
 	ImGuiID m_RenderHookId;
+	ImFont* m_DisplayFont;
 };
