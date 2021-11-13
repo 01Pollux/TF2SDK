@@ -44,7 +44,7 @@ public:
 	// Install a console printer
 	virtual void			InstallConsoleDisplayFunc(IConsoleDisplayFunc* pDisplayFunc) abstract;
 	virtual void			RemoveConsoleDisplayFunc(IConsoleDisplayFunc* pDisplayFunc) abstract;
-	virtual void			ConsoleColorPrintf(const Color3_I8& clr, const char* pFormat, ...) const abstract;
+	virtual void			ConsoleColorPrintf(const Color3_8& clr, const char* pFormat, ...) const abstract;
 	virtual void			ConsolePrintf(const char* pFormat, ...) const abstract;
 	virtual void			ConsoleDPrintf(const char* pFormat, ...) const abstract;
 

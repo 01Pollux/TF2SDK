@@ -278,7 +278,7 @@ public:
 
 	// Debugging functionality:
 	// Very slow routine to draw a physics model
-	virtual void		DebugDrawPhysCollide(const IPhysCollide* pCollide, IMaterial* pMaterial, Matrix3x4_F& transform, const Color4_I32& color) abstract;
+	virtual void		DebugDrawPhysCollide(const IPhysCollide* pCollide, IMaterial* pMaterial, Matrix3x4_F& transform, const Color4_8& color) abstract;
 	// This can be used to notify test scripts that we're at a particular spot in the code.
 	virtual void		CheckPoint(const char* pName) abstract;
 	// Draw portals if r_DrawPortals is set (Debugging only)

@@ -629,6 +629,21 @@ enum class TFTeam
 	Count
 };
 
+namespace TFTeamNames
+{
+	constexpr const char* CStrings[]{
+		"Spectator",
+		"Red",
+		"Blue"
+	};
+
+	constexpr const wchar_t* WStrings[]{
+		L"Spectator",
+		L"Red",
+		L"Blue"
+	};
+}
+
 enum class PlayerHitboxIdx
 {
 	Invalid = -1,

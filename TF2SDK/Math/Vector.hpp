@@ -79,6 +79,18 @@ public:
 		return m_Data;
 	}
 
+	constexpr size_t size() const noexcept
+	{
+		return _Size;
+	}
+
+	template<typename _OTy>
+	constexpr _OTy to() const noexcept
+	{
+		static_assert(sizeof(_OTy) == sizeof(*this), "Size mismatch");
+		return std::bit_cast<_OTy>(m_Data);
+	}
+
 	constexpr auto operator<=>(const VectorXD&) const = default;
 
 	void negate() noexcept
@@ -145,7 +157,6 @@ public:
 			return 0.f;
 		}
 	}
-
 
 	_NODISCARD constexpr bool within(const VectorXD& min, const VectorXD& max) const noexcept
 	{
@@ -403,14 +414,14 @@ using Quaternion_I = Vector4D_I;
 using Quaternion_F = Vector4D_F;
 using Quaternion_D = Vector4D_D;
 
-using Color3_I8		= VectorXD<int8_t, 3>;
-using Color3_I16	= VectorXD<int16_t, 3>;
-using Color3_I32	= VectorXD<int32_t, 3>;
+using Color3_8		= VectorXD<uint8_t, 3>;
+using Color3_16		= VectorXD<uint16_t, 3>;
+using Color3_32		= VectorXD<uint32_t, 3>;
 using Color3_F		= VectorXD<float, 3>;
 
-using Color4_I8		= VectorXD<int8_t, 4>;
-using Color4_I16	= VectorXD<int16_t, 4>;
-using Color4_I32	= VectorXD<int32_t, 4>;
+using Color4_8		= VectorXD<uint8_t, 4>;
+using Color4_16		= VectorXD<uint16_t, 4>;
+using Color4_32		= VectorXD<uint32_t, 4>;
 using Color4_F		= VectorXD<float, 4>;
 
 

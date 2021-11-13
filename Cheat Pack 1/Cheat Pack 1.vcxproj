@@ -102,7 +102,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SG_LIBRARIES)\imgui\lib;$(SG_TF2)\..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SG_LIBRARIES)\imgui\lib;$(SG_TF2)\..\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>imgui_export.lib;TF2SDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -189,13 +189,19 @@
   <ItemGroup>
     <ClCompile Include="Cheats\AutoStab\Config.cpp" />
     <ClCompile Include="Cheats\AutoStab\Main.cpp" />
+    <ClCompile Include="Cheats\ESP\Building.cpp" />
+    <ClCompile Include="Cheats\ESP\Config.cpp" />
+    <ClCompile Include="Cheats\ESP\Draw.cpp" />
+    <ClCompile Include="Cheats\ESP\Main.cpp" />
     <ClCompile Include="Cheats\SpectatorList\Config.cpp" />
     <ClCompile Include="Cheats\SpectatorList\Main.cpp" />
+    <ClCompile Include="Cheats\ESP\Player.cpp" />
     <ClCompile Include="dllImpl.cpp" />
     <ClCompile Include="cheat_pack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\AutoStab\AutoStab.hpp" />
+    <ClInclude Include="Cheats\ESP\ESP.hpp" />
     <ClInclude Include="Cheats\SpectatorList\SpectatorList.hpp" />
     <ClInclude Include="Defines.hpp" />
     <ClInclude Include="ICheatIFace.hpp" />

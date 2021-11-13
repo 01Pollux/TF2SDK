@@ -578,9 +578,9 @@ bool KeyValues::GetBool(const char* keyName, bool defaultValue, bool* optGotDefa
 }
 
 
-Color4_I8 KeyValues::GetColor(const char* keyName) const noexcept
+Color4_8 KeyValues::GetColor(const char* keyName) const noexcept
 {
-	Color4_I8 color;
+	Color4_8 color;
 	const KeyValues* dat = FindKey(keyName);
 	if (dat)
 	{
@@ -621,7 +621,7 @@ Color4_I8 KeyValues::GetColor(const char* keyName) const noexcept
 
 
 
-void KeyValues::SetColor(const char* keyName, const Color4_I8& value)
+void KeyValues::SetColor(const char* keyName, const Color4_8& value)
 {
 	KeyValues* dat = FindKey(keyName, true);
 

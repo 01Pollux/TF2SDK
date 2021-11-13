@@ -5,10 +5,9 @@
 #include "DataMap.hpp"
 
 #include <type_traits>
+#include <array>
 
 TF2_NAMESPACE_BEGIN();
-
-
 
 template<typename _TypeInfo>
 class UnknowProp
@@ -23,28 +22,50 @@ public:
 
 public:	
 	UnknowProp() = delete;
-	UnknowProp(const UnknowProp&) = delete;	UnknowProp& operator=(const UnknowProp&) = delete;
-	UnknowProp(UnknowProp&&) = delete;		UnknowProp& operator=(UnknowProp&&) = delete;
 
-
-	operator reference() noexcept { return get_ref(); }
-	operator const_reference() const noexcept { return get_ref(); }
+	operator reference() noexcept				{ return get_ref(); }
+	operator const_reference() const noexcept	{ return get_ref(); }
 
 	template<typename _OTypeInfo>
 	const_reference operator=(const UnknowProp<_OTypeInfo>& o) { return this->GetVarRef() = static_cast<const_reference>(o.GetVarConstRef()); }
 	template<typename _Ty>
 	const_reference operator=(const _Ty& o) { return (get_ref() = static_cast<const_reference>(o)); }
 
-	template<typename _Ty> const reference operator+=(const _Ty& o) noexcept { return get_ref() += static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator-=(const _Ty& o) noexcept { return get_ref() -= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator*=(const _Ty& o) noexcept { return get_ref() *= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator/=(const _Ty& o) noexcept { return get_ref() /= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator%=(const _Ty& o) noexcept { return get_ref() %= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator&=(const _Ty& o) noexcept { return get_ref() &= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator|=(const _Ty& o) noexcept { return get_ref() |= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator^=(const _Ty& o) noexcept { return get_ref() ^= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator<<=(const _Ty& o) noexcept { return get_ref() <<= static_cast<const_reference>(o); }
-	template<typename _Ty> const reference operator>>=(const _Ty& o) noexcept { return get_ref() >>= static_cast<const_reference>(o); }
+
+#define UNKNOWNPROP_IMPL_OPERATOR(SYMBOL)								\
+	reference operator##SYMBOL##=(const UnknowProp& prop) noexcept		\
+	{																	\
+		get_ref() SYMBOL##= prop.get_ref();								\
+		return *this;													\
+	}																	\
+	template<typename _Ty>												\
+	reference operator##SYMBOL##=(const _Ty& o)	noexcept				\
+	{																	\
+		get_ref() SYMBOL##= static_cast<const_reference>(o);			\
+		return *this;													\
+	}																	\
+	type operator##SYMBOL(const UnknowProp& prop) const noexcept		\
+	{																	\
+		return get_ref() SYMBOL prop.get_ref();							\
+	}																	\
+	template<typename _Ty>												\
+	type operator##SYMBOL(const _Ty& o) const noexcept					\
+	{																	\
+		return get_ref() SYMBOL static_cast<const_reference>(o);		\
+	}
+
+	UNKNOWNPROP_IMPL_OPERATOR(+);
+	UNKNOWNPROP_IMPL_OPERATOR(-);
+	UNKNOWNPROP_IMPL_OPERATOR(/);
+	UNKNOWNPROP_IMPL_OPERATOR(*);
+	UNKNOWNPROP_IMPL_OPERATOR(%);
+	UNKNOWNPROP_IMPL_OPERATOR(&);
+	UNKNOWNPROP_IMPL_OPERATOR(|);
+	UNKNOWNPROP_IMPL_OPERATOR(^);
+	UNKNOWNPROP_IMPL_OPERATOR(<<);
+	UNKNOWNPROP_IMPL_OPERATOR(>>);
+
+#undef UNKNOWNPROP_IMPL_OPERATOR
 
 	template<typename _Ty = type> _NODISCARD auto operator<=>(const _Ty& o) const noexcept	{ return get_ref() <=> static_cast<const_reference>(o); }
 	template<typename _Ty = type> _NODISCARD bool operator!=(const _Ty& o) const noexcept	{ return get_ref() != static_cast<const_reference>(o); }
@@ -116,7 +137,11 @@ public:
 	_NODISCARD const_reference get() const noexcept { return get_ref(); }
 
 	_NODISCARD pointer data() noexcept				{ return get_ptr(); }
-	_NODISCARD const_pointer data() const noexcept	{ return get_ptr(); }
+	_NODISCARD const_pointer data() const noexcept { return get_ptr(); }
+
+	template<typename _Ty>	_NODISCARD _Ty get() const noexcept			{ return std::bit_cast<_Ty>(get_ref()); }
+	template<typename _Ty>	_NODISCARD _Ty* data() noexcept				{ return std::bit_cast<_Ty*>(get_ptr()); }
+	template<typename _Ty>	_NODISCARD const _Ty* data() const noexcept	{ return std::bit_cast<const _Ty*>(get_ptr()); }
 
 	_NODISCARD const ptrdiff_t offset() const noexcept	{ return get_offset(); }
 
@@ -164,10 +189,10 @@ private:
 
 
 
-#define SG_DECL_UNKOWN_PROP(Class, Type, GETTER, CustomName, EXTRA)					\
+#define SG_DECL_UNKOWN_PROP_A(Class, Type, Size, GETTER, CustomName, EXTRA)			\
 struct TypeInfo_##CustomName##Class													\
 {																					\
-	using type = Type;																\
+	using type = std::conditional_t<(Size > 0), std::array<Type, Size>, Type>;		\
 	static constexpr bool use_this_ptr = false;										\
 	static constexpr size_t offset_to_this() noexcept								\
 	{																				\
@@ -184,10 +209,14 @@ struct TypeInfo_##CustomName##Class													\
 };																					\
 UnknowProp<TypeInfo_##CustomName##Class> CustomName
 
-#define SG_DECL_UNKOWN_PROP_THIS(Class, Type, GETTER, CustomName, EXTRA)			\
+#define SG_DECL_UNKOWN_PROP(Class, Type, GETTER, CustomName, EXTRA)					\
+		SG_DECL_UNKOWN_PROP_A(Class, Type, 0, GETTER, CustomName, EXTRA)
+
+
+#define SG_DECL_UNKOWN_PROP_THIS_A(Class, Type, Size, GETTER, CustomName, EXTRA)	\
 struct TypeInfo_##CustomName##Class													\
 {																					\
-	using type = Type;																\
+	using type = std::conditional_t<(Size > 0), std::array<Type, Size>, Type>;		\
 	static constexpr bool use_this_ptr = true;										\
 	static constexpr size_t offset_to_this() noexcept								\
 	{																				\
@@ -204,47 +233,47 @@ struct TypeInfo_##CustomName##Class													\
 };																					\
 UnknowProp<TypeInfo_##CustomName##Class> CustomName
 
-#define SG_DECL_RECVPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
-SG_DECL_UNKOWN_PROP(																	\
-	Class, 																				\
-	Type, 																				\
-	[]()																				\
-	{																					\
-		uint32_t offset{ };																\
-		PropFinder::FindRecvProp(Class_Name, Prop_Name, nullptr, &offset);				\
-		return offset;																	\
-	}(),																				\
-	Custom_Name,																		\
-	ExtraOffset																			\
+#define SG_DECL_UNKOWN_PROP_THIS(Class, Type, GETTER, CustomName, EXTRA)			\
+		SG_DECL_UNKOWN_PROP_THIS_A(Class, Type, 0, GETTER, CustomName, EXTRA)		\
+
+
+#define SG_DECL_RECVPROP_A(Class, Type, Size, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
+SG_DECL_UNKOWN_PROP_A(																			\
+	Class, 																						\
+	Type,																						\
+	Size,																						\
+	[]()																						\
+	{																							\
+		uint32_t offset{ };																		\
+		PropFinder::FindRecvProp(Class_Name, Prop_Name, nullptr, &offset);						\
+		return offset;																			\
+	}(),																						\
+	Custom_Name,																				\
+	ExtraOffset																					\
 )
 
-#define SG_DECL_SENDPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
-SG_DECL_UNKOWN_PROP(																	\
-	Class, 																				\
-	Type, 																				\
-	[]()																				\
-	{																					\
-		uint32_t offset{ };																\
-		PropFinder::FindSendProp(Class_Name, Prop_Name, nullptr, &offset);				\
-		return offset;																	\
-	}(),																				\
-	Custom_Name,																		\
-	ExtraOffset																			\
+#define SG_DECL_RECVPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)			\
+		SG_DECL_RECVPROP_A(Class, Type, 0, Class_Name, Prop_Name, Custom_Name, ExtraOffset)
+
+
+#define SG_DECL_DATAMAP_A(Class, Type, Size, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)	\
+SG_DECL_UNKOWN_PROP_THIS_A(																	\
+	Class, 																					\
+	Type, 																					\
+	Size, 																					\
+	[pthis](auto datamap)																	\
+	{																						\
+		uint32_t offset{ };																	\
+		PropFinder::FindDataMap(datamap, Prop_Name, nullptr, &offset);						\
+		return offset;																		\
+	}(((Class*)(pthis))->GetDataMap(Is_Pred)),												\
+	Custom_Name,																			\
+	ExtraOffset																				\
 )
 
-#define SG_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)		\
-SG_DECL_UNKOWN_PROP_THIS(																\
-	Class, 																				\
-	Type, 																				\
-	[pthis](auto datamap)																\
-	{																					\
-		uint32_t offset{ };																\
-		PropFinder::FindDataMap(datamap, Prop_Name, nullptr, &offset);					\
-		return offset;																	\
-	}(((Class*)(pthis))->GetDataMap(Is_Pred)),											\
-	Custom_Name,																		\
-	ExtraOffset																			\
-)
+
+#define SG_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)			\
+		SG_DECL_DATAMAP_A(Class, Type, 0, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)
 
 
 TF2_NAMESPACE_END();

@@ -30,7 +30,7 @@ namespace Const
 		Count,
 	};
 
-	enum class ETFCond
+	enum class TFCond
 	{
 		//0: Revving Minigun, Sniper Rifle.Gives zoomed / revved pose
 		Slowed,
@@ -313,6 +313,19 @@ namespace Const
 		"Engineer"
 	};
 
+	/*static const char* TFClassNamesIcons[] =
+	{
+		"\xF1\xF4\xAA",
+		"Sniper",
+		"Soldier",
+		"Demoman",
+		"Medic",
+		"Heavy",
+		"Pyro",
+		"Spy",
+		"Engineer"
+	};*/
+
 	enum class PlayerLifeState : uint8_t
 	{
 		Alive,
@@ -411,22 +424,97 @@ public:
 
 	Vector3D_F EyePosition() const
 	{
-		return VecOrigin.get() + ViewOffset.get();
+		return VecOrigin + ViewOffset;
 	}
 
 	void EyeVectors(Vector3D_F* fwd = nullptr, Vector3D_F* right = nullptr, Vector3D_F* up = nullptr) const
 	{
-		Utils::AngleVectors(EyeAngles.get(), fwd, right, up);
+		Utils::AngleVectors(EyeAngles, fwd, right, up);
 	}
 
 	SG_SDK_TF2 bool 
-		InCond(Const::ETFCond cond) const;
+		InCond(Const::TFCond cond) const;
+
+	template<typename _CondTy, typename... _Args>
+	bool InCond(_CondTy cond, _Args... conds) const
+	{
+		if (!InCond(cond))
+			return false;
+		return InCond(conds...);
+	}
+
+	/// <summary>
+	/// Test if player is in condition's effect:
+	/// 
+	/// * OnFire
+	/// * Jarated
+	/// * CloakFlicker
+	/// * Milked
+	/// * Bleeding
+	/// 
+	/// </summary>
+	bool IsPlayerInCondEffect() const
+	{
+		using enum Const::TFCond;
+		return InCond(OnFire, Jarated, CloakFlicker, Milked, Bleeding);
+	}
+
+	/// <summary>
+	/// Test if player is in invisible:
+	/// 
+	/// * Stealthed
+	/// * Cloaked
+	/// 
+	/// </summary>
+	bool IsPlayerInvisible() const
+	{
+		using enum Const::TFCond;
+		return InCond(Stealthed, Cloaked);
+	}
+
+	/// <summary>
+	/// Test if player is invenurable:
+	/// 
+	/// * Ubercharged
+	/// * UberchargedCanteen
+	/// * UberchargedHidden
+	/// * UberchargedOnTakeDamage
+	/// * Bonked
+	/// * DefenseBuffMmmph
+	/// 
+	/// </summary>
+	bool IsPlayerInvunerable() const
+	{
+		using enum Const::TFCond;
+		return InCond(Ubercharged, UberchargedCanteen, UberchargedHidden, UberchargedOnTakeDamage, Bonked, DefenseBuffMmmph);
+	}
+
+	/// <summary>
+	/// Test if player is crit-boosted:
+	/// 
+	/// * Kritzkrieged
+	/// * CritRuneTemp
+	/// * CritCanteen
+	/// * CritMmmph
+	/// * CritOnKill
+	/// * CritOnDamage
+	/// * CritOnFirstBlood
+	/// * CritOnWin
+	/// * CritRuneTemp
+	/// * HalloweenCritCandy
+	/// 
+	/// </summary>
+	bool IsPlayerCritBoosted() const
+	{
+		using enum Const::TFCond;
+		return InCond(Kritzkrieged, CritRuneTemp, CritCanteen, CritMmmph, CritOnKill, CritOnDamage, CritOnFirstBlood, CritOnWin, CritRuneTemp, HalloweenCritCandy);
+	}
 
 	SG_SDK_TF2 void 
-		AddCond(Const::ETFCond cond, float duration = -1.0);
+		AddCond(Const::TFCond cond, float duration = -1.0);
 
 	SG_SDK_TF2 void 
-		RemoveCond(Const::ETFCond cond);
+		RemoveCond(Const::TFCond cond);
 
 	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		Const::EntClassID::CTFPlayer, "m_Shared",				PlayerShared, 0);
 	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			Const::EntClassID::CTFPlayer, "m_PlayerClass",			PlayerClass, 0);
@@ -453,19 +541,20 @@ public:
 	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecViewOffset[0]",		ViewOffset, 0);
 	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecVelocity[0]",		Velocity, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle[Const::MaxPlayers], Const::EntClassID::CTFPlayer, "m_hMyWeapons",			MyWeapons, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					Const::EntClassID::CTFPlayer, "m_hActiveWeapon",		ActiveWeapon, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,					Const::EntClassID::CTFPlayer, "m_hObserverTarget",		ObserverTarget, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,		Const::EntClassID::CTFPlayer, "m_iObserverMode",		ObserverMode, 0);
+	SG_DECL_RECVPROP_A(ITFPlayerInternal, IBaseHandle, Const::MaxPlayers,			Const::EntClassID::CTFPlayer, "m_hMyWeapons", MyWeapons, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hActiveWeapon",		ActiveWeapon, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hObserverTarget",		ObserverTarget, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,					Const::EntClassID::CTFPlayer, "m_iObserverMode",		ObserverMode, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,			Const::EntClassID::CTFPlayer, "m_lifeState",			LifeState, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,					Const::EntClassID::CTFPlayer, "m_iClass",				Class, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,					Const::EntClassID::CTFPlayer, "m_nStreaks",				Streaks, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,							Const::EntClassID::CTFPlayer, "m_iHealth",				CurrentHealth, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,							Const::EntClassID::CTFPlayer, "m_flDeathTime",			DeathTime, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,						Const::EntClassID::CTFPlayer, "m_lifeState",			LifeState, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,								Const::EntClassID::CTFPlayer, "m_iClass",				Class, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,								Const::EntClassID::CTFPlayer, "m_nStreaks",				Streaks, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, int,										Const::EntClassID::CTFPlayer, "m_iHealth",				CurrentHealth, 0);
+	SG_DECL_RECVPROP(ITFPlayerInternal, float,										Const::EntClassID::CTFPlayer, "m_flDeathTime",			DeathTime, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		Const::EntClassID::CTFPlayer, "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool[Const::MaxPlayers],		Const::EntClassID::CTFPlayer, "m_bPlayerDominated",		PlayerDominated, 0);
+	SG_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
+	SG_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominated",		PlayerDominated, 0);
+
 };
 
 

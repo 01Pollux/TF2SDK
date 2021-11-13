@@ -58,7 +58,7 @@ bool IBaseEntityInternal::IsBaseCombatWeapon() const noexcept
 	return is_combat_weapon(this);
 }
 
-SG_SDK_TF2 EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const noexcept
+EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const noexcept
 {
 	if (is_pred)
 	{
@@ -72,13 +72,13 @@ SG_SDK_TF2 EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const no
 	}
 }
 
-SG_SDK_TF2 const IBoneCache* IBaseEntityInternal::GetBoneCache() const
+const IBoneCache* IBaseEntityInternal::GetBoneCache() const
 {
 	static Utils::IMemberFuncThunk<IBoneCache*, studiohdr_t*> get_bonecache(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "GetBoneCache").get());
 	return get_bonecache(this, nullptr);
 }
 
-SG_SDK_TF2 bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
+bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
 {
 	const ModelInfo* mdl = GetModel();
 	if (!mdl)
@@ -88,7 +88,7 @@ SG_SDK_TF2 bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
 	if (!shdr)
 		return false;
 
-	const mstudiohitboxset_t* shbs = shdr->GetHitboxSet(HitboxSet.get());
+	const mstudiohitboxset_t* shbs = shdr->GetHitboxSet(HitboxSet);
 	if (!shbs)
 		return false;
 
@@ -101,7 +101,7 @@ SG_SDK_TF2 bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
 	return true;
 }
 
-SG_SDK_TF2 bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResult& results) const
+bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResult& results) const
 {
 	const ModelInfo* mdl = GetModel();
 	if (!mdl)
@@ -111,7 +111,7 @@ SG_SDK_TF2 bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResu
 	if (!shdr)
 		return false;
 
-	const mstudiohitboxset_t* shbs = shdr->GetHitboxSet(HitboxSet.get());
+	const mstudiohitboxset_t* shbs = shdr->GetHitboxSet(HitboxSet);
 	if (!shbs)
 		return false;
 
@@ -130,16 +130,23 @@ SG_SDK_TF2 bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResu
 	return true;
 }
 
-SG_SDK_TF2 void IBaseEntityInternal::SetModel(int modelidx)
+void IBaseEntityInternal::SetModel(int modelidx)
 {
 	static Utils::IMemberFuncThunk<void, int> set_modelidx(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "SetModelIndex").get());
 	set_modelidx(this, modelidx);
 }
 
-SG_SDK_TF2 bool IBaseEntityInternal::IsHealthKit() const noexcept
+bool IBaseEntityInternal::IsHealthKit() const noexcept
 {
 	const ModelInfo* mdl = this->GetModel();
 	return mdl ? strstr(mdl->ModelName, "healthkit") != nullptr : false;
+}
+
+bool IBaseEntityInternal::IsGhost() const noexcept
+{
+	const ModelInfo* mdl = this->GetModel();
+	// models/props_halloween/ghost*.mdl
+	return mdl ? strstr(mdl->ModelName, "n/ghost") != nullptr : false;
 }
 
 void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel)

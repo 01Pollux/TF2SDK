@@ -122,8 +122,6 @@ using IDispenser = IBaseEntityWrapper<IDispenserInternal>;
 class ITeleporterInternal : public IBaseObjectInternal
 {
 public:
-	
-	SG_DECL_RECVPROP(ITeleporterInternal,	int,						Const::EntClassID::CObjectTeleporter, "m_bMatchBuilding",			MatchingBuilding, 0);
 	SG_DECL_RECVPROP(ITeleporterInternal,	int,						Const::EntClassID::CObjectTeleporter, "m_iTimesUsed",				TimesUsed, 0);
 	SG_DECL_RECVPROP(ITeleporterInternal,	float,						Const::EntClassID::CObjectTeleporter, "m_flRechargeTime",			RechargeTime, 0);
 	SG_DECL_RECVPROP(ITeleporterInternal,	float,						Const::EntClassID::CObjectTeleporter, "m_flCurrentRechargeDuration",CurrentRechageDuration, 0);

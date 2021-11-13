@@ -7,7 +7,7 @@ TF2_NAMESPACE_BEGIN();
 class _TFCondProxy
 {
 public:
-	void Change(ITFPlayerInternal* player, Const::ETFCond tfcond, bool add)
+	void Change(ITFPlayerInternal* player, Const::TFCond tfcond, bool add)
 	{
 		if (!CondOffsets[0])
 			Init(player);
@@ -69,7 +69,7 @@ public:
 		else outcond &= ~bit;
 	}
 
-	bool InCond(const ITFPlayerInternal* player, Const::ETFCond tfcond) noexcept
+	bool InCond(const ITFPlayerInternal* player, Const::TFCond tfcond) noexcept
 	{
 		if (!CondOffsets[0])
 			Init(player);
@@ -152,17 +152,17 @@ private:
 static _TFCondProxy TFCondProxy;
 
 
-bool ITFPlayerInternal::InCond(Const::ETFCond cond) const
+bool ITFPlayerInternal::InCond(Const::TFCond cond) const
 {
 	return TFCondProxy.InCond(this, cond);
 }
 
-void ITFPlayerInternal::AddCond(Const::ETFCond cond, float duration)
+void ITFPlayerInternal::AddCond(Const::TFCond cond, float duration)
 {
 	TFCondProxy.Change(this, cond, true);
 }
 
-void ITFPlayerInternal::RemoveCond(Const::ETFCond cond)
+void ITFPlayerInternal::RemoveCond(Const::TFCond cond)
 {
 	TFCondProxy.Change(this, cond, false);
 }

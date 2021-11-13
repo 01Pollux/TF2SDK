@@ -49,7 +49,7 @@ namespace VGui
 
 		// rendering functions
 		virtual void DrawSetColor(int r, int g, int b, int a) abstract;
-		virtual void DrawSetColor(Color4_I8 col) abstract;
+		virtual void DrawSetColor(Color4_8 col) abstract;
 
 		virtual void DrawFilledRect(int x0, int y0, int x1, int y1) abstract;
 		virtual void DrawFilledRectArray(Const::VGui::IntRect* pRects, int numRects) abstract;
@@ -60,7 +60,7 @@ namespace VGui
 
 		virtual void DrawSetTextFont(Const::VGui::HFont font) abstract;
 		virtual void DrawSetTextColor(int r, int g, int b, int a) abstract;
-		virtual void DrawSetTextColor(Color4_I8 col) abstract;
+		virtual void DrawSetTextColor(Color4_8 col) abstract;
 		virtual void DrawSetTextPos(int x, int y) abstract;
 		virtual void DrawGetTextPos(int& x, int& y) abstract;
 		virtual void DrawPrintText(const wchar_t* text, int textLen, Const::VGui::FontDrawType drawType = Const::VGui::FontDrawType::Default) abstract;

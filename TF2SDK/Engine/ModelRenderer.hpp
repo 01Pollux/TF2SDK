@@ -142,7 +142,7 @@ public:
 	virtual void SetupColorMeshes(int nTotalVerts) abstract;
 
 	virtual void AddColoredDecal(void* handle, const GameRay& ray,
-		const Vector3D_F& decalUp, int decalIndex, int body, Color4_I8 cColor, bool noPokeThru = false, int maxLODToDecal = -1) abstract;
+		const Vector3D_F& decalUp, int decalIndex, int body, Color4_8 cColor, bool noPokeThru = false, int maxLODToDecal = -1) abstract;
 
 	virtual void GetMaterialOverride(IMaterial** ppOutForcedMaterial, Const::OverrideType* pOutOverrideType) abstract;
 };

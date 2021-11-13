@@ -5,14 +5,6 @@
 
 TF2_NAMESPACE_BEGIN();
 
-enum class EntGrenadeProjType
-{
-	Regular,
-	Detonate,
-	DetonateRemote,
-	CannonBall
-};
-
 class GameTrace;
 
 class IBaseWeaponInternal : public IEconEntityInternal
@@ -42,9 +34,6 @@ public:
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flObservedCritChance", ObservedCritChance, 0);
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFSniperRifle,	"m_flChargedDamage",	ChargedDamage, 0);
-
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	EntGrenadeProjType,	Const::EntClassID::CTFGrenadePipebombProjectile,	"m_iType",		Type, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	IBaseHandle,		Const::EntClassID::CTFGrenadePipebombProjectile,	"m_hLauncher",	Launcher, 0);
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_flChargeLevel",		ChargeLevel, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_hHealingTarget",		HealingTarget, 0);

@@ -47,7 +47,7 @@ public:
 	virtual void AddTextOverlayRGB(const Vector3D_F& origin, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) abstract;
 
 	virtual void AddLineOverlayAlpha(const Vector3D_F& origin, const Vector3D_F& dest, int r, int g, int b, int a, bool noDepthTest, float duration) abstract;
-	virtual void AddBoxOverlay2(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& max, const Angle_F& orientation, const Color3_I8& faceColor, const Color3_I8& edgeColor, float duration) abstract;
+	virtual void AddBoxOverlay2(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& max, const Angle_F& orientation, const Color3_8& faceColor, const Color3_8& edgeColor, float duration) abstract;
 
 private:
 	inline void AddTextOverlay(const Vector3D_F& origin, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) {}

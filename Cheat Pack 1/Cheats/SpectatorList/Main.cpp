@@ -32,7 +32,7 @@ void DisplaySpecList::OnPluginLoad()
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Spectator list", std::bind(&DisplaySpecList::OnRender, this));
 
 	ImGuiContextHook draw_hook;
-	draw_hook.Type = ImGuiContextHookType_RenderPre;
+	draw_hook.Type = ImGuiContextHookType_EndFramePre;
 	draw_hook.Callback = &DisplaySpecList::OnDrawSpecList;
 	m_RenderHookId = ImGui::AddContextHook(ImGui::GetCurrentContext(), &draw_hook);
 }
@@ -43,7 +43,7 @@ void DisplaySpecList::OnPluginUnload()
 	ImGui::RemoveContextHook(ImGui::GetCurrentContext(), m_RenderHookId);
 }
 
-void DisplaySpecList::OnDrawSpecList(ImGuiContext* ctx, ImGuiContextHook* hook)
+void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 {
 	if (SG::ThisPlugin->IsPluginPaused() || !spec_list.m_Enabled)
 		return;
@@ -111,14 +111,9 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* ctx, ImGuiContextHook* hook)
 	}
 
 	if (spectators.empty())
-	{
-		spectators.emplace_back("[FP] ", "Waxel");
-		spectators.emplace_back("[FP] ", "Waxe151zt5z");
-		spectators.emplace_back("[TC] ", "topjkpzt");
-		spectators.emplace_back("[FC] ", "zatlpzektl)p");
-	}
+		return;
 
-	const ImGuiWindowFlags background_flag = (spec_list.m_Locked ? ImGuiWindowFlags_NoMove : ImGuiWindowFlags_None);
+	const ImGuiWindowFlags background_flag = spec_list.m_Locked ? ImGuiWindowFlags_NoMove : ImGuiWindowFlags_None;
 
 	ImGui::SetNextWindowSize({ 0.f, 0.f }, ImGuiCond_Always);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, { spec_list.m_InnerColor[0] , spec_list.m_InnerColor[1] ,spec_list.m_InnerColor[2], spec_list.m_InnerTransparent ? 0.f : spec_list.m_InnerColor[3] });
@@ -129,12 +124,10 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* ctx, ImGuiContextHook* hook)
 	if (is_open)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, { spec_list.m_TextColor[0], spec_list.m_TextColor[1], spec_list.m_TextColor[2], spec_list.m_TextColor[3] });
-		ImGui::PushFont(spec_list.m_DisplayFont);
 		for (auto& name_and_mode : spectators)
 		{
-			ImGui::Text("[%s]%s", name_and_mode.Mode, name_and_mode.Name.c_str());
+			ImGui::Text("%s%s", name_and_mode.Mode, name_and_mode.Name.c_str());
 		}
-		ImGui::PopFont();
 		ImGui::PopStyleColor();
 	}
 

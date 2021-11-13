@@ -76,36 +76,11 @@ SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 		if (!m_CheckUber || !m_CheckInvisible)
 		{
 			TF2::ITFPlayer pEnt(pCurWpn->BackstabVictim);
-			if (m_CheckUber)
-			{
-				constexpr std::array invun_conds{
-					TF2::Const::ETFCond::Ubercharged,
-					TF2::Const::ETFCond::UberchargedCanteen,
-					TF2::Const::ETFCond::UberchargedOnTakeDamage,
-					TF2::Const::ETFCond::Bonked,
-					TF2::Const::ETFCond::DefenseBuffMmmph,
-				};
+			if (m_CheckUber && pEnt->IsPlayerInvunerable())
+				return{ };
 
-				for (auto cond : invun_conds)
-				{
-					if (pEnt->InCond(cond))
-						return{ };
-				}
-			}
-
-			if (m_CheckInvisible)
-			{
-				constexpr std::array invun_conds{
-					TF2::Const::ETFCond::Cloaked,
-					TF2::Const::ETFCond::Stealthed
-				};
-
-				for (auto cond : invun_conds)
-				{
-					if (pEnt->InCond(cond))
-						return{ };
-				}
-			}
+			if (m_CheckInvisible && pEnt->IsPlayerInvisible())
+				return{ };
 		}
 
 		cmd->Buttons |= TF2::Const::UserCmd::Keys::Attack;

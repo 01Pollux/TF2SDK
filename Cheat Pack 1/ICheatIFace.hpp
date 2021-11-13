@@ -4,6 +4,8 @@
 #include "Utils/AutoList.hpp"
 #include "TF2Config.hpp"
 
+struct ImGuiContextHook;
+
 class ICheatIFace : public TF2::Utils::IAutoList<ICheatIFace>
 {
 public:

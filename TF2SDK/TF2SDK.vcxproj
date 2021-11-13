@@ -42,6 +42,7 @@
     <ClInclude Include="Engine\Sounds.hpp" />
     <ClInclude Include="Engine\VGui.hpp" />
     <ClInclude Include="Engine\GameEvent.hpp" />
+    <ClInclude Include="Entity\BaseProjectile.hpp" />
     <ClInclude Include="Materials\Consts.hpp" />
     <ClInclude Include="Materials\Material.hpp" />
     <ClInclude Include="Materials\MaterialCfg.hpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Materials\Texture.hpp" />
     <ClInclude Include="Materials\VTF.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
+    <ClInclude Include="Utils\Draw.hpp" />
     <ClInclude Include="Utils\KeyValues.hpp" />
     <ClInclude Include="Engine\Trace.hpp" />
     <ClInclude Include="Engine\ModelInfo.hpp" />
@@ -106,10 +108,12 @@
     <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
     <ClCompile Include="Impl\Entity\BaseWeapon.cpp" />
     <ClCompile Include="Impl\Entity\EconEntity.cpp" />
+    <ClCompile Include="Impl\Entity\ResourceEntity.cpp" />
     <ClCompile Include="Impl\GameProp\DataMap.cpp" />
     <ClCompile Include="Impl\Materials\Reference.cpp" />
     <ClCompile Include="Impl\Utils\bitbuf.cpp" />
     <ClCompile Include="Impl\Utils\Checksum.cpp" />
+    <ClCompile Include="Impl\Utils\Draw.cpp" />
     <ClCompile Include="Impl\Utils\KeyValues.cpp" />
     <ClCompile Include="Impl\Engine\NetMessage.cpp" />
     <ClCompile Include="Impl\Utils\Prediction.cpp" />

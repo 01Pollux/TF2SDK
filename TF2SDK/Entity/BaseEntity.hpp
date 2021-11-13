@@ -16,20 +16,6 @@ class IBoneInfo;
 struct BoneResult;
 class ITFParticleFactory;
 
-namespace TFTeamsNames
-{
-	constexpr const char* CStrings[]{
-		"Spectator",
-		"Red",
-		"Blue"
-	};
-
-	constexpr const wchar_t* WStrings[]{
-		L"Spectator",
-		L"Red",
-		L"Blue"
-	};
-}
 
 class IBaseEntityInternal : public IClientEntity
 {
@@ -122,6 +108,13 @@ public:
 		IsHealthKit() const noexcept;
 
 	/// <summary>
+	/// Tests whether the entity is a ghost
+	/// </summary>
+	/// <returns></returns>
+	SG_SDK_TF2 bool
+		IsGhost() const noexcept;
+
+	/// <summary>
 	/// Get either local velocity or predicted velocity
 	/// </summary>
 	SG_SDK_TF2 void 
@@ -194,6 +187,7 @@ public:
 		{
 		}
 	};
+
 	SG_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
 	SG_DECL_DATAMAP(IBaseEntityInternal,	uint32_t,			true,		"m_iEFlags",	EntFlags, 0);
 

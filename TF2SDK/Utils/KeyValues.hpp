@@ -107,7 +107,7 @@ public:
 	const wchar_t* GetWString(const char* keyName = nullptr, const wchar_t* defaultValue = L"") const noexcept;
 	void* GetPtr(const char* keyName = nullptr, void* defaultValue = nullptr) const noexcept;
 	bool			GetBool(const char* keyName = nullptr, bool defaultValue = false, bool* optGotDefault = nullptr) const noexcept;
-	Color4_I8		GetColor(const char* keyName = nullptr) const noexcept;
+	Color4_8		GetColor(const char* keyName = nullptr) const noexcept;
 	bool			IsEmpty(const char* keyName = nullptr) const noexcept;
 
 	// Data access
@@ -116,7 +116,7 @@ public:
 	const char*		GetString(int keySymbol, const char* defaultValue = "") const noexcept;
 	const wchar_t*	GetWString(int keySymbol, const wchar_t* defaultValue = L"") const noexcept;
 	void*			GetPtr(int keySymbol, void* defaultValue = nullptr) const noexcept;
-	Color4_I8		GetColor(int keySymbol) const noexcept;
+	Color4_8		GetColor(int keySymbol) const noexcept;
 	bool			IsEmpty(int keySymbol) const noexcept;
 
 	// Key writing
@@ -126,7 +126,7 @@ public:
 	SG_SDK_TF2 void SetUint64(const char* keyName, uint64_t value);
 	SG_SDK_TF2 void SetFloat(const char* keyName, float value);
 	SG_SDK_TF2 void SetPtr(const char* keyName, void* value);
-	SG_SDK_TF2 void SetColor(const char* keyName, const Color4_I8& value);
+	SG_SDK_TF2 void SetColor(const char* keyName, const Color4_8& value);
 	void SetBool(const char* keyName, bool value) { SetInt(keyName, value ? 1 : 0); }
 
 	// Allocate & create a new copy of the keys
@@ -234,10 +234,10 @@ inline void* KeyValues::GetPtr(int keySymbol, void* defaultValue) const noexcept
 }
 
 
-inline Color4_I8 KeyValues::GetColor(int keySymbol) const noexcept
+inline Color4_8 KeyValues::GetColor(int keySymbol) const noexcept
 {
 	const KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetColor() : Color4_I8{};
+	return dat ? dat->GetColor() : Color4_8{};
 }
 
 

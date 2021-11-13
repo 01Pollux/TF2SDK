@@ -68,7 +68,7 @@ public:
 	virtual void			MarkClientRenderableDirty(IClientRenderable* pRenderable) abstract;
 	virtual void			UpdateProjectedTexture(uint32_t client_shadowflags, bool bForce) abstract;
 
-	virtual bool			DrawSprite(IClientRenderable* pRenderable, float scale, float frame, int rendermode, int renderfx, const Color4_I8& color, float flProxyRadius, int* pVisHandle) abstract;
+	virtual bool			DrawSprite(IClientRenderable* pRenderable, float scale, float frame, int rendermode, int renderfx, const Color4_8& color, float flProxyRadius, int* pVisHandle) abstract;
 
 	virtual EntitySearchResult	GetLocalPlayer() abstract;
 	virtual bool			GetLocalPlayerEyePosition(Vector3D_F& org, Angle_F& ang, float& fov) abstract;

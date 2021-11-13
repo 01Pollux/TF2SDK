@@ -21,8 +21,8 @@ private:
 
 	SG::ISHookToken m_CreateMove;
 
-	SG::Config<bool> m_Enabled{ "Enable", false, "Enable auto-backstab" };
+	SG::Config<bool> m_Enabled{ "enable", false, "Enable auto-backstab" };
 
-	SG::Config<bool> m_CheckUber{ "Check Ubercharge", true, "Don't backstab when the enemy is invunerable" };
-	SG::Config<bool> m_CheckInvisible{ "Check visible", true, "Don't backstab when the enemy is invisible" };
+	SG::Config<bool> m_CheckUber{ "check ubercharge", true, "Don't backstab when the enemy is invunerable" };
+	SG::Config<bool> m_CheckInvisible{ "check visible", true, "Don't backstab when the enemy is invisible" };
 };
