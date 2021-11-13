@@ -32,7 +32,7 @@ public:
 
 	constexpr VectorXD(std::initializer_list<value_type> list) noexcept
 	{
-		std::copy_n(list.begin(), _Size, m_Data.begin());
+		std::copy_n(list.begin(), std::min(list.size(), _Size), m_Data.begin());
 	}
 	constexpr VectorXD(const array_type& arr) noexcept : m_Data{ arr } { }
 
