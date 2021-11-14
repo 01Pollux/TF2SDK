@@ -17,8 +17,6 @@ bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinf
 	const Vector3D_F mins = origin + (is_zero ? Vector3D_F{ -12.5f, -12.5f, -12.5f } : pEnt->Mins);
 	const Vector3D_F maxs = origin + (is_zero ? Vector3D_F{ 12.5f, 12.5f, 12.5f } : pEnt->Maxs);
 
-	constexpr Vector3D_F c = Vector3D_F{};
-	constexpr auto p = c + { 1.f, 2.f, 3.f };
 	const Vector3D_F delta = maxs - mins;
 	const Vector3D_F corners[]{
 		mins,
