@@ -14,6 +14,7 @@
 // IValveGlobalVars
 // INetworkStringTableContainer
 // IEngineSound
+// IStudioRender
 #include "Engine/ClientDll.hpp"
 #include "Engine/ModelInfo.hpp"
 #include "Engine/Convar.hpp"
@@ -25,6 +26,7 @@
 #include "Engine/Sounds.hpp"
 #include "Engine/ModelRenderer.hpp"
 #include "Engine/GameEvent.hpp"
+#include "Materials/StudioRender.hpp"
 
 // ClientList
 // IGameRules
@@ -95,6 +97,7 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 			TF2_INTERFACE(Engine, ClientSound),
 			TF2_INTERFACE(Engine, ModelRenderer),
 			TF2_INTERFACE(Engine, GameEventMgr),
+			TF2_INTERFACE(Engine, StudioRender),
 
 			// valve std library keys:
 			std::tuple{ CVar_Key, config.Engine.Convar, std::bit_cast<void**>(&CVar), static_cast<size_t>(IFaceType::VSTDLib), "ValveSTD::CreateInterface", CVar_Sig },
@@ -120,6 +123,8 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 			TF2_INTERFACE(Material, MatSys),
 			TF2_INTERFACE(Material, MatSysCfg)
 		};
+
+#undef TF2_INTERFACE
 
 		m_GameData->PushFiles({ "/GameData/Interfaces" });
 		for (auto& [name, is_on, res, type, iface_name, is_sig] : ifaces)
@@ -148,6 +153,7 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 	return true;
 }
 
+
 SDKManager::~SDKManager()
 {
 	delete m_GameData;
@@ -156,8 +162,4 @@ SDKManager::~SDKManager()
 }
 
 
-#undef TF2_KEYCONFIG
-#undef TF2_INTERFACE
-
 TF2_NAMESPACE_END();
-

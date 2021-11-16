@@ -16,26 +16,26 @@ void IAttributeList::SetAttribute(int index, float value) noexcept
 		}
 	}
 
-	if (Attributes.Count() < 15)
-		Attributes.AddToTail(EconItemAttribute{ static_cast<uint16_t>(index), value});
+	if (Attributes.size() < 15)
+		Attributes.push_to_tail(EconItemAttribute{ static_cast<uint16_t>(index), value});
 }
 
 float IAttributeList::GetAttribute(int index) noexcept
 {
-	for (int i = 0; i < Attributes.Count(); i++)
-		if (Attributes[i].AttributeDefinitionIndex == index)
-			return Attributes[i].FloatValue;
+	for (auto& attrib : Attributes)
+		if (attrib.AttributeDefinitionIndex == index)
+			return attrib.FloatValue;
 
 	return 0.f;
 }
 
 void IAttributeList::RemoveAttribute(int index) noexcept
 {
-	for (int i = 0; i < Attributes.Count(); i++)
+	for (size_t i = 0; i < Attributes.size(); i++)
 	{
 		if (Attributes[i].AttributeDefinitionIndex == index)
 		{
-			Attributes.Remove(i); 
+			Attributes.erase_fast(i); 
 			break;
 		}
 	}

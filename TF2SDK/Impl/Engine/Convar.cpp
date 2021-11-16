@@ -131,7 +131,7 @@ int ConCommand::AutoCompleteSuggest(const char* partial, Utils::UtlVector<const 
 	int iret = CompletionCallback(partial, cmds);
 
 	for (int i = 0; i < iret; ++i)
-		commands.AddToTail(cmds[i]);
+		commands.push_to_tail(cmds[i]);
 
 	return iret;
 }

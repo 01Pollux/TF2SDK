@@ -20,13 +20,13 @@ void IClientEntityListener::AddEntityListener() noexcept
 {
 	auto pListeners = FindEntityListener();
 	if (pListeners->Find(this) == -1)
-		pListeners->AddToTail(this);
+		pListeners->push_to_tail(this);
 }
 
 void IClientEntityListener::RemoveEntityListener() noexcept
 {
 	auto pListeners = FindEntityListener();
-	pListeners->FindAndRemove(this);
+	pListeners->find_and_erase(this);
 }
 
 TF2_NAMESPACE_END();

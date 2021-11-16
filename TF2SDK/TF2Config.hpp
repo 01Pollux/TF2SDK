@@ -140,6 +140,11 @@ struct SDKManager::Config
 		/// IGameEventManager
 		/// </summary>
 		bool GameEventMgr : 1{ };
+
+		/// <summary>
+		/// IStudioRender
+		/// </summary>
+		bool StudioRender : 1{ };
 	} Engine;
 
 	struct

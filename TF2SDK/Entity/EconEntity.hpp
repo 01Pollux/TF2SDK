@@ -45,7 +45,7 @@ public:
 	/// <summary>
 	/// Get attributes count
 	/// </summary>
-	int GetNumAttributes() const noexcept { return Attributes.Count(); }
+	int GetNumAttributes() const noexcept { return Attributes.size(); }
 
 	/// <summary>
 	/// Get attribute value by name of an entity

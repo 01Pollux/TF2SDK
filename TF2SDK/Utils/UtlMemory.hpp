@@ -9,222 +9,216 @@ TF2_NAMESPACE_BEGIN(::Utils);
 
 //-----------------------------------------------------------------------------
 // The UtlMemory class:
-// A growable memory class which doubles in size by default.
+// A growable memory class which doubles in capacity by default.
 //-----------------------------------------------------------------------------
-template<class T, typename I = int>
+template<class _Ty, typename _IterTy = uint32_t>
 class UtlMemory
 {
 public:
+	static constexpr int GrowType_Internal = 0;
+	static constexpr int GrowType_External_Const = -1;
+	static constexpr int GrowType_External_Mutable = -2;
+
 	// constructor, destructor
-	UtlMemory(int nGrowSize = 0, int nInitSize = 0);
-	UtlMemory(T* pMemory, int numElements);
-	UtlMemory(const T* pMemory, int numElements);
+	UtlMemory(int nGrowSize = GrowType_Internal, uint32_t nInitSize = 0);
+	UtlMemory(_Ty* pMemory, uint32_t numElements);
+	UtlMemory(const _Ty* pMemory, uint32_t numElements);
 	~UtlMemory();
 
-	// Set the size by which the memory grows
-	void Init(int nGrowSize = 0, int nInitSize = 0);
+	// Set the capacity by which the memory grows
+	void init(int nGrowSize = GrowType_Internal, uint32_t nInitSize = 0);
 
 	class Iterator_t
 	{
 	public:
-		Iterator_t(I i) : index(i) { }
-		I index;
+		Iterator_t(_IterTy _IterTy) : index(_IterTy) { }
+		_IterTy index;
 
 		bool operator==(const Iterator_t it) const { return index == it.index; }
 		bool operator!=(const Iterator_t it) const { return index != it.index; }
 	};
-	Iterator_t First() const { return Iterator_t(IsIdxValid(0) ? 0 : InvalidIndex()); }
-	Iterator_t Next(const Iterator_t& it) const { return Iterator_t(IsIdxValid(it.index + 1) ? it.index + 1 : InvalidIndex()); }
-	I GetIndex(const Iterator_t& it) const { return it.index; }
-	bool IsIdxAfter(I i, const Iterator_t& it) const { return i > it.index; }
-	bool IsValidIterator(const Iterator_t& it) const { return IsIdxValid(it.index); }
-	Iterator_t InvalidIterator() const { return Iterator_t(InvalidIndex()); }
+	Iterator_t first() const { return Iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
+	Iterator_t next(const Iterator_t& it) const { return Iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
+	_IterTy get_index(const Iterator_t& it) const { return it.index; }
+	bool is_index_after(_IterTy _IterTy, const Iterator_t& it) const { return _IterTy > it.index; }
+	bool is_valid_iterator(const Iterator_t& it) const { return is_valid_index(it.index); }
+	Iterator_t invalid_iterator() const { return Iterator_t(invalid_index()); }
 
 	// element access
-	T& operator[](I i);
-	const T& operator[](I i) const;
-	T& Element(I i);
-	const T& Element(I i) const;
+	_Ty& operator[](_IterTy _IterTy);
+	const _Ty& operator[](_IterTy _IterTy) const;
+	_Ty& at(_IterTy _IterTy);
+	const _Ty& at(_IterTy _IterTy) const;
 
 	// Can we use this index?
-	bool IsIdxValid(I i) const;
+	bool is_valid_index(_IterTy _IterTy) const;
 
 	// Specify the invalid ('null') index that we'll only return on failure
-	static const I INVALID_INDEX = (I)-1; // For use with COMPILE_TIME_ASSERT
-	static I InvalidIndex() { return INVALID_INDEX; }
+	static _IterTy invalid_index() { return static_cast<_IterTy>(-1); }
 
 	// Gets the base address (can change when adding elements!)
-	T* Base();
-	const T* Base() const;
+	_Ty* data();
+	const _Ty* data() const;
 
 	// Attaches the buffer to external memory....
-	void SetExternalBuffer(T* pMemory, int numElements);
-	void SetExternalBuffer(const T* pMemory, int numElements);
+	void set_external_buffer(_Ty* pMemory, uint32_t numElements);
+	void set_external_buffer(const _Ty* pMemory, uint32_t numElements);
 	// Takes ownership of the passed memory, including freeing it when this buffer is destroyed.
-	void AssumeMemory(T* pMemory, int nSize);
+	void take_ownership(_Ty* pMemory, uint32_t nSize);
 
 	// Fast swap
-	void Swap(UtlMemory< T, I >& mem);
+	void swap(UtlMemory< _Ty, _IterTy >& mem);
 
 	// Switches the buffer from an external memory buffer to a reallocatable buffer
 	// Will copy the current contents of the external buffer to the reallocatable buffer
-	void ConvertToGrowableMemory(int nGrowSize);
+	void convert_to_growable(uint32_t nGrowSize);
 
 	// Size
-	int NumAllocated() const;
-	int Count() const;
+	uint32_t capacity() const;
 
 	// Grows the memory, so that at least allocated + num elements are allocated
-	void Grow(int num = 1);
+	void grow_by(uint32_t num = 1);
 
 	// Makes sure we've got at least this much memory
-	void EnsureCapacity(int num);
+	void reserve(uint32_t num);
 
 	// Memory deallocation
-	void Purge();
+	void destroy();
 
-	// Purge all but the given number of elements
-	void Purge(int numElements);
+	// destroy all but the given number of elements
+	void destroy(uint32_t numElements);
 
 	// is the memory externally allocated?
-	bool IsExternallyAllocated() const;
+	bool is_external() const;
 
 	// is the memory read only?
-	bool IsReadOnly() const;
+	bool is_read_only() const;
 
-	// Set the size by which the memory grows
-	void SetGrowSize(int size);
+	// Set the capacity by which the memory grows
+	void set_grow_size(int capacity);
 
 protected:
-	enum class GrowType : int
-	{
-		External_Const = -2,
-		External_Mutable = -1,
-		Internal = 0,
-	};
-
-	T* m_Memory;
-	size_t m_AllocationCount;
-	GrowType m_GrowSize;
+	_Ty* m_Memory;
+	uint32_t m_AllocationCount;
+	int m_GrowSize;
 };
 
 
 //-----------------------------------------------------------------------------
 // The UtlMemory class:
-// A growable memory class which doubles in size by default.
+// A growable memory class which doubles in capacity by default.
 //-----------------------------------------------------------------------------
-template<class T, size_t SIZE, class I = int>
-class UtlMemoryFixedGrowable : public UtlMemory< T, I >
+template<class _Ty, uint32_t SIZE, class _IterTy = uint32_t>
+class UtlMemoryFixedGrowable : public UtlMemory< _Ty, _IterTy >
 {
-	typedef UtlMemory< T, I > BaseClass;
+	typedef UtlMemory< _Ty, _IterTy > BaseClass;
 
 public:
-	UtlMemoryFixedGrowable(int nGrowSize = 0, int nInitSize = SIZE) : BaseClass(m_FixedMemory, SIZE)
+	UtlMemoryFixedGrowable(uint32_t nGrowSize = 0, uint32_t nInitSize = SIZE) : BaseClass(m_FixedMemory, SIZE)
 	{
 		m_MallocGrowSize = nGrowSize;
 	}
 
-	void Grow(int nCount = 1)
+	void grow_by(uint32_t nCount = 1)
 	{
-		if (this->IsExternallyAllocated())
+		if (this->is_external())
 		{
-			this->ConvertToGrowableMemory(m_MallocGrowSize);
+			this->convert_to_growable(m_MallocGrowSize);
 		}
-		BaseClass::Grow(nCount);
+		BaseClass::grow_by(nCount);
 	}
 
-	void EnsureCapacity(int num)
+	void reserve(uint32_t num)
 	{
-		if (UtlMemory<T>::m_AllocationCount >= num)
+		if (UtlMemory<_Ty>::m_AllocationCount >= num)
 			return;
 
-		if (this->IsExternallyAllocated())
+		if (this->is_external())
 		{
-			// Can't grow a buffer whose memory was externally allocated 
-			this->ConvertToGrowableMemory(m_MallocGrowSize);
+			// Can'_Ty grow a buffer whose memory was externally allocated 
+			this->convert_to_growable(m_MallocGrowSize);
 		}
 
-		BaseClass::EnsureCapacity(num);
+		BaseClass::reserve(num);
 	}
 
 private:
-	int m_MallocGrowSize;
-	T m_FixedMemory[SIZE];
+	uint32_t m_MallocGrowSize;
+	_Ty m_FixedMemory[SIZE];
 };
 
 //-----------------------------------------------------------------------------
 // The UtlMemoryFixed class:
 // A fixed memory class
 //-----------------------------------------------------------------------------
-template< typename T, size_t SIZE, int nAlignment = 0>
+template< typename _Ty, uint32_t SIZE, uint32_t nAlignment = 0>
 class UtlMemoryFixed
 {
 public:
 	// constructor, destructor
-	UtlMemoryFixed(int nGrowSize = 0, int nInitSize = 0) { }
-	UtlMemoryFixed(T* pMemory, int numElements) { }
+	UtlMemoryFixed(uint32_t nGrowSize = 0, uint32_t nInitSize = 0) { }
+	UtlMemoryFixed(_Ty* pMemory, uint32_t numElements) { }
 
 	// Can we use this index?
 	// Use unsigned math to improve performance
-	bool IsIdxValid(int i) const { return (size_t)i < SIZE; }
+	bool is_valid_index(uint32_t _IterTy) const { return (uint32_t)_IterTy < SIZE; }
 
 	// Specify the invalid ('null') index that we'll only return on failure
-	static const int INVALID_INDEX = -1; // For use with COMPILE_TIME_ASSERT
-	static int InvalidIndex() { return INVALID_INDEX; }
+	static const uint32_t INVALID_INDEX = -1; // For use with COMPILE_TIME_ASSERT
+	static uint32_t invalid_index() { return INVALID_INDEX; }
 
 	// Gets the base address
-	T* Base() { if (nAlignment == 0) return (T*)(&m_Memory[0]); else return (T*)AlignValue(&m_Memory[0], nAlignment); }
-	const T* Base() const { if (nAlignment == 0) return (T*)(&m_Memory[0]); else return (T*)AlignValue(&m_Memory[0], nAlignment); }
+	_Ty* data() { if (nAlignment == 0) return (_Ty*)(&m_Memory[0]); else return (_Ty*)AlignValue(&m_Memory[0], nAlignment); }
+	const _Ty* data() const { if (nAlignment == 0) return (_Ty*)(&m_Memory[0]); else return (_Ty*)AlignValue(&m_Memory[0], nAlignment); }
 
 	// element access
 	// Use unsigned math and inlined checks to improve performance.
-	T& operator[](int i) { return Base()[i]; }
-	const T& operator[](int i) const { return Base()[i]; }
-	T& Element(int i) { return Base()[i]; }
-	const T& Element(int i) const { return Base()[i]; }
+	_Ty& operator[](uint32_t _IterTy) { return data()[_IterTy]; }
+	const _Ty& operator[](uint32_t _IterTy) const { return data()[_IterTy]; }
+	_Ty& at(uint32_t _IterTy) { return data()[_IterTy]; }
+	const _Ty& at(uint32_t _IterTy) const { return data()[_IterTy]; }
 
 	// Attaches the buffer to external memory....
-	void SetExternalBuffer(T* pMemory, int numElements) { }
+	void set_external_buffer(_Ty* pMemory, uint32_t numElements) { }
 
 	// Size
-	int NumAllocated() const { return SIZE; }
-	int Count() const { return SIZE; }
+	uint32_t capacity() const { return SIZE; }
 
 	// Grows the memory, so that at least allocated + num elements are allocated
-	void Grow(int num = 1) { }
+	void grow_by(uint32_t num = 1) { }
 
 	// Makes sure we've got at least this much memory
-	void EnsureCapacity(int num) { }
+	void reserve(uint32_t num) { }
 
 	// Memory deallocation
-	void Purge() { }
+	void destroy() { }
 
-	// Purge all but the given number of elements (NOT IMPLEMENTED IN UtlMemoryFixed)
-	void Purge(int numElements) { }
+	// destroy all but the given number of elements (NOT IMPLEMENTED IN UtlMemoryFixed)
+	void destroy(uint32_t numElements) { }
 
 	// is the memory externally allocated?
-	bool IsExternallyAllocated() const { return false; }
+	bool is_external() const { return false; }
 
-	// Set the size by which the memory grows
-	void SetGrowSize(int size) { }
+	// Set the capacity by which the memory grows
+	void set_grow_size(uint32_t capacity) { }
 
 	class Iterator_t
 	{
 	public:
-		Iterator_t(int i) : index(i) { }
-		int index;
+		Iterator_t(uint32_t _IterTy) : index(_IterTy) { }
+		uint32_t index;
 		bool operator==(const Iterator_t it) const { return index == it.index; }
 		bool operator!=(const Iterator_t it) const { return index != it.index; }
 	};
-	Iterator_t First() const { return Iterator_t(IsIdxValid(0) ? 0 : InvalidIndex()); }
-	Iterator_t Next(const Iterator_t& it) const { return Iterator_t(IsIdxValid(it.index + 1) ? it.index + 1 : InvalidIndex()); }
-	int GetIndex(const Iterator_t& it) const { return it.index; }
-	bool IsIdxAfter(int i, const Iterator_t& it) const { return i > it.index; }
-	bool IsValidIterator(const Iterator_t& it) const { return IsIdxValid(it.index); }
-	Iterator_t InvalidIterator() const { return Iterator_t(InvalidIndex()); }
+	Iterator_t first() const { return Iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
+	Iterator_t next(const Iterator_t& it) const { return Iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
+	uint32_t get_index(const Iterator_t& it) const { return it.index; }
+	bool is_index_after(uint32_t _IterTy, const Iterator_t& it) const { return _IterTy > it.index; }
+	bool is_valid_iterator(const Iterator_t& it) const { return is_valid_index(it.index); }
+	Iterator_t invalid_iterator() const { return Iterator_t(invalid_index()); }
 
 private:
-	char m_Memory[SIZE * sizeof(T) + nAlignment];
+	char m_Memory[SIZE * sizeof(_Ty) + nAlignment];
 };
 
 #if defined(POSIX)
@@ -240,54 +234,54 @@ private:
 // constructor, destructor
 //-----------------------------------------------------------------------------
 
-template<class T, class I>
-UtlMemory<T, I>::UtlMemory(int nGrowSize, int nInitAllocationCount) : m_Memory(0),
-m_AllocationCount(nInitAllocationCount), m_GrowSize(static_cast<GrowType>(nGrowSize))
+template<class _Ty, class _IterTy>
+UtlMemory<_Ty, _IterTy>::UtlMemory(int nGrowSize, uint32_t nInitAllocationCount) : m_Memory(nullptr),
+m_AllocationCount(nInitAllocationCount), m_GrowSize(nGrowSize)
 {
 	if (m_AllocationCount)
-		m_Memory = (T*)malloc(m_AllocationCount * sizeof(T));
+		m_Memory = (_Ty*)malloc(m_AllocationCount * sizeof(_Ty));
 }
 
-template<class T, class I>
-UtlMemory<T, I>::UtlMemory(T* pMemory, int numElements) : m_Memory(pMemory),
+template<class _Ty, class _IterTy>
+UtlMemory<_Ty, _IterTy>::UtlMemory(_Ty* pMemory, uint32_t numElements) : m_Memory(pMemory),
 m_AllocationCount(numElements)
 {
 	// Special marker indicating externally supplied modifyable memory
-	m_GrowSize = GrowType::External_Mutable;
+	m_GrowSize = GrowType_External_Mutable;
 }
 
-template<class T, class I>
-UtlMemory<T, I>::UtlMemory(const T* pMemory, int numElements) : m_Memory((T*)pMemory),
+template<class _Ty, class _IterTy>
+UtlMemory<_Ty, _IterTy>::UtlMemory(const _Ty* pMemory, uint32_t numElements) : m_Memory((_Ty*)pMemory),
 m_AllocationCount(numElements)
 {
 	// Special marker indicating externally supplied modifyable memory
-	m_GrowSize = GrowType::External_Const;
+	m_GrowSize = GrowType_External_Const;
 }
 
-template<class T, class I>
-UtlMemory<T, I>::~UtlMemory()
+template<class _Ty, class _IterTy>
+UtlMemory<_Ty, _IterTy>::~UtlMemory()
 {
-	Purge();
+	destroy();
 }
 
-template<class T, class I>
-void UtlMemory<T, I>::Init(int nGrowSize /*= 0*/, int nInitSize /*= 0*/)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::init(int nGrowSize /*= 0*/, uint32_t nInitSize /*= 0*/)
 {
-	Purge();
+	destroy();
 
 	m_GrowSize = nGrowSize;
 	m_AllocationCount = nInitSize;
 	if (m_AllocationCount)
 	{
-		m_Memory = (T*)malloc(m_AllocationCount * sizeof(T));
+		m_Memory = (_Ty*)malloc(m_AllocationCount * sizeof(_Ty));
 	}
 }
 
 //-----------------------------------------------------------------------------
 // Fast swap
 //-----------------------------------------------------------------------------
-template<class T, class I>
-void UtlMemory<T, I>::Swap(UtlMemory<T, I>& mem)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::swap(UtlMemory<_Ty, _IterTy>& mem)
 {
 	std::swap(m_GrowSize, mem.m_GrowSize);
 	std::swap(m_Memory, mem.m_Memory);
@@ -298,17 +292,17 @@ void UtlMemory<T, I>::Swap(UtlMemory<T, I>& mem)
 //-----------------------------------------------------------------------------
 // Switches the buffer from an external memory buffer to a reallocatable buffer
 //-----------------------------------------------------------------------------
-template<class T, class I>
-void UtlMemory<T, I>::ConvertToGrowableMemory(int nGrowSize)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::convert_to_growable(uint32_t nGrowSize)
 {
-	if (!IsExternallyAllocated())
+	if (!is_external())
 		return;
 
 	m_GrowSize = nGrowSize;
 	if (m_AllocationCount)
 	{
-		int nNumBytes = m_AllocationCount * sizeof(T);
-		T* pMemory = (T*)malloc(nNumBytes);
+		uint32_t nNumBytes = m_AllocationCount * sizeof(_Ty);
+		_Ty* pMemory = (_Ty*)malloc(nNumBytes);
 		memcpy((void*)pMemory, (void*)m_Memory, nNumBytes);
 		m_Memory = pMemory;
 	}
@@ -322,39 +316,39 @@ void UtlMemory<T, I>::ConvertToGrowableMemory(int nGrowSize)
 //-----------------------------------------------------------------------------
 // Attaches the buffer to external memory....
 //-----------------------------------------------------------------------------
-template<class T, class I>
-void UtlMemory<T, I>::SetExternalBuffer(T* pMemory, int numElements)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::set_external_buffer(_Ty* pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
-	Purge();
+	destroy();
 
 	m_Memory = pMemory;
 	m_AllocationCount = numElements;
 
-	// Indicate that we don't own the memory
-	m_GrowSize = GrowType::External_Mutable;
+	// Indicate that we don'_Ty own the memory
+	m_GrowSize = GrowType_External_Mutable;
 }
 
-template<class T, class I>
-void UtlMemory<T, I>::SetExternalBuffer(const T* pMemory, int numElements)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::set_external_buffer(const _Ty* pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
-	Purge();
+	destroy();
 
-	m_Memory = const_cast<T*>(pMemory);
+	m_Memory = const_cast<_Ty*>(pMemory);
 	m_AllocationCount = numElements;
 
-	// Indicate that we don't own the memory
-	m_GrowSize = GrowType::External_Const;
+	// Indicate that we don'_Ty own the memory
+	m_GrowSize = GrowType_External_Const;
 }
 
-template<class T, class I>
-void UtlMemory<T, I>::AssumeMemory(T* pMemory, int numElements)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::take_ownership(_Ty* pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
-	Purge();
+	destroy();
 
-	// Simply take the pointer but don't mark us as external
+	// Simply take the pointer but don'_Ty mark us as external
 	m_Memory = pMemory;
 	m_AllocationCount = numElements;
 }
@@ -363,53 +357,53 @@ void UtlMemory<T, I>::AssumeMemory(T* pMemory, int numElements)
 //-----------------------------------------------------------------------------
 // element access
 //-----------------------------------------------------------------------------
-template<class T, class I>
-inline T& UtlMemory<T, I>::operator[](I i)
+template<class _Ty, class _IterTy>
+inline _Ty& UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy)
 {
-	return m_Memory[(uint32_t)i];
+	return m_Memory[(uint32_t)_IterTy];
 }
 
-template<class T, class I>
-inline const T& UtlMemory<T, I>::operator[](I i) const
+template<class _Ty, class _IterTy>
+inline const _Ty& UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy) const
 {
-	return m_Memory[(uint32_t)i];
+	return m_Memory[(uint32_t)_IterTy];
 }
 
-template<class T, class I>
-inline T& UtlMemory<T, I>::Element(I i)
+template<class _Ty, class _IterTy>
+inline _Ty& UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy)
 {
-	return m_Memory[(uint32_t)i];
+	return m_Memory[(uint32_t)_IterTy];
 }
 
-template<class T, class I>
-inline const T& UtlMemory<T, I>::Element(I i) const
+template<class _Ty, class _IterTy>
+inline const _Ty& UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy) const
 {
-	return m_Memory[(uint32_t)i];
+	return m_Memory[(uint32_t)_IterTy];
 }
 
 
 //-----------------------------------------------------------------------------
 // is the memory externally allocated?
 //-----------------------------------------------------------------------------
-template<class T, class I>
-bool UtlMemory<T, I>::IsExternallyAllocated() const
+template<class _Ty, class _IterTy>
+bool UtlMemory<_Ty, _IterTy>::is_external() const
 {
-	return (m_GrowSize < GrowType::Internal);
+	return (m_GrowSize < GrowType_Internal);
 }
 
 
 //-----------------------------------------------------------------------------
 // is the memory read only?
 //-----------------------------------------------------------------------------
-template<class T, class I>
-bool UtlMemory<T, I>::IsReadOnly() const
+template<class _Ty, class _IterTy>
+bool UtlMemory<_Ty, _IterTy>::is_read_only() const
 {
-	return (m_GrowSize == GrowType::External_Const);
+	return (m_GrowSize == GrowType_External_Const);
 }
 
 
-template<class T, class I>
-void UtlMemory<T, I>::SetGrowSize(int nSize)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::set_grow_size(int nSize)
 {
 	m_GrowSize = nSize;
 }
@@ -418,14 +412,14 @@ void UtlMemory<T, I>::SetGrowSize(int nSize)
 //-----------------------------------------------------------------------------
 // Gets the base address (can change when adding elements!)
 //-----------------------------------------------------------------------------
-template<class T, class I>
-inline T* UtlMemory<T, I>::Base()
+template<class _Ty, class _IterTy>
+inline _Ty* UtlMemory<_Ty, _IterTy>::data()
 {
 	return m_Memory;
 }
 
-template<class T, class I>
-inline const T* UtlMemory<T, I>::Base() const
+template<class _Ty, class _IterTy>
+inline const _Ty* UtlMemory<_Ty, _IterTy>::data() const
 {
 	return m_Memory;
 }
@@ -434,14 +428,8 @@ inline const T* UtlMemory<T, I>::Base() const
 //-----------------------------------------------------------------------------
 // Size
 //-----------------------------------------------------------------------------
-template<class T, class I>
-inline int UtlMemory<T, I>::NumAllocated() const
-{
-	return m_AllocationCount;
-}
-
-template<class T, class I>
-inline int UtlMemory<T, I>::Count() const
+template<class _Ty, class _IterTy>
+inline uint32_t UtlMemory<_Ty, _IterTy>::capacity() const
 {
 	return m_AllocationCount;
 }
@@ -450,29 +438,29 @@ inline int UtlMemory<T, I>::Count() const
 //-----------------------------------------------------------------------------
 // Is element index valid?
 //-----------------------------------------------------------------------------
-template<class T, class I>
-inline bool UtlMemory<T, I>::IsIdxValid(I i) const
+template<class _Ty, class _IterTy>
+inline bool UtlMemory<_Ty, _IterTy>::is_valid_index(_IterTy _IterTy) const
 {
-	// If we always cast 'i' and 'm_AllocationCount' to unsigned then we can
+	// If we always cast '_IterTy' and 'm_AllocationCount' to unsigned then we can
 	// do our range checking with a single comparison instead of two. This gives
 	// a modest speedup in debug builds.
-	return (uint32_t)i < m_AllocationCount;
+	return (uint32_t)_IterTy < m_AllocationCount;
 }
 
-template<class T, class I>
-void UtlMemory<T, I>::Grow(int num)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::grow_by(uint32_t num)
 {
-	if (IsExternallyAllocated())
+	if (is_external())
 	{
-		// Can't grow a buffer whose memory was externally allocated 
+		// Can'_Ty grow a buffer whose memory was externally allocated 
 		return;
 	}
 
 	// Make sure we have at least numallocated + num allocations.
 	// Use the grow rules specified for this memory (in m_GrowSize)
-	int nAllocationRequested = m_AllocationCount + num;
+	uint32_t nAllocationRequested = m_AllocationCount + num;
 
-	auto calc_new_alloc_count = [] (int nAllocationCount, int nGrowSize, int nNewSize, int nBytesItem)
+	auto calc_new_alloc_count = [] (uint32_t nAllocationCount, uint32_t nGrowSize, uint32_t nNewSize, uint32_t nBytesItem)
 	{
 		if (nGrowSize)
 		{
@@ -492,30 +480,30 @@ void UtlMemory<T, I>::Grow(int num)
 
 		return nAllocationCount;
 	};
-	int nNewAllocationCount = calc_new_alloc_count(m_AllocationCount, static_cast<int>(m_GrowSize), nAllocationRequested, sizeof(T));
+	uint32_t nNewAllocationCount = calc_new_alloc_count(m_AllocationCount, static_cast<uint32_t>(m_GrowSize), nAllocationRequested, sizeof(_Ty));
 
-	// if m_nAllocationRequested wraps index type I, recalculate
-	if ((int)(I)nNewAllocationCount < nAllocationRequested)
+	// if m_nAllocationRequested wraps index type _IterTy, recalculate
+	if ((uint32_t)(_IterTy)nNewAllocationCount < nAllocationRequested)
 	{
-		if ((int)(I)nNewAllocationCount == 0 && (int)(I)(nNewAllocationCount - 1) >= nAllocationRequested)
+		if ((uint32_t)(_IterTy)nNewAllocationCount == 0 && (uint32_t)(_IterTy)(nNewAllocationCount - 1) >= nAllocationRequested)
 		{
 			--nNewAllocationCount; // deal w/ the common case of m_AllocationCount == MAX_USHORT + 1
 		}
 		else
 		{
-			if ((int)(I)nAllocationRequested != nAllocationRequested)
+			if ((uint32_t)(_IterTy)nAllocationRequested != nAllocationRequested)
 			{
-				// we've been asked to grow memory to a size s.t. the index type can't address the requested amount of memory
+				// we've been asked to grow memory to a capacity s._Ty. the index type can'_Ty address the requested amount of memory
 				return;
 			}
-			while ((int)(I)nNewAllocationCount < nAllocationRequested)
+			while ((uint32_t)(_IterTy)nNewAllocationCount < nAllocationRequested)
 			{
 				nNewAllocationCount = (nNewAllocationCount + nAllocationRequested) / 2;
 			}
 		}
 	}
 
-	if (T* mem = (T*)realloc(m_Memory, nNewAllocationCount * sizeof(T)))
+	if (_Ty* mem = (_Ty*)realloc(m_Memory, nNewAllocationCount * sizeof(_Ty)))
 	{
 		m_Memory = mem;
 		m_AllocationCount = nNewAllocationCount;
@@ -526,19 +514,19 @@ void UtlMemory<T, I>::Grow(int num)
 //-----------------------------------------------------------------------------
 // Makes sure we've got at least this much memory
 //-----------------------------------------------------------------------------
-template<class T, class I>
-inline void UtlMemory<T, I>::EnsureCapacity(int num)
+template<class _Ty, class _IterTy>
+inline void UtlMemory<_Ty, _IterTy>::reserve(uint32_t num)
 {
 	if (m_AllocationCount >= num)
 		return;
 
-	if (IsExternallyAllocated())
+	if (is_external())
 	{
-		// Can't grow a buffer whose memory was externally allocated 
+		// Can'_Ty grow a buffer whose memory was externally allocated 
 		return;
 	}
 
-	if (T* mem = realloc(m_Memory, num * sizeof(T)))
+	if (_Ty* mem = std::bit_cast<_Ty*>(realloc(m_Memory, num * sizeof(_Ty))))
 	{
 		m_Memory = mem;
 		m_AllocationCount = num;
@@ -549,10 +537,10 @@ inline void UtlMemory<T, I>::EnsureCapacity(int num)
 //-----------------------------------------------------------------------------
 // Memory deallocation
 //-----------------------------------------------------------------------------
-template<class T, class I>
-void UtlMemory<T, I>::Purge()
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::destroy()
 {
-	if (!IsExternallyAllocated())
+	if (!is_external())
 	{
 		if (m_Memory)
 		{
@@ -563,25 +551,25 @@ void UtlMemory<T, I>::Purge()
 	}
 }
 
-template<class T, class I>
-void UtlMemory<T, I>::Purge(int numElements)
+template<class _Ty, class _IterTy>
+void UtlMemory<_Ty, _IterTy>::destroy(uint32_t numElements)
 {
 	if (numElements > m_AllocationCount)
 	{
-		// Ensure this isn't a grow request in disguise.
+		// Ensure this isn'_Ty a grow request in disguise.
 		return;
 	}
 
 	// If we have zero elements, simply do a purge:
 	if (numElements == 0)
 	{
-		Purge();
+		destroy();
 		return;
 	}
 
-	if (IsExternallyAllocated())
+	if (is_external())
 	{
-		// Can't shrink a buffer whose memory was externally allocated, fail silently like purge 
+		// Can'_Ty shrink a buffer whose memory was externally allocated, fail silently like purge 
 		return;
 	}
 
@@ -598,7 +586,7 @@ void UtlMemory<T, I>::Purge(int numElements)
 		return;
 	}
 
-	if (T* mem = realloc(m_Memory, numElements * sizeof(T)))
+	if (_Ty* mem = realloc(m_Memory, numElements * sizeof(_Ty)))
 	{
 		m_Memory = mem;
 		m_AllocationCount = numElements;

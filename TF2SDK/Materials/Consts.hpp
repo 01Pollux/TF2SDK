@@ -342,15 +342,6 @@ enum class MaterialMatrixMode
 };
 
 
-enum class LightType
-{
-	Disable,
-	Point,
-	Directional,
-	Spot
-};
-
-
 enum class MaterialPrimitiveType
 {
 	Points,

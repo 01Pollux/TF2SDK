@@ -4,7 +4,6 @@
 
 TF2_NAMESPACE_BEGIN(::Utils);
 
-
 //-----------------------------------------------------------------------------
 // Purpose:	Implement a standard reference counted interface. Use of this
 //			is optional insofar as all the concrete tools only require

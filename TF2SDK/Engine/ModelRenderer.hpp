@@ -2,6 +2,8 @@
 
 #include "Math/Matrix.hpp"
 #include "Materials/Consts.hpp"
+#include "Studio/LightDesc.hpp"
+
 
 TF2_NAMESPACE_BEGIN();
 
@@ -56,8 +58,6 @@ namespace Const
 		Depth_Write,
 		SSAO_Depth_Write
 	};
-
-	enum class LightType;
 }
 
 
@@ -207,31 +207,6 @@ struct ColorMeshInfo_t
 	int						m_nNumVerts;
 	ITexture* m_pLightmap;
 	ColorTexelsInfo_t* m_pLightmapData;
-};
-
-struct LightDesc_t
-{
-	Const::LightType Type;			//< MATERIAL_LIGHT_xxx
-	Vector3D_F	Color;				//< color+intensity 
-	Vector3D_F	Position;			//< light source center position
-	Vector3D_F	Direction;			//< for SPOT, direction it is pointing
-	float	Range;					//< distance range for light.0=infinite
-	float	Falloff;				//< angular falloff exponent for spot lights
-	float	Attenuation0;			//< constant distance falloff term
-	float	Attenuation1;			//< linear term of falloff
-	float	Attenuation2;			//< quadatic term of falloff
-	float	Theta;					//< inner cone angle. no angular falloff 
-									//< within this cone
-	float Phi;						//< outer cone angle
-
-	// the values below are derived from the above settings for optimizations
-	// These aren't used by DX8. . used for software lighting.
-	float ThetaDot;
-	float PhiDot;
-	unsigned int Flags;
-protected:
-	float OneOver_ThetaDot_Minus_PhiDot;
-	float RangeSquared;
 };
 
 struct DrawModelInfo_t

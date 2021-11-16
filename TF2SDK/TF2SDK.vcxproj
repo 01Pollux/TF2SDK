@@ -49,8 +49,11 @@
     <ClInclude Include="Materials\MaterialSys.hpp" />
     <ClInclude Include="Materials\MaterialVar.hpp" />
     <ClInclude Include="Materials\Reference.hpp" />
+    <ClInclude Include="Materials\StudioRender.hpp" />
     <ClInclude Include="Materials\Texture.hpp" />
     <ClInclude Include="Materials\VTF.hpp" />
+    <ClInclude Include="Studio\LightDesc.hpp" />
+    <ClInclude Include="Utils\Byteswap.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
     <ClInclude Include="Utils\Draw.hpp" />
     <ClInclude Include="Utils\KeyValues.hpp" />
@@ -89,6 +92,7 @@
     <ClInclude Include="Utils\Thunks.hpp" />
     <ClInclude Include="Utils\Trace.hpp" />
     <ClInclude Include="Utils\UtlAlloc.hpp" />
+    <ClInclude Include="Utils\UtlBuffer.hpp" />
     <ClInclude Include="Utils\UtlMemory.hpp" />
     <ClInclude Include="Utils\UtlSymbol.hpp" />
     <ClInclude Include="Utils\UtlVector.hpp" />

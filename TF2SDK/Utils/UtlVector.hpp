@@ -15,178 +15,173 @@ public:
 
 //-----------------------------------------------------------------------------
 // The UtlVector class:
-// A growable array class which doubles in size by default.
+// _AllocTy growable array class which doubles in size by default.
 // It will always keep all elements consecutive in memory, and may move the
-// elements around in memory (via a PvRealloc) when elements are inserted or
+// elements around in memory (via _AllocTy PvRealloc) when elements are inserted or
 // removed. Clients should therefore refer to the elements of the vector
 // by index (they should *never* maintain pointers to elements in the vector).
 //-----------------------------------------------------------------------------
-template<class T, class A = UtlMemory<T>>
+template<class _Ty, class _AllocTy = UtlMemory<_Ty>>
 class UtlVector : public UtlBaseVector
 {
-	using CAllocator = A;
+	using CAllocator = _AllocTy;
 public:
-	using ElemType_t = T;
-	using iterator = T*;
-	using const_iterator = const T*;
+	using ElemType_t = _Ty;
+	using iterator = _Ty*;
+	using const_iterator = const _Ty*;
 
-	// Set the growth policy and initial capacity. Count will always be zero. This is different from std::vector
+	// Set the growth policy and initial capacity. size will always be zero. This is different from std::vector
 	// where the constructor sets count as well as capacity.
 	// growSize of zero implies the default growth pattern which is exponential.
-	explicit UtlVector(int growSize = 0, int initialCapacity = 0);
+	explicit UtlVector(int growSize = 0, uint32_t initialCapacity = 0);
 
 	// Initialize with separately allocated buffer, setting the capacity and count.
 	// The container will not be growable.
-	UtlVector(T* pMemory, int initialCapacity, int initialCount = 0);
+	UtlVector(_Ty* pMemory, uint32_t initialCapacity, uint32_t initialCount = 0);
 	~UtlVector();
 
 	// Copy the array.
-	UtlVector<T, A>& operator=(const UtlVector<T, A>& other);
+	UtlVector& operator=(const UtlVector& other);
+	UtlVector(const UtlVector&) = delete;
 
 	// element access
-	T& operator[](int i);
-	const T& operator[](int i) const;
-	T& Element(int i);
-	const T& Element(int i) const;
-	T& Head();
-	const T& Head() const;
-	T& Tail();
-	const T& Tail() const;
+	_Ty& operator[](uint32_t i);
+	const _Ty& operator[](uint32_t i) const;
+	_Ty& at(uint32_t i);
+	const _Ty& at(uint32_t i) const;
+	_Ty& head();
+	const _Ty& head() const;
+	_Ty& tail();
+	const _Ty& tail() const;
 
 	// STL compatible member functions. These allow easier use of std::sort
 	// and they are forward compatible with the C++ 11 range-based for loops.
-	iterator begin() { return Base(); }
-	const_iterator begin() const { return Base(); }
-	iterator end() { return Base() + Count(); }
-	const_iterator end() const { return Base() + Count(); }
+	iterator begin() { return data(); }
+	const_iterator begin() const { return data(); }
+	iterator end() { return data() + size(); }
+	const_iterator end() const { return data() + size(); }
 
 	// Gets the base address (can change when adding elements!)
-	T* Base() { return m_Memory.Base(); }
-	const T* Base() const { return m_Memory.Base(); }
+	_Ty* data() { return m_Memory.data(); }
+	const _Ty* data() const { return m_Memory.data(); }
 
 	// Returns the number of elements in the vector
-	// SIZE IS DEPRECATED!
-	int Count() const;
+	uint32_t size() const;
 
 	/// are there no elements? For compatibility with lists.
-	inline bool IsEmpty() const
+	inline bool is_empty() const
 	{
-		return (Count() == 0);
+		return (size() == 0);
 	}
 
 	// Is element index valid?
-	bool IsValidIndex(int i) const;
-	static int InvalidIndex();
+	bool is_valid_index(uint32_t i) const;
+	static uint32_t invalid_index();
 
 	// Adds an element, uses default constructor
-	int AddToHead();
-	int AddToTail();
-	T* AddToTailGetPtr();
-	int InsertBefore(int elem);
-	int InsertAfter(int elem);
+	uint32_t push_to_head();
+	uint32_t push_to_tail();
+	_Ty* push_to_tail_ptr();
+	uint32_t push_before(uint32_t elem);
+	uint32_t push_after(uint32_t elem);
 
 	// Adds an element, uses copy constructor
-	int AddToHead(const T& src);
-	int AddToTail(const T& src);
-	int InsertBefore(int elem, const T& src);
-	int InsertAfter(int elem, const T& src);
+	uint32_t push_to_head(const _Ty& src);
+	uint32_t push_to_tail(const _Ty& src);
+	uint32_t push_before(uint32_t elem, const _Ty& src);
+	uint32_t push_after(uint32_t elem, const _Ty& src);
 
 	// Adds multiple elements, uses default constructor
-	int AddMultipleToHead(int num);
-	int AddMultipleToTail(int num);
-	int AddMultipleToTail(int num, const T* pToCopy);
-	int InsertMultipleBefore(int elem, int num);
-	int InsertMultipleBefore(int elem, int num, const T* pToCopy);
-	int InsertMultipleAfter(int elem, int num);
+	uint32_t push_to_head_multiple(uint32_t num);
+	uint32_t push_to_tail_multiple(uint32_t num);
+	uint32_t push_to_tail_multiple(uint32_t num, const _Ty* pToCopy);
+	uint32_t push_before_multiple(uint32_t elem, uint32_t num);
+	uint32_t push_before_multiple(uint32_t elem, uint32_t num, const _Ty* pToCopy);
+	uint32_t push_after_multiple(uint32_t elem, uint32_t num);
 
-	// Calls RemoveAll() then AddMultipleToTail.
-	// SetSize is a synonym for SetCount
-	void SetSize(int size);
-	// SetCount deletes the previous contents of the container and sets the
+	// resize deletes the previous contents of the container and sets the
 	// container to have this many elements.
+	// Calls clear() then push_to_tail_multiple.
 	// Use GetCount to retrieve the current count.
-	void SetCount(int count);
-	void SetCountNonDestructively(int count); //sets count by adding or removing elements to tail TODO: This should probably be the default behavior for SetCount
+	void resize(uint32_t count);
+	void resize_no_destroy(uint32_t count); //sets count by adding or removing elements to tail TODO: This should probably be the default behavior for resize
 
-	// Calls SetSize and copies each element.
-	void CopyArray(const T* pArray, int size);
+	// Calls resize and copies each element.
+	void copy(const _Ty* pArray, uint32_t size);
 
 	// Fast swap
-	void Swap(UtlVector< T, A >& vec);
+	void swap(UtlVector< _Ty, _AllocTy >& vec);
 
 	// Add the specified array to the tail.
-	int AddVectorToTail(UtlVector<T, A> const& src);
+	uint32_t push_to_tail(const UtlVector& src);
 
 	// Finds an element (element needs operator== defined)
-	int Find(const T& src) const;
+	uint32_t Find(const _Ty& src) const;
 
-	// Helper to find using std::find_if with a predicate
-	//   e.g. [] -> bool ( T &a ) { return a.IsTheThingIWant(); }
+	// Helper to find using std::find_if with _AllocTy predicate
+	//   e.g. [] -> bool ( _Ty &_AllocTy ) { return _AllocTy.IsTheThingIWant(); }
 	//
-	// Useful if your object doesn't define a ==
-	template < typename F >
-	int FindPredicate(F&& predicate) const;
+	// Useful if your object doesn'_Ty define _AllocTy ==
+	template<typename _FnTy>
+	uint32_t find(_FnTy predicate) const;
 
-	void FillWithValue(const T& src);
+	void fill(const _Ty& src);
 
-	bool HasElement(const T& src) const;
+	bool contains(const _Ty& src) const;
 
-	// Makes sure we have enough memory allocated to store a requested # of elements
-	// Use NumAllocated() to retrieve the current capacity.
-	void EnsureCapacity(int num);
+	// Makes sure we have enough memory allocated to store _AllocTy requested # of elements
+	// Use capacity() to retrieve the current capacity.
+	void reserve(uint32_t num);
 
 	// Makes sure we have at least this many elements
 	// Use GetCount to retrieve the current count.
-	void EnsureCount(int num);
+	void reserve_size(uint32_t num);
 
-	// Element removal
-	void FastRemove(int elem);	// doesn't preserve order
-	void Remove(int elem);		// preserves order, shifts elements
-	bool FindAndRemove(const T& src);	// removes first occurrence of src, preserves order, shifts elements
-	bool FindAndFastRemove(const T& src);	// removes first occurrence of src, doesn't preserve order
-	void RemoveMultiple(int elem, int num);	// preserves order, shifts elements
-	void RemoveMultipleFromHead(int num); // removes num elements from tail
-	void RemoveMultipleFromTail(int num); // removes num elements from tail
-	void RemoveAll();				// doesn't deallocate memory
+	// at removal
+	void erase_fast(uint32_t elem);	// doesn'_Ty preserve order
+	void erase(uint32_t elem);		// preserves order, shifts elements
+	bool find_and_erase(const _Ty& src);	// removes first occurrence of src, preserves order, shifts elements
+	bool find_and_erase_fast(const _Ty& src);	// removes first occurrence of src, doesn'_Ty preserve order
+	void erase_multiple(uint32_t elem, uint32_t num);	// preserves order, shifts elements
+	void erase_from_head_multiple(uint32_t num); // removes num elements from tail
+	void erase_from_tail_multiple(uint32_t num); // removes num elements from tail
+	void clear();				// doesn'_Ty deallocate memory
 
 	// Memory deallocation
-	void Purge();
+	void destroy();
 
 	// Purges the list and calls delete on each element in it.
-	void PurgeAndDeleteElements();
+	void destroy_and_delete();
 
 	// Compacts the vector to the number of elements actually in use 
-	void Compact();
+	void destroy_no_resize();
 
 	// Set the size by which it grows when it needs to allocate more memory.
-	void SetGrowSize(int size) { m_Memory.SetGrowSize(size); }
+	void set_grow_size(int size) { m_Memory.set_grow_size(size); }
 
-	int NumAllocated() const;	// Only use this if you really know what you're doing!
+	uint32_t capacity() const;	// Only use this if you really know what you're doing!
 
 	// reverse the order of elements
-	void Reverse();
+	void reverse();
 
 protected:
-	// Can't copy this unless we explicitly do it!
-	UtlVector(UtlVector const& vec) { }
-
 	// Grows the vector
-	void GrowVector(int num = 1);
+	void grow_by(uint32_t num = 1);
 
 	// Shifts elements....
-	void ShiftElementsRight(int elem, int num = 1);
-	void ShiftElementsLeft(int elem, int num = 1);
+	void shift_to_right(uint32_t elem, uint32_t num = 1);
+	void shift_to_left(uint32_t elem, uint32_t num = 1);
 
 	CAllocator m_Memory;
-	int m_Size;
+	uint32_t m_Size;
 
 	// For easier access to the elements through the debugger
 	// it's in release builds so this can be used in libraries correctly
-	T* m_Elements;
+	_Ty* m_Elements;
 
-	inline void ResetDbgInfo()
+	inline void reset_dbg_info()
 	{
-		m_Elements = Base();
+		m_Elements = data();
 	}
 };
 
@@ -194,32 +189,32 @@ protected:
 //-----------------------------------------------------------------------------
 // constructor, destructor
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline UtlVector<T, A>::UtlVector(int growSize, int initSize) :
+template<typename _Ty, class _AllocTy>
+inline UtlVector<_Ty, _AllocTy>::UtlVector(int growSize, uint32_t initSize) :
 	m_Memory(growSize, initSize), m_Size(0)
 {
-	ResetDbgInfo();
+	reset_dbg_info();
 }
 
-template<typename T, class A>
-inline UtlVector<T, A>::UtlVector(T* pMemory, int allocationCount, int numElements) :
+template<typename _Ty, class _AllocTy>
+inline UtlVector<_Ty, _AllocTy>::UtlVector(_Ty* pMemory, uint32_t allocationCount, uint32_t numElements) :
 	m_Memory(pMemory, allocationCount), m_Size(numElements)
 {
-	ResetDbgInfo();
+	reset_dbg_info();
 }
 
-template<typename T, class A>
-inline UtlVector<T, A>::~UtlVector()
+template<typename _Ty, class _AllocTy>
+inline UtlVector<_Ty, _AllocTy>::~UtlVector()
 {
-	Purge();
+	destroy();
 }
 
-template<typename T, class A>
-inline UtlVector<T, A>& UtlVector<T, A>::operator=(const UtlVector<T, A>& other)
+template<typename _Ty, class _AllocTy>
+inline UtlVector<_Ty, _AllocTy>& UtlVector<_Ty, _AllocTy>::operator=(const UtlVector<_Ty, _AllocTy>& other)
 {
-	int nCount = other.Count();
-	SetSize(nCount);
-	for (int i = 0; i < nCount; i++)
+	uint32_t nCount = other.size();
+	resize(nCount);
+	for (uint32_t i = 0; i < nCount; i++)
 	{
 		(*this)[i] = other[i];
 	}
@@ -229,58 +224,58 @@ inline UtlVector<T, A>& UtlVector<T, A>::operator=(const UtlVector<T, A>& other)
 //-----------------------------------------------------------------------------
 // element access
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline T& UtlVector<T, A>::operator[](int i)
+template<typename _Ty, class _AllocTy>
+inline _Ty& UtlVector<_Ty, _AllocTy>::operator[](uint32_t i)
 {
 	return m_Memory[i];
 }
 
-template<typename T, class A>
-inline const T& UtlVector<T, A>::operator[](int i) const
+template<typename _Ty, class _AllocTy>
+inline const _Ty& UtlVector<_Ty, _AllocTy>::operator[](uint32_t i) const
 {
 	return m_Memory[i];
 }
 
-template<typename T, class A>
-inline T& UtlVector<T, A>::Element(int i)
+template<typename _Ty, class _AllocTy>
+inline _Ty& UtlVector<_Ty, _AllocTy>::at(uint32_t i)
 {
 	return m_Memory[i];
 }
 
-template<typename T, class A>
-inline const T& UtlVector<T, A>::Element(int i) const
+template<typename _Ty, class _AllocTy>
+inline const _Ty& UtlVector<_Ty, _AllocTy>::at(uint32_t i) const
 {
 	return m_Memory[i];
 }
 
-template<typename T, class A>
-inline T& UtlVector<T, A>::Head()
+template<typename _Ty, class _AllocTy>
+inline _Ty& UtlVector<_Ty, _AllocTy>::head()
 {
 	return m_Memory[0];
 }
 
-template<typename T, class A>
-inline const T& UtlVector<T, A>::Head() const
+template<typename _Ty, class _AllocTy>
+inline const _Ty& UtlVector<_Ty, _AllocTy>::head() const
 {
 	return m_Memory[0];
 }
 
-template<typename T, class A>
-inline T& UtlVector<T, A>::Tail()
+template<typename _Ty, class _AllocTy>
+inline _Ty& UtlVector<_Ty, _AllocTy>::tail()
 {
 	return m_Memory[m_Size - 1];
 }
 
-template<typename T, class A>
-inline const T& UtlVector<T, A>::Tail() const
+template<typename _Ty, class _AllocTy>
+inline const _Ty& UtlVector<_Ty, _AllocTy>::tail() const
 {
 	return m_Memory[m_Size - 1];
 }
 
 
 
-template<typename T, class A>
-inline int UtlVector<T, A>::Count() const
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::size() const
 {
 	return m_Size;
 }
@@ -288,14 +283,14 @@ inline int UtlVector<T, A>::Count() const
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-// Reverse - reverse the order of elements, akin to std::vector<>::reverse()
+// reverse - reverse the order of elements, akin to std::vector<>::reverse()
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::Reverse()
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::reverse()
 {
-	for (int i = 0; i < m_Size / 2; i++)
+	for (uint32_t i = 0; i < m_Size / 2; i++)
 	{
-		V_swap(m_Memory[i], m_Memory[m_Size - 1 - i]);
+		std::swap(m_Memory[i], m_Memory[m_Size - 1 - i]);
 	}
 }
 
@@ -303,8 +298,8 @@ void UtlVector<T, A>::Reverse()
 //-----------------------------------------------------------------------------
 // Is element index valid?
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline bool UtlVector<T, A>::IsValidIndex(int i) const
+template<typename _Ty, class _AllocTy>
+inline bool UtlVector<_Ty, _AllocTy>::is_valid_index(uint32_t i) const
 {
 	return (i >= 0) && (i < m_Size);
 }
@@ -313,49 +308,49 @@ inline bool UtlVector<T, A>::IsValidIndex(int i) const
 //-----------------------------------------------------------------------------
 // Returns in invalid index
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline int UtlVector<T, A>::InvalidIndex()
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::invalid_index()
 {
-	return -1;
+	return static_cast<uint32_t>(-1);
 }
 
 
 //-----------------------------------------------------------------------------
 // Grows the vector
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::GrowVector(int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::grow_by(uint32_t num)
 {
-	if (m_Size + num > m_Memory.NumAllocated())
+	if (m_Size + num > m_Memory.capacity())
 	{
-		m_Memory.Grow(m_Size + num - m_Memory.NumAllocated());
+		m_Memory.grow_by(m_Size + num - m_Memory.capacity());
 	}
 
 	m_Size += num;
-	ResetDbgInfo();
+	reset_dbg_info();
 }
 
 
 //-----------------------------------------------------------------------------
-// Makes sure we have enough memory allocated to store a requested # of elements
+// Makes sure we have enough memory allocated to store _AllocTy requested # of elements
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::EnsureCapacity(int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::reserve(uint32_t num)
 {
-	m_Memory.EnsureCapacity(num);
-	ResetDbgInfo();
+	m_Memory.reserve(num);
+	reset_dbg_info();
 }
 
 
 //-----------------------------------------------------------------------------
 // Makes sure we have at least this many elements
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::EnsureCount(int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::reserve_size(uint32_t num)
 {
-	if (Count() < num)
+	if (size() < num)
 	{
-		AddMultipleToTail(num - Count());
+		push_to_tail_multiple(num - size());
 	}
 }
 
@@ -363,21 +358,21 @@ void UtlVector<T, A>::EnsureCount(int num)
 //-----------------------------------------------------------------------------
 // Shifts elements
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::ShiftElementsRight(int elem, int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::shift_to_right(uint32_t elem, uint32_t num)
 {
-	int numToMove = m_Size - elem - num;
+	uint32_t numToMove = m_Size - elem - num;
 	if ((numToMove > 0) && (num > 0))
-		memmove(&Element(elem + num), &Element(elem), numToMove * sizeof(T));
+		memmove(&at(elem + num), &at(elem), numToMove * sizeof(_Ty));
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::ShiftElementsLeft(int elem, int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::shift_to_left(uint32_t elem, uint32_t num)
 {
-	int numToMove = m_Size - elem - num;
+	uint32_t numToMove = m_Size - elem - num;
 	if ((numToMove > 0) && (num > 0))
 	{
-		memmove(&Element(elem), &Element(elem + num), numToMove * sizeof(T));
+		memmove(&at(elem), &at(elem + num), numToMove * sizeof(_Ty));
 	}
 }
 
@@ -385,36 +380,36 @@ void UtlVector<T, A>::ShiftElementsLeft(int elem, int num)
 //-----------------------------------------------------------------------------
 // Adds an element, uses default constructor
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline int UtlVector<T, A>::AddToHead()
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_head()
 {
-	return InsertBefore(0);
+	return push_before(0);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::AddToTail()
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail()
 {
-	return InsertBefore(m_Size);
+	return push_before(m_Size);
 }
 
-template<typename T, class A>
-inline T* UtlVector<T, A>::AddToTailGetPtr()
+template<typename _Ty, class _AllocTy>
+inline _Ty* UtlVector<_Ty, _AllocTy>::push_to_tail_ptr()
 {
-	return &Element(AddToTail());
+	return &at(push_to_tail());
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::InsertAfter(int elem)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_after(uint32_t elem)
 {
-	return InsertBefore(elem + 1);
+	return push_before(elem + 1);
 }
 
-template<typename T, class A>
-int UtlVector<T, A>::InsertBefore(int elem)
+template<typename _Ty, class _AllocTy>
+uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem)
 {
-	GrowVector();
-	ShiftElementsRight(elem);
-	Utils::VAlloc::Construct(&Element(elem));
+	grow_by();
+	shift_to_right(elem);
+	Utils::VAlloc::Construct(&at(elem));
 	return elem;
 }
 
@@ -422,30 +417,30 @@ int UtlVector<T, A>::InsertBefore(int elem)
 //-----------------------------------------------------------------------------
 // Adds an element, uses copy constructor
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline int UtlVector<T, A>::AddToHead(const T& src)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_head(const _Ty& src)
 {
-	return InsertBefore(0, src);
+	return push_before(0, src);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::AddToTail(const T& src)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail(const _Ty& src)
 {
-	return InsertBefore(m_Size, src);
+	return push_before(m_Size, src);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::InsertAfter(int elem, const T& src)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_after(uint32_t elem, const _Ty& src)
 {
-	return InsertBefore(elem + 1, src);
+	return push_before(elem + 1, src);
 }
 
-template<typename T, class A>
-int UtlVector<T, A>::InsertBefore(int elem, const T& src)
+template<typename _Ty, class _AllocTy>
+uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem, const _Ty& src)
 {
-	GrowVector();
-	ShiftElementsRight(elem);
-	Utils::VAlloc::CopyConstruct(&Element(elem), src);
+	grow_by();
+	shift_to_right(elem);
+	Utils::VAlloc::CopyConstruct(&at(elem), src);
 	return elem;
 }
 
@@ -453,131 +448,123 @@ int UtlVector<T, A>::InsertBefore(int elem, const T& src)
 //-----------------------------------------------------------------------------
 // Adds multiple elements, uses default constructor
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-inline int UtlVector<T, A>::AddMultipleToHead(int num)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_head_multiple(uint32_t num)
 {
-	return InsertMultipleBefore(0, num);
+	return push_before_multiple(0, num);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::AddMultipleToTail(int num)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail_multiple(uint32_t num)
 {
-	return InsertMultipleBefore(m_Size, num);
+	return push_before_multiple(m_Size, num);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::AddMultipleToTail(int num, const T* pToCopy)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail_multiple(uint32_t num, const _Ty* pToCopy)
 {
-	return InsertMultipleBefore(m_Size, num, pToCopy);
+	return push_before_multiple(m_Size, num, pToCopy);
 }
 
-template<typename T, class A>
-int UtlVector<T, A>::InsertMultipleAfter(int elem, int num)
+template<typename _Ty, class _AllocTy>
+uint32_t UtlVector<_Ty, _AllocTy>::push_after_multiple(uint32_t elem, uint32_t num)
 {
-	return InsertMultipleBefore(elem + 1, num);
+	return push_before_multiple(elem + 1, num);
 }
 
 
-template<typename T, class A>
-void UtlVector<T, A>::SetCount(int count)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::resize(uint32_t count)
 {
-	RemoveAll();
-	AddMultipleToTail(count);
+	clear();
+	push_to_tail_multiple(count);
 }
 
-template<typename T, class A>
-inline void UtlVector<T, A>::SetSize(int size)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::resize_no_destroy(uint32_t count)
 {
-	SetCount(size);
+	uint32_t delta = count - m_Size;
+	if (delta > 0) push_to_tail_multiple(delta);
+	else if (delta < 0) erase_from_tail_multiple(-delta);
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::SetCountNonDestructively(int count)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::copy(const _Ty* pArray, uint32_t size)
 {
-	int delta = count - m_Size;
-	if (delta > 0) AddMultipleToTail(delta);
-	else if (delta < 0) RemoveMultipleFromTail(-delta);
-}
-
-template<typename T, class A>
-void UtlVector<T, A>::CopyArray(const T* pArray, int size)
-{
-	// Can't insert something that's in the list... reallocation may hose us
-	Assert((Base() == NULL) || !pArray || (Base() >= (pArray + size)) || (pArray >= (Base() + Count())));
-
-	SetSize(size);
-	for (int i = 0; i < size; i++)
+	// Can'_Ty insert something that's in the list... reallocation may hose us
+	resize(size);
+	for (uint32_t i = 0; i < size; i++)
 	{
 		(*this)[i] = pArray[i];
 	}
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::Swap(UtlVector< T, A >& vec)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::swap(UtlVector< _Ty, _AllocTy >& vec)
 {
-	m_Memory.Swap(vec.m_Memory);
+	m_Memory.swap(vec.m_Memory);
 	std::swap(m_Size, vec.m_Size);
 	std::swap(m_Elements, vec.m_Elements);
 }
 
-template<typename T, class A>
-int UtlVector<T, A>::AddVectorToTail(UtlVector const& src)
+template<typename _Ty, class _AllocTy>
+uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail(const UtlVector& src)
 {
-	int base = Count();
+	uint32_t base = size();
 
 	// Make space.
-	int nSrcCount = src.Count();
-	EnsureCapacity(base + nSrcCount);
+	uint32_t nSrcCount = src.size();
+	reserve(base + nSrcCount);
 
 	// Copy the elements.	
 	m_Size += nSrcCount;
-	for (int i = 0; i < nSrcCount; i++)
+	for (uint32_t i = 0; i < nSrcCount; i++)
 	{
-		Utils::VAlloc::CopyConstruct(&Element(base + i), src[i]);
+		Utils::VAlloc::CopyConstruct(&at(base + i), src[i]);
 	}
 	return base;
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::InsertMultipleBefore(int elem, int num)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, uint32_t num)
 {
 	if (num == 0)
 		return elem;
 
-	GrowVector(num);
-	ShiftElementsRight(elem, num);
+	grow_by(num);
+	shift_to_right(elem, num);
 
 	// Invoke default constructors
-	for (int i = 0; i < num; ++i)
+	for (uint32_t i = 0; i < num; ++i)
 	{
-		Utils::VAlloc::Construct(&Element(elem + i));
+		Utils::VAlloc::Construct(&at(elem + i));
 	}
 
 	return elem;
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::InsertMultipleBefore(int elem, int num, const T* pToInsert)
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, uint32_t num, const _Ty* pToInsert)
 {
 	if (num == 0)
 		return elem;
 
-	GrowVector(num);
-	ShiftElementsRight(elem, num);
+	grow_by(num);
+	shift_to_right(elem, num);
 
 	// Invoke default constructors
 	if (!pToInsert)
 	{
-		for (int i = 0; i < num; ++i)
+		for (uint32_t i = 0; i < num; ++i)
 		{
-			Utils::VAlloc::Construct(&Element(elem + i));
+			Utils::VAlloc::Construct(&at(elem + i));
 		}
 	}
 	else
 	{
-		for (int i = 0; i < num; i++)
+		for (uint32_t i = 0; i < num; i++)
 		{
-			Utils::VAlloc::CopyConstruct(&Element(elem + i), pToInsert[i]);
+			Utils::VAlloc::CopyConstruct(&at(elem + i), pToInsert[i]);
 		}
 	}
 
@@ -588,140 +575,140 @@ inline int UtlVector<T, A>::InsertMultipleBefore(int elem, int num, const T* pTo
 //-----------------------------------------------------------------------------
 // Finds an element (element needs operator== defined)
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-int UtlVector<T, A>::Find(const T& src) const
+template<typename _Ty, class _AllocTy>
+uint32_t UtlVector<_Ty, _AllocTy>::Find(const _Ty& src) const
 {
-	for (int i = 0; i < Count(); ++i)
+	for (uint32_t i = 0; i < size(); ++i)
 	{
-		if (Element(i) == src)
+		if (at(i) == src)
 			return i;
 	}
 	return -1;
 }
 
 //-----------------------------------------------------------------------------
-// Finds an element using a predicate, using std::find_if
+// Finds an element using _AllocTy predicate, using std::find_if
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-template< class F >
-int UtlVector<T, A>::FindPredicate(F&& predicate) const
+template<typename _Ty, class _AllocTy>
+template<typename _FnTy>
+uint32_t UtlVector<_Ty, _AllocTy>::find(_FnTy predicate) const
 {
-	const T* begin = Base();
-	const T* end = begin + Count();
-	const T* const& elem = std::find_if(begin, end, predicate);
+	const _Ty* begin = data();
+	const _Ty* end = begin + size();
+	const _Ty* const& elem = std::find_if(begin, end, predicate);
 
 	if (elem != end)
 	{
 		return std::distance(begin, elem);
 	}
 
-	return InvalidIndex();
+	return invalid_index();
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::FillWithValue(const T& src)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::fill(const _Ty& src)
 {
-	for (int i = 0; i < Count(); i++)
+	for (uint32_t i = 0; i < size(); i++)
 	{
-		Element(i) = src;
+		at(i) = src;
 	}
 }
 
-template<typename T, class A>
-bool UtlVector<T, A>::HasElement(const T& src) const
+template<typename _Ty, class _AllocTy>
+bool UtlVector<_Ty, _AllocTy>::contains(const _Ty& src) const
 {
 	return (Find(src) >= 0);
 }
 
 
 //-----------------------------------------------------------------------------
-// Element removal
+// at removal
 //-----------------------------------------------------------------------------
-template<typename T, class A>
-void UtlVector<T, A>::FastRemove(int elem)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::erase_fast(uint32_t elem)
 {
 	// Global scope to resolve conflict with Scaleform 4.0
-	VAlloc::Destruct(&Element(elem));
+	VAlloc::Destruct(&at(elem));
 	if (m_Size > 0)
 	{
 		if (elem != m_Size - 1)
-			memcpy(&Element(elem), &Element(m_Size - 1), sizeof(T));
+			memcpy(&at(elem), &at(m_Size - 1), sizeof(_Ty));
 		--m_Size;
 	}
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::Remove(int elem)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::erase(uint32_t elem)
 {
 	// Global scope to resolve conflict with Scaleform 4.0
-	VAlloc::Destruct(&Element(elem));
-	ShiftElementsLeft(elem);
+	VAlloc::Destruct(&at(elem));
+	shift_to_left(elem);
 	--m_Size;
 }
 
-template<typename T, class A>
-bool UtlVector<T, A>::FindAndRemove(const T& src)
+template<typename _Ty, class _AllocTy>
+bool UtlVector<_Ty, _AllocTy>::find_and_erase(const _Ty& src)
 {
-	int elem = Find(src);
+	uint32_t elem = Find(src);
 	if (elem != -1)
 	{
-		Remove(elem);
+		erase(elem);
 		return true;
 	}
 	return false;
 }
 
-template<typename T, class A>
-bool UtlVector<T, A>::FindAndFastRemove(const T& src)
+template<typename _Ty, class _AllocTy>
+bool UtlVector<_Ty, _AllocTy>::find_and_erase_fast(const _Ty& src)
 {
-	int elem = Find(src);
+	uint32_t elem = Find(src);
 	if (elem != -1)
 	{
-		FastRemove(elem);
+		erase_fast(elem);
 		return true;
 	}
 	return false;
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::RemoveMultiple(int elem, int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::erase_multiple(uint32_t elem, uint32_t num)
 {
 	// Global scope to resolve conflict with Scaleform 4.0
-	for (int i = elem + num; --i >= elem; )
-		VAlloc::Destruct(&Element(i));
+	for (uint32_t i = elem + num; --i >= elem; )
+		VAlloc::Destruct(&at(i));
 
-	ShiftElementsLeft(elem, num);
+	shift_to_left(elem, num);
 	m_Size -= num;
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::RemoveMultipleFromHead(int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::erase_from_head_multiple(uint32_t num)
 {
 	// Global scope to resolve conflict with Scaleform 4.0
-	for (int i = num; --i >= 0; )
-		VAlloc::Destruct(&Element(i));
+	for (uint32_t i = num; --i >= 0; )
+		VAlloc::Destruct(&at(i));
 
-	ShiftElementsLeft(0, num);
+	shift_to_left(0, num);
 	m_Size -= num;
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::RemoveMultipleFromTail(int num)
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::erase_from_tail_multiple(uint32_t num)
 {
 	// Global scope to resolve conflict with Scaleform 4.0
-	for (int i = m_Size - num; i < m_Size; i++)
-		VAlloc::Destruct(&Element(i));
+	for (uint32_t i = m_Size - num; i < m_Size; i++)
+		VAlloc::Destruct(&at(i));
 
 	m_Size -= num;
 }
 
-template<typename T, class A>
-void UtlVector<T, A>::RemoveAll()
+template<typename _Ty, class _AllocTy>
+void UtlVector<_Ty, _AllocTy>::clear()
 {
-	for (int i = m_Size; --i >= 0; )
+	for (uint32_t i = m_Size; --i >= 0; )
 	{
 		// Global scope to resolve conflict with Scaleform 4.0
-		VAlloc::Destruct(&Element(i));
+		VAlloc::Destruct(&at(i));
 	}
 
 	m_Size = 0;
@@ -732,35 +719,35 @@ void UtlVector<T, A>::RemoveAll()
 // Memory deallocation
 //-----------------------------------------------------------------------------
 
-template<typename T, class A>
-inline void UtlVector<T, A>::Purge()
+template<typename _Ty, class _AllocTy>
+inline void UtlVector<_Ty, _AllocTy>::destroy()
 {
-	RemoveAll();
-	m_Memory.Purge();
-	ResetDbgInfo();
+	clear();
+	m_Memory.destroy();
+	reset_dbg_info();
 }
 
 
-template<typename T, class A>
-inline void UtlVector<T, A>::PurgeAndDeleteElements()
+template<typename _Ty, class _AllocTy>
+inline void UtlVector<_Ty, _AllocTy>::destroy_and_delete()
 {
-	for (int i = 0; i < m_Size; i++)
+	for (uint32_t i = 0; i < m_Size; i++)
 	{
-		delete Element(i);
+		delete at(i);
 	}
-	Purge();
+	destroy();
 }
 
-template<typename T, class A>
-inline void UtlVector<T, A>::Compact()
+template<typename _Ty, class _AllocTy>
+inline void UtlVector<_Ty, _AllocTy>::destroy_no_resize()
 {
-	m_Memory.Purge(m_Size);
+	m_Memory.destroy(m_Size);
 }
 
-template<typename T, class A>
-inline int UtlVector<T, A>::NumAllocated() const
+template<typename _Ty, class _AllocTy>
+inline uint32_t UtlVector<_Ty, _AllocTy>::capacity() const
 {
-	return m_Memory.NumAllocated();
+	return m_Memory.capacity();
 }
 
 

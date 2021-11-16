@@ -145,8 +145,8 @@ class ITraceListData : public IPartitionEnumerator
 public:
 	ITraceListData(int nLeafMax = TLD_DEF_LEAF_MAX, int nEntityMax = TLD_DEF_ENTITY_MAX) noexcept
 	{
-		LeafList.SetSize(nLeafMax);
-		EntityList.SetSize(nEntityMax);
+		LeafList.resize(nLeafMax);
+		EntityList.resize(nEntityMax);
 	}
 
 	void Reset() noexcept
@@ -157,17 +157,17 @@ public:
 
 	bool	IsEmpty() const noexcept { return (LeafCount == 0 && EntityCount == 0); }
 
-	int		LeafCountMax() const noexcept { return LeafList.Count(); }
+	int		LeafCountMax() const noexcept { return LeafList.size(); }
 	void    LeafCountReset() noexcept { LeafCount = 0; }
 
-	int		EntityCountMax() const noexcept { return EntityList.Count(); }
+	int		EntityCountMax() const noexcept { return EntityList.size(); }
 	void	EntityCountReset() noexcept { EntityCount = 0; }
 
 	// For leaves...
 	void AddLeaf(int iLeaf) noexcept
 	{
-		if (LeafCount >= LeafList.Count())
-			LeafList.AddMultipleToTail(LeafList.Count());
+		if (LeafCount >= LeafList.size())
+			LeafList.push_to_tail_multiple(LeafList.size());
 
 		LeafList[LeafCount] = iLeaf;
 		LeafCount++;
@@ -176,8 +176,8 @@ public:
 	// For entities...
 	Const::PartitionRetVal EnumElement(IBaseEntityInternal* pHandleEntity) override
 	{
-		if (EntityCount >= EntityList.Count())
-			EntityList.AddMultipleToTail(EntityList.Count());
+		if (EntityCount >= EntityList.size())
+			EntityList.push_to_tail_multiple(EntityList.size());
 
 		EntityList[EntityCount] = pHandleEntity;
 		EntityCount++;
@@ -187,10 +187,10 @@ public:
 
 public:
 
-	int							LeafCount{ };
+	uint32_t					LeafCount{ };
 	Utils::UtlVector<int>		LeafList;
 
-	int										EntityCount{ };
+	uint32_t								EntityCount{ };
 	Utils::UtlVector<IBaseEntityInternal*>	EntityList;
 };
 
