@@ -6,7 +6,7 @@
 
 #include "ESP.hpp"
 
-void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info)
+void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index)
 {
 	using namespace TF2;
 
@@ -33,12 +33,16 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 	else if (!GetBoxInfo(pEnt, box_info))
 		return;
 
+	auto iter_espoverride = m_ESPOverride.find(ent_index);
+	ESPOverride* esp_override = iter_espoverride == m_ESPOverride.end() ? nullptr : &iter_espoverride->second;
+
 	DrawSharedInfo(
 		box_info,
 		esp_info,
-		[distance, pEnt, class_id](ESPInfo::Shared* esp_info, ESPInfo::TextInfo& renderer)
+		esp_override,
+		[distance, pEnt, class_id](const ESPInfo::Shared* esp_info, ESPInfo::TextInfo& renderer)
 		{
-			ESPInfo::Building* building_esp = static_cast<ESPInfo::Building*>(esp_info);
+			const ESPInfo::Building* building_esp = static_cast<const ESPInfo::Building*>(esp_info);
 			char fmt[64];
 
 			switch (class_id)
@@ -103,9 +107,9 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 
 				if (building_esp->DrawBState)
 				{
-					if (const int healing_players = dispenser->HealingTargets->Count())
+					if (const size_t healing_players = dispenser->HealingTargets->size())
 					{
-						sprintf_s(fmt, "Healing: %i Players", healing_players);
+						sprintf_s(fmt, "Healing: %u Players", healing_players);
 						renderer.AddText(fmt);
 					}
 				}

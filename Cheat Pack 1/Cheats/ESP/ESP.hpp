@@ -4,6 +4,8 @@
 #include <Entity/BaseObject.hpp>
 #include <Math/Vector.hpp>
 
+#include <deque>
+
 #include "ICheatIFace.hpp"
 #include "Defines.hpp"
 
@@ -215,12 +217,34 @@ namespace ESPInfo
 		ImVec2 m_DrawPos;
 	};
 
-	using DrawTextCallback = std::function<void(Shared* esp_info, TextInfo& text_renderer)>;
+	using DrawTextCallback = std::function<void(const Shared* esp_info, TextInfo& text_renderer)>;
 }
 
 
 class GlobalESP : public ICheatIFace
 {
+public:
+	enum class ESPType : char
+	{
+		Player,
+		Buidling,
+		Other
+	};
+	
+	struct ESPOverride
+	{
+		const TF2::IBaseEntity Entity;
+		const TF2::Color4_F Color;
+		ESPInfo::ESPMode DrawMode;
+		ESPType Type;
+	};
+
+	static void PushESPOverride(int ent_index, const ESPOverride& esp_override);
+
+	static void PopESPOverride(const TF2::IBaseEntity pEnt);
+
+	static void PopESPOverride(int entindex);
+
 private:
 	bool OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config) override;
 	void OnPluginLoad() override;
@@ -237,9 +261,9 @@ private:
 private:
 	bool GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinfo);
 
-	void DrawSharedInfo(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, const ESPInfo::DrawTextCallback& callback);
+	void DrawSharedInfo(const ESPInfo::BoxInfo& boxinfo, const ESPInfo::Shared* esp_info, const ESPOverride* esp_override, const ESPInfo::DrawTextCallback& callback);
 
-	void DrawSharedHealth(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player);
+	void DrawSharedHealth(const ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player);
 
 	TF2::Color4_F GetHealthColor(int cur, int max);
 
@@ -257,17 +281,14 @@ private:
 	/// <summary>
 	/// Handles building's esp, ie sentry...
 	/// </summary>
-	void RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info);
-
-	///// <summary>
-	///// Handles item's esp, ie pickups, projectiles...
-	///// </summary>
-	//void RenderItemsESP();
+	void RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index);
 
 private:
 	ESPInfo::Player		m_PlayerESPInfo[ESPInfo::MaxTeams];
 	ESPInfo::Building	m_BuildingESPInfo[ESPInfo::MaxTeams];
 	ESPInfo::Object		m_ObjectESPInfo;
+
+	std::unordered_map<int, ESPOverride> m_ESPOverride;
 
 	ImFont* m_DisplayFont;
 	ImGuiID m_RenderHookId;

@@ -39,17 +39,25 @@ bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinf
 	return true;
 }
 
-void GlobalESP::DrawSharedInfo(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, const ESPInfo::DrawTextCallback& callback)
+void GlobalESP::DrawSharedInfo(
+	const ESPInfo::BoxInfo& boxinfo, 
+	const ESPInfo::Shared* esp_info,
+	const ESPOverride* esp_override, 
+	const ESPInfo::DrawTextCallback& callback
+)
 {
 	using namespace TF2;
 	using PosType = ESPInfo::BoxInfo::PosType;
 	ImDrawList* pDraw = ImGui::GetBackgroundDrawList();
-
-	switch (esp_info->DrawMode.get())
+	
+	switch (esp_override ? esp_override->DrawMode : esp_info->DrawMode)
 	{
 	case ESPInfo::ESPMode::type::Box:
 	{
-		ImU32 line_color = ImGui::GetColorU32(*std::bit_cast<ImVec4*>(esp_info->Box.DrawColor.data()));
+		ImU32 line_color = ImGui::GetColorU32(esp_override ? 
+			*std::bit_cast<ImVec4*>(esp_override->Color.data()) :
+			*std::bit_cast<ImVec4*>(esp_info->Box.DrawColor.data())
+		);
 		for (size_t i = 0; i < 4; i++)
 		{
 			const auto cur_bot = boxinfo.GetPosition<PosType::Bottom>(i).to<ImVec2>();
@@ -67,7 +75,10 @@ void GlobalESP::DrawSharedInfo(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_i
 	}
 	case ESPInfo::ESPMode::type::BoxOutline:
 	{
-		ImU32 line_color = ImGui::GetColorU32(*std::bit_cast<ImVec4*>(esp_info->OutlineBox.DrawColor.data()));
+		ImU32 line_color = ImGui::GetColorU32(esp_override ?
+			*std::bit_cast<ImVec4*>(esp_override->Color.data()) :
+			*std::bit_cast<ImVec4*>(esp_info->OutlineBox.DrawColor.data())
+		);
 		ImU32 outline_color = ImGui::GetColorU32(*std::bit_cast<ImVec4*>(esp_info->OutlineBox.OutlineColor.data()));
 
 		for (size_t i = 0; i < 4; i++)
@@ -89,14 +100,13 @@ void GlobalESP::DrawSharedInfo(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_i
 	}
 	}
 
-	if (callback)
+	if (!esp_override)
 	{
 		const float text_height = (this->m_DisplayFont ? this->m_DisplayFont->FontSize : ImGui::GetTextLineHeight()) + esp_info->Text.Height;
 
 		const Vector2D_F delta_updown = boxinfo.GetPosition<PosType::Upper>(ESPInfo::BoxInfo::BOTTOM_L) - boxinfo.GetPosition<PosType::Bottom>(ESPInfo::BoxInfo::BOTTOM_L);
 		const float text_size = std::min(esp_info->Text.Size.get(), esp_info->Text.Size * std::abs(delta_updown[1]) / 5.f + 1.f);
 
-		//boxinfo.GetPosition<PosType::Upper>(ESPInfo::BoxInfo::BOTTOM_L).to<ImVec2>()
 		const Vector2D_F* ideal_pos = nullptr;
 		float ideal_delta = -FLT_MAX;
 
@@ -127,7 +137,7 @@ void GlobalESP::DrawSharedInfo(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_i
 }
 
 
-void GlobalESP::DrawSharedHealth(ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player)
+void GlobalESP::DrawSharedHealth(const ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player)
 {
 	using namespace TF2;
 
@@ -283,7 +293,7 @@ void GlobalESP::RenderExtraESP()
 		case Const::EntClassID::CObjectDispenser:
 		case Const::EntClassID::CObjectTeleporter:
 		{
-			RenderBuildingESP(pEnt, cls_id, box_info);
+			RenderBuildingESP(pEnt, cls_id, box_info, i);
 			continue;
 		}
 		}
@@ -450,10 +460,14 @@ void GlobalESP::RenderExtraESP()
 		else if (!GetBoxInfo(pEnt, box_info))
 			return;
 
+		auto iter_espoverride = m_ESPOverride.find(i);
+		ESPOverride* esp_override = iter_espoverride == m_ESPOverride.end() ? nullptr : &iter_espoverride->second;
+
 		DrawSharedInfo(
 			box_info,
 			&m_ObjectESPInfo,
-			[item_name = name](ESPInfo::Shared* esp_info, ESPInfo::TextInfo& renderer)
+			esp_override,
+			[item_name = name](const ESPInfo::Shared*, ESPInfo::TextInfo& renderer)
 			{
 				renderer.AddText(item_name);
 			}

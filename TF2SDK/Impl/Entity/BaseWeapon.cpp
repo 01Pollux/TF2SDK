@@ -7,6 +7,9 @@ TF2_NAMESPACE_BEGIN();
 
 int IBaseWeaponInternal::GetWeaponSlot() const noexcept
 {
+	// CHudWeaponSelection::DrawSelection
+	// First virtual function
+	// 327
 	static Utils::IMemberVFuncThunk<int> get_slot{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseWeapon", "vtable" }, "GetWeaponSlot").value_or(-1)};
 	return get_slot(this);
 }

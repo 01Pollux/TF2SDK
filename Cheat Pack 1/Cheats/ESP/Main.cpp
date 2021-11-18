@@ -14,6 +14,25 @@
 
 static GlobalESP esp_draw;
 
+
+void GlobalESP::PushESPOverride(int ent_index, const ESPOverride& esp_override)
+{
+	esp_draw.m_ESPOverride.emplace(ent_index, esp_override);
+}
+
+void GlobalESP::PopESPOverride(const TF2::IBaseEntity pEnt)
+{
+	auto iter = std::find_if(esp_draw.m_ESPOverride.begin(), esp_draw.m_ESPOverride.end(), [pEnt] (const auto& entry) { return entry.second.Entity == pEnt; });
+	if (iter != esp_draw.m_ESPOverride.end())
+		esp_draw.m_ESPOverride.erase(iter);
+}
+
+void GlobalESP::PopESPOverride(int ent_index)
+{
+	esp_draw.m_ESPOverride.erase(ent_index);
+}
+
+
 bool GlobalESP::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 {
 	config.Engine.GlobalVars = true;
@@ -27,9 +46,6 @@ bool GlobalESP::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
 
 void GlobalESP::OnPluginLoad()
 {
-	int* x = nullptr;
-	float* c = std::bit_cast<float*>(x);
-
 	m_DisplayFont = SG::ImGuiLoader->FindFont("Arimo-Medium, s=14");
 	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "ESP", std::bind(&GlobalESP::OnRender, this));
 

@@ -19,6 +19,9 @@ void GlobalESP::RenderPlayerESP()
 	
 	for (int i = 1; i < Interfaces::GlobalVars->MaxClients; i++)
 	{
+		if (m_ESPOverride.contains(i))
+			continue;
+
 		if (!players->IsConnected[i] || !players->IsAlive[i])
 			continue;
 
@@ -38,7 +41,10 @@ void GlobalESP::RenderPlayerESP()
 		default: continue;
 		}
 
-		if (!esp_info->Enable)
+		auto iter_espoverride = m_ESPOverride.find(i);
+		ESPOverride* esp_override = iter_espoverride == m_ESPOverride.end() ? nullptr : &iter_espoverride->second;
+
+		if (!esp_override && !esp_info->Enable)
 			continue;
 		else if (esp_info->IgnoreCloak && player->IsPlayerInvisible())
 			continue;
@@ -52,9 +58,10 @@ void GlobalESP::RenderPlayerESP()
 		DrawSharedInfo(
 			box_info,
 			esp_info,
-			[distance, player](ESPInfo::Shared* esp_info, ESPInfo::TextInfo& renderer)
+			esp_override,
+			[distance, player](const ESPInfo::Shared* esp_info, ESPInfo::TextInfo& renderer)
 			{
-				ESPInfo::Player* player_esp = static_cast<ESPInfo::Player*>(esp_info);
+				const ESPInfo::Player* player_esp = static_cast<const ESPInfo::Player*>(esp_info);
 				char fmt[64];
 
 				if (player_esp->DrawName)
