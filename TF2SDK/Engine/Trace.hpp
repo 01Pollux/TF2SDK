@@ -90,13 +90,12 @@ public:
 	virtual int GetLeafContainingPoint(const Vector3D_F& ptTest) abstract;
 };
 
-
 struct GameRay
 {
-	Vector4D_F  Start;	// starting point, centered within the extents
-	Vector4D_F  Delta;	// direction + length of the ray
-	Vector4D_F  StartOffset;	// Add this to m_Start to get the actual ray start
-	Vector4D_F  Extents;	// Describes an axis aligned box extruded along a ray
+	Vector4D_F alignas(16) Start;	// starting point, centered within the extents
+	Vector4D_F alignas(16) Delta;	// direction + length of the ray
+	Vector4D_F alignas(16) StartOffset;	// Add this to m_Start to get the actual ray start
+	Vector4D_F alignas(16) Extents;	// Describes an axis aligned box extruded along a ray
 	bool		IsRay;	// are the extents zero?
 	bool		IsSwept;	// is delta != 0?
 

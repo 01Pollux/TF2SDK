@@ -580,7 +580,6 @@ enum class EntCollisionGroup
 	Count
 };
 
-
 static constexpr float SoundNormal_ClipDist = 1000.f;
 
 // How many networked area portals do we allow?
@@ -590,30 +589,6 @@ static constexpr size_t MaxAreaPortal_StateBytes = 24u;
 // user message max payload size (note, this value is used by the engine, so MODs cannot change it)
 static constexpr size_t MaxUserMsgData= 255u;
 static constexpr size_t MaxEntityMsgData = 255u;
-
-
-namespace StudioDraw
-{
-	static constexpr uint32_t None						= 0;
-	static constexpr uint32_t Render					= 1 << 0;
-	static constexpr uint32_t ViewXFormatAttachement	= 1 << 1;
-	static constexpr uint32_t DrawTranslucentSubmodels	= 1 << 2;
-	static constexpr uint32_t TwoPass					= 1 << 3;
-	static constexpr uint32_t StaticLighting			= 1 << 4;
-	static constexpr uint32_t WireFrame					= 1 << 5;
-	static constexpr uint32_t ItemBlink					= 1 << 6;
-	static constexpr uint32_t NoShadows					= 1 << 7;
-	static constexpr uint32_t WireFrame_VCollide		= 1 << 8;
-	static constexpr uint32_t NoOverrideForAttach		= 1 << 9;
-	// Not a studio flag, but used to flag when we want studio stats
-	static constexpr uint32_t GenerateStats				= 1 << 24;
-	// Not a studio flag, but used to flag model as using shadow depth material override
-	static constexpr uint32_t SSAO_DepthTexture			= 1 << 27;
-	// Not a studio flag, but used to flag model as using shadow depth material override
-	static constexpr uint32_t Shadow_DepthTexture		= 1 << 30;
-	// Not a studio flag, but used to flag model as a non-sorting brush model
-	static constexpr uint32_t Transparency				= 1 << 31;
-}
 
 using QueryCvarCookie = int;
 static constexpr QueryCvarCookie QueryCvarCookie_Invalid = -1;

@@ -52,7 +52,12 @@
     <ClInclude Include="Materials\StudioRender.hpp" />
     <ClInclude Include="Materials\Texture.hpp" />
     <ClInclude Include="Materials\VTF.hpp" />
+    <ClInclude Include="Physics\Consts.hpp" />
+    <ClInclude Include="Physics\Friction.hpp" />
+    <ClInclude Include="Physics\VPhysics.hpp" />
+    <ClInclude Include="Studio\BSP.hpp" />
     <ClInclude Include="Studio\LightDesc.hpp" />
+    <ClInclude Include="Studio\Model.hpp" />
     <ClInclude Include="Utils\Byteswap.hpp" />
     <ClInclude Include="Utils\Checksum.hpp" />
     <ClInclude Include="Utils\Draw.hpp" />
@@ -94,6 +99,7 @@
     <ClInclude Include="Utils\UtlAlloc.hpp" />
     <ClInclude Include="Utils\UtlBuffer.hpp" />
     <ClInclude Include="Utils\UtlMemory.hpp" />
+    <ClInclude Include="Utils\UtlString.hpp" />
     <ClInclude Include="Utils\UtlSymbol.hpp" />
     <ClInclude Include="Utils\UtlVector.hpp" />
     <ClInclude Include="Utils\Vector.hpp" />

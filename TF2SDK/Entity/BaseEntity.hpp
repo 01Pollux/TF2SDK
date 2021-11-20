@@ -15,6 +15,7 @@ class IBoneCache;
 class IBoneInfo;
 struct BoneResult;
 class ITFParticleFactory;
+class IPhysicsObject;
 
 
 class IBaseEntityInternal : public IClientEntity
@@ -175,6 +176,12 @@ public:
 		[]() -> int
 		{
 			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
+		}()
+	);
+	DECL_RECVPROP(IPhysicsObject,		"m_iTeamNum",			PhysicsObject,
+		[]() -> int
+		{
+			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iTeamNum__To__m_pPhysicsObject").value_or(0);
 		}()
 	);
 

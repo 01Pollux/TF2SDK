@@ -304,5 +304,28 @@ namespace StudioSeqFlags
 	static constexpr uint32_t ALPose	= 0x4'000;
 }
 
+namespace StudioDraw
+{
+	static constexpr uint32_t None = 0;
+	static constexpr uint32_t Render = 1 << 0;
+	static constexpr uint32_t ViewXFormatAttachement = 1 << 1;
+	static constexpr uint32_t DrawTranslucentSubmodels = 1 << 2;
+	static constexpr uint32_t TwoPass = 1 << 3;
+	static constexpr uint32_t StaticLighting = 1 << 4;
+	static constexpr uint32_t WireFrame = 1 << 5;
+	static constexpr uint32_t ItemBlink = 1 << 6;
+	static constexpr uint32_t NoShadows = 1 << 7;
+	static constexpr uint32_t WireFrame_VCollide = 1 << 8;
+	static constexpr uint32_t NoOverrideForAttach = 1 << 9;
+	// Not a studio flag, but used to flag when we want studio stats
+	static constexpr uint32_t GenerateStats = 1 << 24;
+	// Not a studio flag, but used to flag model as using shadow depth material override
+	static constexpr uint32_t SSAO_DepthTexture = 1 << 27;
+	// Not a studio flag, but used to flag model as using shadow depth material override
+	static constexpr uint32_t Shadow_DepthTexture = 1 << 30;
+	// Not a studio flag, but used to flag model as a non-sorting brush model
+	static constexpr uint32_t Transparency = 1 << 31;
+}
+
 
 TF2_NAMESPACE_END();

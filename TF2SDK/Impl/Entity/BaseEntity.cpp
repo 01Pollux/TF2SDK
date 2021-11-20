@@ -10,6 +10,7 @@
 #include "Utils/UtlVector.hpp"
 #include "Studio/Studio.hpp"
 #include "Studio/BoneCache.hpp"
+#include "Studio/Model.hpp"
 
 
 TF2_NAMESPACE_BEGIN();
@@ -139,14 +140,14 @@ void IBaseEntityInternal::SetModel(int modelidx)
 bool IBaseEntityInternal::IsHealthKit() const noexcept
 {
 	const ModelInfo* mdl = this->GetModel();
-	return mdl ? strstr(mdl->ModelName, "healthkit") != nullptr : false;
+	return mdl ? strstr(mdl->Name, "healthkit") != nullptr : false;
 }
 
 bool IBaseEntityInternal::IsGhost() const noexcept
 {
 	const ModelInfo* mdl = this->GetModel();
 	// models/props_halloween/ghost*.mdl
-	return mdl ? strstr(mdl->ModelName, "n/ghost") != nullptr : false;
+	return mdl ? strstr(mdl->Name, "n/ghost") != nullptr : false;
 }
 
 void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel)

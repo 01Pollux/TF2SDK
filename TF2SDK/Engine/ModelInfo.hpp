@@ -184,7 +184,7 @@ namespace Const
 	}
 }
 
-struct ModelInfo
+/*struct ModelInfo
 {
 	void*				FileNameHndl;
 	const char*			ModelName;
@@ -205,7 +205,7 @@ struct ModelInfo
 		uint16_t		StudioHndl;
 		uint8_t			_PadSprite[16];
 	};
-};
+};*/
 
 
 TF2_NAMESPACE_END();

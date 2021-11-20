@@ -298,7 +298,7 @@ void GlobalESP::RenderExtraESP()
 		}
 		}
 
-		if (!m_ObjectESPInfo.Enable)
+		if (!m_ObjectESPInfo.Enable || pEnt->TeamNum == pMe->TeamNum)
 			continue;
 
 		const char* name;
@@ -331,7 +331,6 @@ void GlobalESP::RenderExtraESP()
 					name = "Stickie bomb";
 					break;
 				}
-				//	data.AddEntityString(ObjectESPInfo.DrawStickies && ObjectESPInfo.DrawName, L"Stickie bomb"sv);
 			}
 
 			default:
