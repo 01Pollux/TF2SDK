@@ -4,6 +4,7 @@
 #include <Entity/BaseProjectile.hpp>
 #include <Entity/BasePlayer.hpp>
 
+#include <Studio/Model.hpp>
 #include <Utils/Draw.hpp>
 
 #include "ESP.hpp"
@@ -14,8 +15,15 @@ bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinf
 	const Vector3D_F& origin = pEnt->VecOrigin;
 
 	const bool is_zero = pEnt->Mins->is_zero();
-	const Vector3D_F mins = origin + (is_zero ? Vector3D_F{ -12.5f, -12.5f, -12.5f } : pEnt->Mins);
-	const Vector3D_F maxs = origin + (is_zero ? Vector3D_F{ 12.5f, 12.5f, 12.5f } : pEnt->Maxs);
+	auto get_min_max = [] (const TF2::IBaseEntity pEnt, bool is_min) -> Vector3D_F
+	{
+		const ModelInfo* model = pEnt->GetModel();
+		if (!model)
+			return { };
+		return is_min ? model->Mins : model->Maxs;
+	};
+	const Vector3D_F mins = origin + (is_zero ? get_min_max(pEnt, true) : pEnt->Mins);
+	const Vector3D_F maxs = origin + (is_zero ? get_min_max(pEnt, false) : pEnt->Maxs);
 
 	const Vector3D_F delta = maxs - mins;
 	const Vector3D_F corners[]{
