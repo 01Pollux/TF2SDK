@@ -583,7 +583,7 @@ bool NET_SetConVar::WriteToBuffer(Utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
-	int numvars = ConVars.Count();
+	int numvars = ConVars.size();
 
 	// Note how many we're sending
 	buffer.write_byte(numvars);
@@ -601,14 +601,14 @@ bool NET_SetConVar::ReadFromBuffer(Utils::bf_read& buffer)
 {
 	int numvars = buffer.read_byte();
 
-	ConVars.RemoveAll();
+	ConVars.clear();
 
 	for (int i = 0; i < numvars; i++)
 	{
 		cvar_t var;
 		buffer.read_string(var.Name, sizeof(var.Name));
 		buffer.read_string(var.Value, sizeof(var.Value));
-		ConVars.AddToTail(var);
+		ConVars.push_to_tail(var);
 
 	}
 	return !buffer.has_overflown();

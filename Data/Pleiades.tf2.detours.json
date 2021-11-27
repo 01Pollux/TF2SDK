@@ -1,0 +1,23 @@
+{
+  "CHLClient": {
+    "CreateMove": {
+      "Signature": {
+        "virtual": [ "CHLClient", "CreateMove" ]
+      },
+
+      "callConv": "ThisCall",
+
+      "return": "I8",
+
+      "Arguments": [
+        {
+          "type": "F32x1",
+          "const": true
+        },
+        {
+          "type": "IPtr"
+        }
+      ]
+    }
+  }
+}

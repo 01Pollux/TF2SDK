@@ -56,6 +56,10 @@
 #include "Materials/MaterialSys.hpp"
 #include "Materials/MaterialCfg.hpp"
 
+// IVPhysics
+// IPhysicsCollision
+// IPhysicsSurfaceProps
+#include "Physics/VPhysics.hpp"
 
 TF2_NAMESPACE_BEGIN(::Interfaces)
 
@@ -77,6 +81,7 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 			VSTDLib,
 			VGui,
 			Material,
+			Physics,
 
 			Count
 		};
@@ -121,7 +126,12 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 
 			// materialsystem library keys:
 			TF2_INTERFACE(Material, MatSys),
-			TF2_INTERFACE(Material, MatSysCfg)
+			TF2_INTERFACE(Material, MatSysCfg),
+
+			// physics library kyes:
+			TF2_INTERFACE(Physics, VPhysics),
+			TF2_INTERFACE(Physics, PhysicsCollision),
+			TF2_INTERFACE(Physics, PhysicsSurfProp)
 		};
 
 #undef TF2_INTERFACE

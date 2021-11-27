@@ -1,11 +1,14 @@
 #pragma once
 
 #include <Interfaces/GameData.hpp>
+
 #include "ClientEntity.hpp"
 #include "HandleEntity.hpp"
-#include "TF2Consts.hpp"
-#include "Math/Vector.hpp"
+
 #include "GameProp/GameProp.hpp"
+#include "TF2Consts.hpp"
+
+#include "Math/Vector.hpp"
 
 
 TF2_NAMESPACE_BEGIN();
@@ -16,7 +19,6 @@ class IBoneInfo;
 struct BoneResult;
 class ITFParticleFactory;
 class IPhysicsObject;
-
 
 class IBaseEntityInternal : public IClientEntity
 {
@@ -275,6 +277,5 @@ protected:
 };
 
 using IBaseEntity = IBaseEntityWrapper<IBaseEntityInternal>;
-
 
 TF2_NAMESPACE_END();

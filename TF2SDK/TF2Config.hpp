@@ -223,6 +223,24 @@ struct SDKManager::Config
 		/// </summary>
 		bool MatSysCfg : 1{ };
 	} Material;
+
+	struct
+	{
+		/// <summary>
+		/// IVPhysics
+		/// </summary>
+		bool VPhysics : 1{ };
+
+		/// <summary>
+		/// IPhysicsCollision
+		/// </summary>
+		bool PhysicsCollision : 1{ };
+
+		/// <summary>
+		/// IPhysicsSurfaceProps
+		/// </summary>
+		bool PhysicsSurfProp : 1{ };
+	} Physics;
 };
 
 

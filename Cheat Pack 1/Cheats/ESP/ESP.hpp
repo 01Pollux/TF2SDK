@@ -1,10 +1,8 @@
 #pragma once
 
-#include <Entity/BaseEntity.hpp>
 #include <Entity/BaseObject.hpp>
+#include <Entity/BasePlayer.hpp>
 #include <Math/Vector.hpp>
-
-#include <deque>
 
 #include "ICheatIFace.hpp"
 #include "Defines.hpp"
@@ -269,14 +267,14 @@ private:
 
 private:
 	/// <summary>
-	/// Handles player's esp
+	/// Handles anything esp related by calling RenderBuildingESP() and RenderPlayerESP(()
 	/// </summary>
-	void RenderPlayerESP();
+	void RenderESP();
 
 	/// <summary>
-	/// Handles anything else's esp and call RenderBuildingESP() and RenderItemsESP()
+	/// Handles player's esp
 	/// </summary>
-	void RenderExtraESP();
+	void RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& box_info);
 
 	/// <summary>
 	/// Handles building's esp, ie sentry...

@@ -1,0 +1,246 @@
+{
+  "Engine::CreateInterface": {
+    "library": "engine",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "Client::CreateInterface": {
+    "library": "client",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "ShaderDx9::CreateInterface": {
+    "library": "shaderapidx9",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "Server::CreateInterface": {
+    "library": "server",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "ValveSTD::CreateInterface": {
+    "library": "vstdlib",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "VGuiMatSurface::CreateInterface": {
+    "library": "vguimatsurface",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "Material::CreateInterface": {
+    "library": "MaterialSystem",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+  "VGui::CreateInterface": {
+    "library": "vgui2",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+
+  "Physics::CreateInterface": {
+    "library": "vgui2",
+    "windows": {
+      "pattern": "55 8B EC 56 8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04"
+    }
+  },
+
+
+  "KeyValues": {
+    "LoadFromBuffer": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 83 EC 3C A1 ? ? ? ? 53"
+      }
+    },
+    "GetStringForSymbol": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC FF 15 ? ? ? ? FF 75 08 8B C8 8B 10 FF 52 10"
+      }
+    },
+    "GetSymbolForString": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC FF 15 ? ? ? ? FF 75 0C"
+      }
+    }
+  },
+
+
+  "ClientModePointer": {
+    "library": "client",
+    "windows": {
+      "pattern": "8B 0D ? ? ? ? 6A 01 68 ? ? ? ? 8B 01 8B 40 24 FF D0 8B C8 E8 ? ? ? ? 5F",
+      "extra": [
+        "a2",
+        "r2"
+      ]
+    }
+  },
+
+
+  "GlobalVarBasePtr": {
+    "library": "engine",
+    "windows": {
+      "pattern": "A1 ? ? ? ? 8B 11 68",
+      "extra": [
+        "a8",
+        "r1"
+      ]
+    }
+  },
+
+  "CGameRules": {
+    "library": "client",
+    "windows": {
+      "pattern": "55 8B EC 8B 45 0C 83 EC 0C 56 8B F1",
+      "extra": [
+        "a2",
+        "r1"
+      ]
+    }
+  },
+  "pLocalPlayer": {
+    "library": "client",
+    "windows": {
+      "pattern": "A1 ? ? ? ? 33 C9 83 C4 04",
+      "extra": [
+        "a1",
+        "r1"
+      ]
+    }
+  },
+
+  "pCEntityListPtr": {
+    "library": "client",
+    "windows": {
+      "pattern": "FF 50 10 8B 0D ? ? ? ? E8 ? ? ? ? 8B 35",
+      "extra": [
+        "a5",
+        "r2"
+      ]
+    }
+  },
+
+  "GameRules": {
+    "library": "client",
+    "windows": {
+      "pattern": "8B 83 0F A5 F1 00",
+      "extra": [
+        "a2",
+        "r1"
+      ]
+    }
+  },
+
+  "CEconEntity": {
+    "GetItemSchema": {
+      "library": "client",
+      "windows": {
+        "pattern": "E8 ? ? ? ? 83 C0 04 C3"
+      }
+    },
+    "AttributeHookValue": {
+      "int": {
+        "library": "client",
+        "windows": {
+          "pattern": "55 8B EC 83 EC 10 8B 0D ? ? ? ? 53 56 57 33 FF"
+        }
+      },
+      "float": {
+        "library": "client",
+        "windows": {
+          "pattern": "55 8B EC 83 EC 0C 8B 0D ? ? ? ? 53 56 57 33 F6 33 FF 89 75 F4 89 7D F8 8B 41 08 85 C0 74 ? 68 ? ? ? ? 68 ? ? ? ? 68 ? ? ? ? 68 ? ? ? ? 6A 6B"
+        }
+      }
+    }
+  },
+
+  "CBaseEntity": {
+    "PlayerResource": {
+      "library": "client",
+      "windows": {
+        "pattern": "FF 35 ? ? ? ? 83 CB FF",
+        "extra": [
+          "a2",
+          "r2"
+        ]
+      }
+    },
+
+    "MonsterResource": {
+      "library": "client",
+      "windows": {
+        "pattern": "C7 05 ? ? ? ? 00 00 00 00 E8 ? ? ? ? 8B 45 08 A8 01 74 ? A8 04 75 ? 56 E8 ? ? ? ? 83 C4 04 8B C6 5E 5D C2 04 00 68 68 05 00 00",
+        "extra": [
+          "a2",
+          "r1"
+        ]
+      }
+    },
+
+    "GetBoneCache": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 83 EC 10 56 8B F1 57 FF B6 5C 08 00 00"
+      }
+    },
+    "SetModelIndex": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 8B 45 08 56 8B F1 57 66 89 86 90 00 00 00"
+      }
+    },
+    // search for "scout_slamdoll_landed" and you'll find it up there
+    "EstimateAbsVelocity": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 83 EC 0C 56 8B F1 E8 ? ? ? ? 3B F0"
+      }
+    }
+  },
+
+  "ITFParticle": {
+    "SetControlPoint": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 53 8B 5D 0C 57 8B F9 83 BF 54 20 00 00 FF"
+      }
+    },
+    "SetControlPointEntity": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 51 53 8B D9 56 57 8B 7D 08"
+      }
+    },
+    "DispatchParticleEffect": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 56 57 FF 75 08 E8 ? ? ? ? 8B 4D 18"
+      }
+    },
+    "FactoryCreate": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 83 EC 08 53 56 57 8B F9 8B 0D"
+      }
+    },
+    "StopEmission": {
+      "library": "client",
+      "windows": {
+        "pattern": "55 8B EC 83 EC 10 A1 ? ? ? ? 8B 55 08"
+      }
+    }
+  }
+}

@@ -24,9 +24,9 @@ public:
 template<class _Ty, class _AllocTy = UtlMemory<_Ty>>
 class UtlVector : public UtlBaseVector
 {
-	using CAllocator = _AllocTy;
+	using allocator_type = _AllocTy;
 public:
-	using ElemType_t = _Ty;
+	using value_type = _Ty;
 	using iterator = _Ty*;
 	using const_iterator = const _Ty*;
 
@@ -172,7 +172,7 @@ protected:
 	void shift_to_right(uint32_t elem, uint32_t num = 1);
 	void shift_to_left(uint32_t elem, uint32_t num = 1);
 
-	CAllocator m_Memory;
+	allocator_type m_Memory;
 	uint32_t m_Size;
 
 	// For easier access to the elements through the debugger

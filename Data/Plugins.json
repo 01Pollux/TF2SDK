@@ -1,0 +1,6 @@
+{
+  "host name": "tf2",
+  "plugins": [
+    "ImGui Interface"
+  ]
+}

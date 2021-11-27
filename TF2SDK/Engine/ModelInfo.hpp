@@ -23,7 +23,7 @@ struct virtualmdl_t;
 struct cplane_t;
 struct mleaf_t;
 struct mleafwaterdata_t;
-struct mvertex_t;
+using mvertex_t = Vector3D_F;
 
 class IMaterial;
 class UtlBuffer;

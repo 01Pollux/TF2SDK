@@ -35,7 +35,7 @@ namespace Interfaces
 {
 	TF2_EXPORT_INTERFACE(IVPhysics, VPhysics, "VPhysics031");
 	TF2_EXPORT_INTERFACE(IPhysicsCollision, PhysicsCollision, "VPhysicsCollision007");
-	TF2_EXPORT_INTERFACE(IPhysicsSurfaceProps, PhysicsSurfaceProps, "VPhysicsSurfaceProps001");
+	TF2_EXPORT_INTERFACE(IPhysicsSurfaceProps, PhysicsSurfProp, "VPhysicsSurfaceProps001");
 }
 
 

@@ -89,6 +89,41 @@ void AngleVectors(const Angle_F& angles, Vector3D_F* forward, Vector3D_F* right,
 	}
 }
 
+void AngleMatrix(const Angle_F& angles, Matrix3x4_F& matrix)
+{
+	float sr, sp, sy, cr, cp, cy;
+
+	auto sin_cos = [](const float f, float& sval, float& cval)
+	{
+		sval = sin(f);
+		cval = cos(f);
+	};
+
+	sin_cos(DegToRad(angles[0]), sy, cy);
+	sin_cos(DegToRad(angles[1]), sp, cp);
+	sin_cos(DegToRad(angles[2]), sr, cr);
+
+	matrix[0][0] = cp * cy;
+	matrix[1][0] = cp * sy;
+	matrix[2][0] = -sp;
+
+	float crcy = cr * cy;
+	float crsy = cr * sy;
+	float srcy = sr * cy;
+	float srsy = sr * sy;
+	matrix[0][1] = sp * srcy - crsy;
+	matrix[1][1] = sp * srsy + crcy;
+	matrix[2][1] = sr * cp;
+
+	matrix[0][2] = (sp * crcy + srsy);
+	matrix[1][2] = (sp * crsy - srcy);
+	matrix[2][2] = cr * cp;
+
+	matrix[0][3] = 0.0f;
+	matrix[1][3] = 0.0f;
+	matrix[2][3] = 0.0f;
+}
+
 float VecToYaw(const Vector3D_F& vec)
 {
 	if (!vec[0] && !vec[1])

@@ -8,6 +8,7 @@
 #include "Client/EntityList.hpp"
 
 #include "Utils/UtlVector.hpp"
+
 #include "Studio/Studio.hpp"
 #include "Studio/BoneCache.hpp"
 #include "Studio/Model.hpp"
@@ -30,9 +31,9 @@ IBaseEntityInternal* IBaseEntityInternal::GetLocalPlayer()
 
 int IBaseEntityInternal::GetHighestEntityIndex()
 {
-	static int* highest_ent_index =
-		IntPtr(Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
-			   Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "HighestEntityIndex").value_or(0)
+	static int* highest_ent_index = IntPtr(
+		Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
+		Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "HighestEntityIndex").value_or(0)
 		).get<int>();
 	return *highest_ent_index;
 }

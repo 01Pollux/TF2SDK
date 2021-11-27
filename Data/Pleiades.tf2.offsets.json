@@ -1,0 +1,46 @@
+{
+  "CEntityList": {
+    "offsets": {
+      "HighestEntityIndex": 65592,
+      "EntListeners": 65560,
+      "BaseEntities": 98364
+    }
+  },
+
+  "BaseEntity": {
+    "offsets": {
+      "m_bDormant": null,
+      "m_iEntityIndex": null,
+      "m_iTeamNum__To__m_pPhysicsObject": 40,
+      "m_flElasticity__To__m_ParticleProp": -32
+    },
+    "vtable": {
+      "IsBaseCombatWeapon": 137,
+      "GetDataDescMap": 15,
+      "GetPredDescMap": 17,
+      // "vehicle_driver_eyes" both LookupAttachment and GetAttachment exists one after ther the other in any function
+      "LookupAttachment": 35,
+      "GetAttachment": 37
+    }
+  },
+
+  "CObjectDispenser": {
+    "offsets": {
+      "m_iMiniBombCounter__To__m_HealingTargets": -32
+    }
+  },
+
+  "CBaseWeapon": {
+    "vtable": {
+      "GetWeaponSlot": 327,
+      "GetSwingRange": 452,
+      "GetWeaponId": 224,
+      "DoSwingTrace": 454
+    }
+  },
+
+  "CGameRules": {
+    "ShouldCollide": 29,
+    "AllowThirdPersonCamera": 37
+  }
+}

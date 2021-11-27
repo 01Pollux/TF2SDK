@@ -113,11 +113,4 @@ private:
 	char* m_Data{ };
 };
 
-void foo()
-{
-	UtlString c;
-	c = UtlString("s");
-		
-}
-
 TF2_NAMESPACE_END();

@@ -1,8 +1,10 @@
 
 #include <Engine/GlobalVars.hpp>
+#include <Engine/ClientDll.hpp>
 
 #include <Entity/BaseProjectile.hpp>
 #include <Entity/BasePlayer.hpp>
+#include <Entity/EntityIterator.hpp>
 
 #include <Studio/Model.hpp>
 #include <Utils/Draw.hpp>
@@ -20,8 +22,9 @@ bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinf
 		const ModelInfo* model = pEnt->GetModel();
 		if (!model)
 			return { };
-		return is_min ? model->Mins : model->Maxs;
+		return (is_min ? model->Mins : model->Maxs) * 1.65;
 	};
+
 	const Vector3D_F mins = origin + (is_zero ? get_min_max(pEnt, true) : pEnt->Mins);
 	const Vector3D_F maxs = origin + (is_zero ? get_min_max(pEnt, false) : pEnt->Maxs);
 
@@ -281,27 +284,33 @@ TF2::Color4_F GlobalESP::GetHealthColor(int cur, int max)
 }
 
 
-void GlobalESP::RenderExtraESP()
+void GlobalESP::RenderESP()
 {
 	using namespace TF2;
 	ESPInfo::BoxInfo box_info;
 	ILocalPlayer pMe;
 
-	for (int i = Interfaces::GlobalVars->MaxClients + 1; i < IBaseEntityInternal::GetHighestEntityIndex(); i++)
+	for (auto pEnt : Utils::IBaseEntityIterator{} | std::views::drop(1))
 	{
-		IBaseEntity pEnt(i);
-		if (!pEnt || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
+		if (pEnt->IsDormant() || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
 			continue;
 
 		Const::EntClassID cls_id = pEnt->GetClientClass()->ClassID;
 
 		switch (cls_id)
 		{
+		case Const::EntClassID::CTFPlayer:
+		{
+			ITFPlayer player(pEnt);
+			if (pMe != pEnt || player->Class == Const::TFClass::Unknown)
+				RenderPlayerESP(player, box_info);
+			continue;
+		}
 		case Const::EntClassID::CObjectSentrygun:
 		case Const::EntClassID::CObjectDispenser:
 		case Const::EntClassID::CObjectTeleporter:
 		{
-			RenderBuildingESP(pEnt, cls_id, box_info, i);
+			RenderBuildingESP(pEnt, cls_id, box_info, pEnt->entindex());
 			continue;
 		}
 		}
@@ -467,7 +476,7 @@ void GlobalESP::RenderExtraESP()
 		else if (!GetBoxInfo(pEnt, box_info))
 			return;
 
-		auto iter_espoverride = m_ESPOverride.find(i);
+		auto iter_espoverride = m_ESPOverride.find(pEnt->entindex());
 		ESPOverride* esp_override = iter_espoverride == m_ESPOverride.end() ? nullptr : &iter_espoverride->second;
 
 		DrawSharedInfo(

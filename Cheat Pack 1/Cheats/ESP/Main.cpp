@@ -69,10 +69,10 @@ void GlobalESP::OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx)
 
 	SG_PROFILE_SECTION("Visuals", "GlobalESP::OnDrawESP");
 
-	if (esp_draw.m_PlayerESPInfo[ESPInfo::TeamRed].Enable || esp_draw.m_PlayerESPInfo[ESPInfo::TeamBlue].Enable)
-		esp_draw.RenderPlayerESP();
-	
 	if (esp_draw.m_PlayerESPInfo[ESPInfo::TeamRed].Enable ||
-		esp_draw.m_PlayerESPInfo[ESPInfo::TeamBlue].Enable || esp_draw.m_ObjectESPInfo.Enable)
-		esp_draw.RenderExtraESP();
+		esp_draw.m_PlayerESPInfo[ESPInfo::TeamBlue].Enable ||
+		esp_draw.m_PlayerESPInfo[ESPInfo::TeamRed].Enable ||
+		esp_draw.m_PlayerESPInfo[ESPInfo::TeamBlue].Enable || 
+		esp_draw.m_ObjectESPInfo.Enable
+	)	esp_draw.RenderESP();
 }

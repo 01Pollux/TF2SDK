@@ -309,7 +309,7 @@ class NET_SetConVar : public INetMessage
 
 	void insert(const char* name, const char* value)
 	{
-		ConVars.AddToTail({ name, value });
+		ConVars.push_to_tail({ name, value });
 	}
 
 public:

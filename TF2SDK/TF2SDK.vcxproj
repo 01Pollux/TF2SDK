@@ -43,6 +43,7 @@
     <ClInclude Include="Engine\VGui.hpp" />
     <ClInclude Include="Engine\GameEvent.hpp" />
     <ClInclude Include="Entity\BaseProjectile.hpp" />
+    <ClInclude Include="Entity\EntityIterator.hpp" />
     <ClInclude Include="Materials\Consts.hpp" />
     <ClInclude Include="Materials\Material.hpp" />
     <ClInclude Include="Materials\MaterialCfg.hpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Utils\Trace.hpp" />
     <ClInclude Include="Utils\UtlAlloc.hpp" />
     <ClInclude Include="Utils\UtlBuffer.hpp" />
+    <ClInclude Include="Utils\UtlLinkedList.hpp" />
     <ClInclude Include="Utils\UtlMemory.hpp" />
     <ClInclude Include="Utils\UtlString.hpp" />
     <ClInclude Include="Utils\UtlSymbol.hpp" />
@@ -118,6 +120,7 @@
     <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
     <ClCompile Include="Impl\Entity\BaseWeapon.cpp" />
     <ClCompile Include="Impl\Entity\EconEntity.cpp" />
+    <ClCompile Include="Impl\Entity\EntityIterator.cpp" />
     <ClCompile Include="Impl\Entity\ResourceEntity.cpp" />
     <ClCompile Include="Impl\GameProp\DataMap.cpp" />
     <ClCompile Include="Impl\Materials\Reference.cpp" />

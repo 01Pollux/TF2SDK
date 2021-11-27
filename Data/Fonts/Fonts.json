@@ -1,0 +1,34 @@
+{
+  "Cousine-Regular, small": {
+    "path": "./Pleiades/Fonts/Cousine-Regular.ttf",
+    "size": 10.0,
+    "config": {
+      "OversampledH": 2
+    },
+    "ranges": "Default"
+  },
+  "Cousine-Regular, medium": {
+    "path": "./Pleiades/Fonts/Cousine-Regular.ttf",
+    "size": 20.0,
+    "config": {
+      "OversampledH": 2
+    },
+    "ranges": "Default"
+  },
+  "Cousine-Regular, large": {
+    "path": "./Pleiades/Fonts/Cousine-Regular.ttf",
+    "size": 20.0,
+    "config": {
+      "OversampledH": 2
+    },
+    "ranges": "Default"
+  },
+  "Arimo-Medium, s=14": {
+    "path": "./Pleiades/Fonts/Arimo-Medium.ttf",
+    "size": 14.0,
+    "config": {
+      "OversampledH": 2
+    },
+    "ranges": "Default"
+  }
+}
