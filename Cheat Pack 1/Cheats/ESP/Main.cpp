@@ -63,9 +63,9 @@ void GlobalESP::OnPluginUnload()
 
 void GlobalESP::OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx)
 {
-	using namespace TF2;
+	using namespace TF2;/*
 	if (SG::ThisPlugin->IsPluginPaused() || ITFPlayerInternal::BadLocal())
-		return;
+		return;*/
 
 	SG_PROFILE_SECTION("Visuals", "GlobalESP::OnDrawESP");
 

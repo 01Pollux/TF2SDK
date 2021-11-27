@@ -290,9 +290,9 @@ void GlobalESP::RenderESP()
 	ESPInfo::BoxInfo box_info;
 	ILocalPlayer pMe;
 
-	for (auto pEnt : Utils::IBaseEntityIterator{} | std::views::drop(1))
+	for (auto pEnt : Utils::IBaseEntityIterator{})
 	{
-		if (pEnt->IsDormant() || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
+		if (pEnt->IsDormantEx() || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
 			continue;
 
 		Const::EntClassID cls_id = pEnt->GetClientClass()->ClassID;
@@ -302,7 +302,7 @@ void GlobalESP::RenderESP()
 		case Const::EntClassID::CTFPlayer:
 		{
 			ITFPlayer player(pEnt);
-			if (pMe != pEnt || player->Class == Const::TFClass::Unknown)
+			if (pMe != pEnt && player->Class != Const::TFClass::Unknown && player->LifeState == Const::PlayerLifeState::Alive)
 				RenderPlayerESP(player, box_info);
 			continue;
 		}

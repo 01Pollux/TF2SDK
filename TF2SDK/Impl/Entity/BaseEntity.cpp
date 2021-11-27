@@ -151,7 +151,7 @@ bool IBaseEntityInternal::IsGhost() const noexcept
 	return mdl ? strstr(mdl->Name, "n/ghost") != nullptr : false;
 }
 
-void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel)
+void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel) const
 {
 	static Utils::IMemberFuncThunk<void, Vector3D_F&> estimate_velocity(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
 	estimate_velocity(this, vel);

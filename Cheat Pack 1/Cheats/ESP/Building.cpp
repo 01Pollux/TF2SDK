@@ -178,7 +178,7 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 				if (ITFPlayer player{ pEnt->Builder })
 				{
 					PlayerInfo info;
-					if (Interfaces::EngineClient->GetPlayerInfo(player->entindex(), &info))
+					if (Interfaces::EngineClient->GetPlayerInfo(player->GetEntIndex(), &info))
 					{
 						sprintf_s(fmt, "Owner: %s", info.Name);
 						renderer.AddText(fmt);

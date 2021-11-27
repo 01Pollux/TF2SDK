@@ -25,7 +25,7 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 	default: return;
 	}
 
-	auto iter_espoverride = m_ESPOverride.find(pPlayer->entindex());
+	auto iter_espoverride = m_ESPOverride.find(pPlayer->GetEntIndex());
 	ESPOverride* esp_override = iter_espoverride == m_ESPOverride.end() ? nullptr : &iter_espoverride->second;
 
 	if (!esp_override && !esp_info->Enable)
@@ -51,7 +51,7 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 			if (player_esp->DrawName)
 			{
 				PlayerInfo info;
-				if (Interfaces::EngineClient->GetPlayerInfo(pPlayer->entindex(), &info))
+				if (Interfaces::EngineClient->GetPlayerInfo(pPlayer->GetEntIndex(), &info))
 				{
 					sprintf_s(fmt, "Name: %s", info.Name);
 					renderer.AddText(fmt);
@@ -106,5 +106,5 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 	);
 
 	if (esp_info->HealthbarMode.get() != ESPInfo::HealthBarMode::type::Disabled)
-		this->DrawSharedHealth(box_info, esp_info, TFPlayerResourceEntity::Get()->Health[pPlayer->entindex()], TFPlayerResourceEntity::Get()->MaxHealth[pPlayer->entindex()], true);
+		this->DrawSharedHealth(box_info, esp_info, TFPlayerResourceEntity::Get()->Health[pPlayer->GetEntIndex()], TFPlayerResourceEntity::Get()->MaxHealth[pPlayer->GetEntIndex()], true);
 }

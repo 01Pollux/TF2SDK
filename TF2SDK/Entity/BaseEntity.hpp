@@ -57,13 +57,14 @@ public:
 	/// </summary>
 	static bool	BadEntity(IBaseEntityInternal* ent_ptr)
 	{
-		return !ent_ptr || ent_ptr->IsDormant();
+		return !ent_ptr || ent_ptr->IsDormantEx();
 	}
 
 	/// <summary>
 	/// Test if the local client is valid (in game and not a bad entity)
 	/// </summary>
-	SG_SDK_TF2 static bool BadLocal();
+	SG_SDK_TF2 static bool
+		BadLocal();
 
 	/// <summary>
 	/// Tests whether the entity is derived from CBaseCombatWeapon or not
@@ -121,8 +122,8 @@ public:
 	/// Get either local velocity or predicted velocity
 	/// </summary>
 	SG_SDK_TF2 void 
-		EstimateAbsVelocity(Vector3D_F& vel);
-	
+		EstimateAbsVelocity(Vector3D_F& vel) const;
+
 	/// <summary>
 	/// Tests whether the entity is class id
 	/// </summary>
@@ -131,17 +132,47 @@ public:
 		return this->GetClientClass()->ClassID == id;
 	}
 
+	/// <summary>
+	/// Get attachement's index by name
+	/// </summary>
+	/// <returns>-1 if the attachement doesn't exists</returns>
 	SG_SDK_TF2 int
 		LookupAttachment(const char* name);
 
+	/// <summary>
+	/// Get attachement's original and angle by name
+	/// </summary>
+	/// <returns>false if the attachement doesn't exists</returns>
 	bool GetAttachment(const char* name, Vector3D_F& origin, Angle_F& angles)
 	{
 		return GetAttachment(LookupAttachment(name), origin, angles);
 	}
 
+	/// <summary>
+	/// Get attachement's original and angle by index
+	/// </summary>
+	/// <returns>false if the attachement doesn't exists</returns>
 	SG_SDK_TF2 bool
 		GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles);
 
+	/// <summary>
+	/// Get entity's entity
+	/// this is the same as entindex, except it's not virtual
+	/// </summary>
+	/// <returns>-1 if the entity wasn't networkable</returns>
+	int GetEntIndex() const noexcept
+	{
+		return m_EntIndex;
+	}
+
+	/// <summary>
+	/// Checks if the entity is dormant
+	/// this is the same as IsDormant, except it's not virtual
+	/// </summary>
+	bool IsDormantEx() const noexcept
+	{
+		return GetEntIndex() != -1 ? m_IsDormant : false;
+	}
 
 #define DECL_RECVPROP(Type, Prop_Name, Custom_Name, Extra_Offset)	SG_DECL_RECVPROP(IBaseEntityInternal, Type, Const::EntClassID::CBaseAnimating, Prop_Name, Custom_Name, Extra_Offset)
 
@@ -187,19 +218,24 @@ public:
 		}()
 	);
 
-	struct Fpp4 {
-		static IBaseEntityInternal* f(IBaseEntityInternal* pent)
-		{
-			return pent;
-	}
-		static void oo()
-		{
-		}
-	};
 
 	SG_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
 	SG_DECL_DATAMAP(IBaseEntityInternal,	uint32_t,			true,		"m_iEFlags",	EntFlags, 0);
-
+	
+private:
+	DECL_RECVPROP(int,					"m_nRenderFX",			m_EntIndex,
+		[]() -> int
+		{
+			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_nRenderFX__To__m_iEntityIndex").value_or(0);
+		}()
+	);
+	
+	DECL_RECVPROP(bool,					"m_iParentAttachment",	m_IsDormant,
+		[]() -> int
+		{
+			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iParentAttachment__To__m_bDormant").value_or(0);
+		}()
+	);
 #undef DECL_RECVPROP
 };
 
