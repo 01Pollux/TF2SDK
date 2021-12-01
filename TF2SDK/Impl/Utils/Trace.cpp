@@ -1,21 +1,25 @@
 
-#include "Utils/Trace.hpp"
 #include "Engine/ModelInfo.hpp"
 #include "Client/GameRules.hpp"
+#include <Engine/ClientDll.hpp>
+
+#include "Utils/Vector.hpp"
+#include "Utils/Trace.hpp"
 
 TF2_NAMESPACE_BEGIN(::Utils);
 
 
 bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 {
+	assert(Interfaces::ModelInfo);
+	assert(Interfaces::GameRules);
+
 	IBaseEntity pEnt(pUnk->GetBaseEntity());
 	if (!pEnt)
 		return false;
 
-	Const::EntSolidType solidtype = pEnt->SolidType;
 	const ModelInfo* mdl = pEnt->GetModel();
-
-	if ((Interfaces::ModelInfo->GetModelType(mdl) != Const::ModelType::Brush) || (solidtype != Const::EntSolidType::BSP && solidtype != Const::EntSolidType::VPhysics))
+	if ((Interfaces::ModelInfo->GetModelType(mdl) != Const::ModelType::Brush) || (pEnt->SolidType != Const::EntSolidType::BSP && pEnt->SolidType != Const::EntSolidType::VPhysics))
 	{
 		if (!(mask & Const::ContentsFlags::Monster))
 			return false;
@@ -23,7 +27,7 @@ bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 
 	if (!(mask & Const::ContentsFlags::Window) && pEnt->IsTransparent())
 		return false;
-	
+
 	if (!(mask & Const::ContentsFlags::Moveable) && pEnt->MoveType == Const::EntMoveType::Push)
 		return false;
 
@@ -35,18 +39,73 @@ bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 			return false;
 	}
 
-	// CBaseEntity::ShouldCollide todo : Fool proof check it in IDA
-	if (pEnt->CollisionGroup == Const::EntCollisionGroup::Debris)
-	{
-		if (!(mask & Const::ContentsFlags::Debris))
-			return false;
-	}
-
-	// TODO: add TFGameRules::ShouldCollide
-	if (!Interfaces::GameRules->ShouldCollide(m_CollisionGroup, pEnt->CollisionGroup))
+	if (!pEnt->ShouldCollide(this->m_CollisionGroup, mask))
 		return false;
-	
+
+	if (!IGameRules::ShouldCollide(m_CollisionGroup, pEnt->CollisionGroup))
+		return false;
+
 	return m_Callback ? m_Callback(pEnt.get(), mask) : true;
+}
+
+float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore)
+{
+	assert(Interfaces::ClientTrace);
+
+	Vector3D_F bottom;
+	AngleVectors({ 90.f, 0.f, 0.f }, &bottom);
+
+	bottom.normalize();
+	bottom = bottom * Const::MaxTrace_Length + position;
+
+	GameTrace results;
+	FilterSimple filter_only_world{
+		pIgnore,
+		Const::EntCollisionGroup::None,
+		[](IBaseEntityInternal* pEnt, uint32_t collision_group) -> bool
+		{
+			return pEnt->GetEntIndex() == 0;
+		}
+	};
+
+	position[2] += 10.f;
+	Utils::TraceLine(position, bottom, Const::TraceMask::PlayerSolid, results, filter_only_world);
+	if (results.DidHit())
+	{
+		position[2] -= 10.f;
+		return static_cast<float>(results.EndPos.distance_to(position));
+	}
+	else return 0.f;
+}
+
+float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector3D_F& maxs, IBaseEntityInternal* pIgnore)
+{
+	assert(Interfaces::ClientTrace);
+
+	Vector3D_F bottom;
+	AngleVectors({ 90.f, 0.f, 0.f }, &bottom);
+
+	bottom.normalize();
+	bottom = bottom * Const::MaxTrace_Length + position;
+
+	GameTrace results;
+	FilterSimple filter_only_world{
+		pIgnore,
+		Const::EntCollisionGroup::None,
+		[](IBaseEntityInternal* pEnt, uint32_t collision_group) -> bool
+		{
+			return pEnt->GetEntIndex() == 0;
+		}
+	};
+
+	position[2] += 10.f;
+	Utils::TraceHull(position, bottom, mins, maxs, Const::TraceMask::PlayerSolid, results, filter_only_world);
+	if (results.DidHit())
+	{
+		position[2] -= 10.f;
+		return static_cast<float>(results.EndPos.distance_to(position));
+	}
+	else return 0.f;
 }
 
 

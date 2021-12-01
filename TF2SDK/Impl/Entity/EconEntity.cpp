@@ -45,6 +45,7 @@ SG_SDK_TF2 int IAttributeList::AttributeHookValue(int fail_value, const char* at
 {
 	static Utils::IFuncThunk<int, int, const char*, const IBaseEntityInternal*, Utils::UtlVector<IBaseEntityInternal*>*, bool>
 		get_attribute_value{ Interfaces::SDKManager::Get()->ReadSignature({ "CEconEntity", "AttributeHookValue" }, "int").get()};
+	assert(get_attribute_value);
 	return get_attribute_value(fail_value, attribute_name, pEnt, pItemList, is_global_string);
 }
 
@@ -52,13 +53,16 @@ SG_SDK_TF2 float IAttributeList::AttributeHookValue(float fail_value, const char
 {
 	static Utils::IFuncThunk<float, float, const char*, const IBaseEntityInternal*, Utils::UtlVector<IBaseEntityInternal*>*, bool>
 		get_attribute_value{ Interfaces::SDKManager::Get()->ReadSignature({ "CEconEntity", "AttributeHookValue" }, "float").get() };
+	assert(get_attribute_value);
 	return get_attribute_value(fail_value, attribute_name, pEnt, pItemList, is_global_string);
 }
 
 
 IEconItemSchema* IEconItemSchema::Get()
 {
-	static Utils::IFuncThunk<IEconItemSchema*> get_item_schema{ Interfaces::SDKManager::Get()->ReadSignature({ "CEconEntity" }, "GetItemSchema").get() };
+	static Utils::IFuncThunk<IEconItemSchema*> 
+		get_item_schema{ Interfaces::SDKManager::Get()->ReadSignature({ "CEconEntity" }, "GetItemSchema").get() };
+	assert(get_item_schema);
 	return get_item_schema();
 }
 

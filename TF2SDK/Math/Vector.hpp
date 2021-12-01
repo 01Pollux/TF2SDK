@@ -32,9 +32,17 @@ public:
 
 	constexpr VectorXD(std::initializer_list<value_type> list) noexcept
 	{
-		std::copy_n(list.begin(), std::min(list.size(), _Size), m_Data.begin());
+		std::copy_n(list.begin(), std::min(list.size(), _Size), begin());
 	}
+
 	constexpr VectorXD(const array_type& arr) noexcept : m_Data{ arr } { }
+
+	template<typename _OTy, size_t _OSize>
+	requires std::negation_v<std::is_same<VectorXD, VectorXD<_OTy, _OSize>>>
+	constexpr VectorXD(const VectorXD<_OTy, _OSize>& vec) noexcept 
+	{
+		std::copy_n(vec.begin(), std::min(_OSize, _Size), begin());
+	}
 
 	constexpr bool is_valid() const noexcept
 	{
@@ -85,10 +93,17 @@ public:
 	}
 
 	template<typename _OTy>
-	constexpr _OTy to() const noexcept
+		requires (sizeof(_OTy) == sizeof(_Ty) * _Size)
+	constexpr const _OTy& to() const noexcept
 	{
-		static_assert(sizeof(_OTy) == sizeof(*this), "Size mismatch");
-		return std::bit_cast<_OTy>(m_Data);
+		return *std::bit_cast<const _OTy*>(data());
+	}
+
+	template<typename _OTy>
+		requires (sizeof(_OTy) == sizeof(_Ty) * _Size)
+	_OTy& to() noexcept
+	{
+		return *std::bit_cast<_OTy*>(data());
 	}
 
 	constexpr auto operator<=>(const VectorXD&) const = default;

@@ -79,6 +79,12 @@ namespace ESPInfo
 	struct Shared
 	{
 		SG::Config<bool> Enable				{ "enable",			false };
+		
+		struct
+		{
+			TF2::Color4_F				Color { 1.f, 1.f, 1.f, 1.f };
+			SG::Config<float>			Speed			{ "rainbow sped",	.5f };
+		} Rainbow;
 
 		struct
 		{
@@ -232,12 +238,15 @@ public:
 	struct ESPOverride
 	{
 		const TF2::IBaseEntity Entity;
-		const TF2::Color4_F Color;
+
+		float RainbowSpeed;
+		TF2::Color4_F Color;
+
 		ESPInfo::ESPMode DrawMode;
 		ESPType Type;
 	};
 
-	static void PushESPOverride(int ent_index, const ESPOverride& esp_override);
+	static ESPOverride& PushESPOverride(int ent_index, const ESPOverride& esp_override);
 
 	static void PopESPOverride(const TF2::IBaseEntity pEnt);
 

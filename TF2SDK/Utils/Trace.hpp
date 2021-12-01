@@ -207,12 +207,14 @@ inline void TraceLine(
 	const Vector3D_F& vec1,
 	const Vector3D_F& vec2,
 	uint32_t mask,
-	GameTrace* results,
-	ITraceFilter* trace
+	GameTrace& results,
+	ITraceFilter& trace
 )
 {
+	assert(Interfaces::ClientTrace);
+
 	GameRay ray{ vec1, vec2 };
-	Interfaces::ClientTrace->TraceRay(ray, mask, trace, results);
+	Interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
 }
 
 inline void TraceHull(
@@ -221,12 +223,14 @@ inline void TraceHull(
 	const Vector3D_F& mins,
 	const Vector3D_F& maxs,
 	uint32_t mask,
-	GameTrace* results,
-	ITraceFilter* trace
+	GameTrace& results,
+	ITraceFilter& trace
 )
 {
+	assert(Interfaces::ClientTrace);
+
 	GameRay ray{ vec1, vec2, mins, maxs };
-	Interfaces::ClientTrace->TraceRay(ray, mask, trace, results);
+	Interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
 }
 
 inline bool VecIsVisible(
@@ -239,9 +243,12 @@ inline bool VecIsVisible(
 {
 	GameTrace res;
 	FilterSimple filter(pIgnore);
-	TraceLine(start, end, mask, &res, &filter);
+	TraceLine(start, end, mask, res, filter);
 
 	return res.Entity == pEnt;
 }
+
+SG_SDK_TF2 float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore = nullptr);
+SG_SDK_TF2 float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector3D_F& maxs, IBaseEntityInternal* pIgnore = nullptr);
 
 TF2_NAMESPACE_END();

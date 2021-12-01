@@ -7,113 +7,42 @@ TF2_NAMESPACE_BEGIN();
 class _TFCondProxy
 {
 public:
-	void Change(ITFPlayerInternal* player, Const::TFCond tfcond, bool add)
+	void Change(ITFPlayerInternal* player, const Const::TFCondFlags& tfconds, bool add)
 	{
 		if (!CondOffsets[0])
 			Init(player);
 
-		int cond = static_cast<int>(tfcond);
-		int bit{ };
-		int type = cond / 32;
-
-		switch (type)
+		if (uint32_t first_bits = tfconds.at(0))
 		{
-		case 0:
-		{
-			bit = 1 << cond;
-			uint32_t& cond = GetCond(player, 0);
-			uint32_t& cond2 = GetCond(player, 1);
+			uint32_t& outcond = GetCond(player, 0);
+			if (add) outcond |= first_bits;
+			else outcond &= ~first_bits;
+		}
 
-			if (add)
+		for (int i = 0; tfconds.size(); i++)
+		{
+			if (uint32_t bits = tfconds.at(i))
 			{
-				cond |= bit;
-				cond2 |= bit;
+				uint32_t& outcond = GetCond(player, i + 1);
+				if (add) outcond |= bits;
+				else outcond &= ~bits;
 			}
-			else
-			{
-				cond &= ~bit;
-				cond2 &= ~bit;
-			}
-
-			return;
 		}
-
-		case 1:
-		{
-			bit = 1 << (cond - 32);
-			break;
-		}
-
-		case 2:
-		{
-			bit = 1 << (cond - 64);
-			break;
-		}
-
-		case 3:
-		{
-			bit = 1 << (cond - 96);
-			break;
-		}
-
-		case 4:
-		{
-			bit = 1 << (cond - 128);
-			break;
-		}
-		}
-
-		uint32_t& outcond = GetCond(player, type + 1);
-
-		if (add) outcond |= bit;
-		else outcond &= ~bit;
 	}
 
-	bool InCond(const ITFPlayerInternal* player, Const::TFCond tfcond) noexcept
+	bool InCond(const ITFPlayerInternal* player, const Const::TFCondFlags& tfconds) noexcept
 	{
 		if (!CondOffsets[0])
 			Init(player);
 
-		int cond = static_cast<int>(tfcond);
-		int bit{ };
-		int type = cond / 32;
-
-		switch (type)
+		if (!tfconds.is_set(0, GetCond(player, 0)))
+			return false;
+		for (int i = 0; i < tfconds.size(); i++)
 		{
-		case 0:
-		{
-			bit = 1 << cond;
-			if (GetCond(player, 0) & bit || GetCond(player, 1) & bit)
-				return true;
-			else return false;
+			if (tfconds.is_set(i, GetCond(player, i + 1)))
+				return false;
 		}
-
-		case 1:
-		{
-			bit = 1 << (cond - 32);
-			break;
-		}
-
-		case 2:
-		{
-			bit = 1 << (cond - 64);
-			break;
-		}
-
-		case 3:
-		{
-			bit = 1 << (cond - 96);
-			break;
-		}
-
-		case 4:
-		{
-			bit = 1 << (cond - 128);
-			break;
-		}
-		}
-
-		return (GetCond(player, type + 1) & bit) != 0;
+		return true;
 	}
 
 private:
@@ -152,19 +81,19 @@ private:
 static _TFCondProxy TFCondProxy;
 
 
-bool ITFPlayerInternal::InCond(Const::TFCond cond) const
+bool ITFPlayerInternal::InCond(const Const::TFCondFlags& conds) const
 {
-	return TFCondProxy.InCond(this, cond);
+	return TFCondProxy.InCond(this, conds);
 }
 
-void ITFPlayerInternal::AddCond(Const::TFCond cond, float duration)
+void ITFPlayerInternal::AddCond(const Const::TFCondFlags& conds)
 {
-	TFCondProxy.Change(this, cond, true);
+	TFCondProxy.Change(this, conds, true);
 }
 
-void ITFPlayerInternal::RemoveCond(Const::TFCond cond)
+void ITFPlayerInternal::RemoveCond(const Const::TFCondFlags& conds)
 {
-	TFCondProxy.Change(this, cond, false);
+	TFCondProxy.Change(this, conds, false);
 }
 
 namespace Utils

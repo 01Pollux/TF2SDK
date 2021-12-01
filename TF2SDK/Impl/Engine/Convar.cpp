@@ -25,6 +25,7 @@ namespace ConCommandHelper
 
 void ConCommandBase::Register(uint32_t nCVarFlag, IConCommandBaseAccessor* pAccessor)
 {
+	assert(!(Interfaces::CVar || ConCommandHelper::ConBaseRegistered));
 	if (!Interfaces::CVar || ConCommandHelper::ConBaseRegistered)
 		return;
 
@@ -51,6 +52,7 @@ void ConCommandBase::Register(uint32_t nCVarFlag, IConCommandBaseAccessor* pAcce
 
 void ConCommandBase::Unregister()
 {
+	assert(!(Interfaces::CVar || ConCommandHelper::ConBaseRegistered));
 	if (!Interfaces::CVar || !ConCommandHelper::ConBaseRegistered)
 		return;
 

@@ -96,15 +96,26 @@ struct GameRay
 	Vector4D_F alignas(16) Delta;	// direction + length of the ray
 	Vector4D_F alignas(16) StartOffset;	// Add this to m_Start to get the actual ray start
 	Vector4D_F alignas(16) Extents;	// Describes an axis aligned box extruded along a ray
-	bool		IsRay;	// are the extents zero?
-	bool		IsSwept;	// is delta != 0?
+	bool		IsRay{ };	// are the extents zero?
+	bool		IsSwept{ };	// is delta != 0?
 
 	GameRay() = default;
-	GameRay(const Vector3D_F& start, const Vector3D_F& end) noexcept { init(start, end); }
-	GameRay(const Vector3D_F& start, const Vector3D_F& end, const Vector3D_F& mins, const Vector3D_F& maxs) noexcept { init(start, end, mins, maxs); }
+	template<size_t _Size>
+	GameRay(const VectorXD<float, _Size>& start, const VectorXD<float, _Size>& end) noexcept
+	{
+		init(start, end);
+	}
 
-	GameRay(const Vector4D_F& start, const Vector4D_F& end) noexcept { init(start, end); }
-	GameRay(const Vector4D_F& start, const Vector4D_F& end, const Vector4D_F& mins, const Vector4D_F& maxs) noexcept { init(start, end, mins, maxs); }
+	template<size_t _Size>
+	GameRay(
+		const VectorXD<float, _Size>& start,
+		const VectorXD<float, _Size>& end, 
+		const VectorXD<float, _Size>& mins,
+		const VectorXD<float, _Size>& maxs
+	) noexcept
+	{
+		init(start, end, mins, maxs);
+	}
 
 	void init(const Vector3D_F& start, const Vector3D_F& end) noexcept
 	{
@@ -137,22 +148,20 @@ struct GameRay
 
 	void init(const Vector4D_F& start, const Vector4D_F& end, const Vector4D_F& mins, const Vector4D_F& maxs) noexcept
 	{
-		VectorXD delta = end - start;
 		Delta = end - start;
 
 		IsSwept = (Delta.length_sqr() != 0);
 
-		Extents = (maxs - mins) / 2;
+		Extents = (maxs - mins) * .5f;
 		IsRay = (Extents.length_sqr() < 1e-6);
 
-		VectorXD offset = (maxs + mins) / 2;
-		StartOffset = (maxs + mins) / 2;
-		Start = offset + StartOffset;
+		StartOffset = (maxs + mins) * .5f;
+		Start = start + StartOffset;
 		StartOffset.negate();
 	}
 
 	// compute inverse delta
-	Vector3D_F invdelta() const noexcept
+	constexpr Vector3D_F invdelta() const noexcept
 	{
 		Vector3D_F vecInvDelta;
 		for (size_t i = 0; i < 3; ++i)

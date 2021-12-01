@@ -365,5 +365,8 @@
     <ClCompile Include="Impl\Entity\EntityIterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Impl\Entity\BaseProjectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

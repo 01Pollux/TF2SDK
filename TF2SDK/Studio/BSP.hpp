@@ -10,7 +10,8 @@ class SurfInfo;
 
 struct GameRay;
 struct ModelInfo;
-struct RayDispOutput_t;
+struct RayDispOutput_t; 
+struct cplane_t;
 
 
 // lights that were used to illuminate the world
@@ -52,6 +53,23 @@ struct doccluderpolydata_t
 
 
 
+struct cplane_t
+{
+	Vector3D_F	Normal;
+	float		Dist;
+	uint8_t		Type;			// for fast side tests
+	uint8_t		SignBits;		// signx + (signy<<1) + (signz<<1)
+	uint8_t		_pad[2];
+};
+
+struct csurface_t
+{
+	const char* Name;
+	short		SurfaceProps;
+	unsigned short	Flags; // BUGBUG: These are declared per surface, not per material, but this database is per-material now
+};
+
+
 struct vcollide_t
 {
 	unsigned short	SolidCount : 15;
@@ -62,6 +80,15 @@ struct vcollide_t
 	char*			KeyValues;
 };
 
+
+struct cModelInfo
+{
+	Vector3D_F	Mins, Maxs;
+	Vector3D_F	Origin;		// for sounds or lights
+	int			HeadNode;
+
+	vcollide_t	CollisionData;
+};
 struct cmodel_t
 {
 	Vector3D_F	Mins, Maxs;
@@ -70,14 +97,6 @@ struct cmodel_t
 
 	vcollide_t	VCollisionData;
 };
-
-struct csurface_t
-{
-	const char* Name;
-	short		SurfaceProps;
-	unsigned short	Flags;		// BUGBUG: These are declared per surface, not per material, but this database is per-material now
-};
-
 
 
 enum class modtype_t
@@ -88,14 +107,6 @@ enum class modtype_t
 	Studio
 };
 
-struct cplane_t
-{
-	Vector3D_F	Normal;
-	float		Dist;
-	std::byte	Type;			// for fast side tests
-	std::byte	Signbits;		// signx + (signy<<1) + (signz<<1)
-	std::byte	Pad[2];
-};
 
 
 #pragma pack(1)

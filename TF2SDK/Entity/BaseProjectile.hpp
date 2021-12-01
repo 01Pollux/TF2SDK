@@ -16,6 +16,15 @@ namespace Const
 	};
 }
 
+namespace Utils
+{
+	/// <summary>
+	/// Query projectile info, from 'https://wiki.teamfortress.com/wiki/Projectiles' and game binary
+	/// </summary>
+	SG_SDK_TF2 void
+		QueryProjectileInfo(const IEconEntityInternal* pEnt, Const::EntClassID class_id, float* speed, float* gravity, float* start_velocity);
+}
+
 class IBaseProjectileInternal : public IEconEntityInternal
 {
 public:
@@ -28,10 +37,10 @@ using IBaseProjectile = IBaseEntityWrapper<IBaseProjectileInternal>;
 class IBaseRocketInternal : public IEconEntityInternal
 {
 public:
-	SG_DECL_RECVPROP(IBaseRocketInternal, IBaseHandle,	Const::EntClassID::CTFBaseProjectile, "m_hLauncher",			Launcher, 0);
-	SG_DECL_RECVPROP(IBaseRocketInternal, IBaseHandle,	Const::EntClassID::CTFBaseProjectile, "m_hOriginalLauncher",	OriginalLauncher, 0);
-	SG_DECL_RECVPROP(IBaseRocketInternal, int,			Const::EntClassID::CTFBaseProjectile, "m_iDeflected",			Deflected, 0);
-	SG_DECL_RECVPROP(IBaseRocketInternal, Vector3D_F,	Const::EntClassID::CTFBaseProjectile, "m_vInitialVelocity",		InitialVelocity, 0);
+	SG_DECL_RECVPROP(IBaseRocketInternal, IBaseHandle,	Const::EntClassID::CTFBaseRocket, "m_hLauncher",			Launcher, 0);
+	SG_DECL_RECVPROP(IBaseRocketInternal, IBaseHandle,	Const::EntClassID::CTFBaseRocket, "m_hOriginalLauncher",	OriginalLauncher, 0);
+	SG_DECL_RECVPROP(IBaseRocketInternal, int,			Const::EntClassID::CTFBaseRocket, "m_iDeflected",			Deflected, 0);
+	SG_DECL_RECVPROP(IBaseRocketInternal, Vector3D_F,	Const::EntClassID::CTFBaseRocket, "m_vInitialVelocity",		InitialVelocity, 0);
 };
 using IBaseRocket = IBaseEntityWrapper<IBaseRocketInternal>;
 

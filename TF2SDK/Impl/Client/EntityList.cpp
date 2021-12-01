@@ -13,6 +13,7 @@ static Utils::UtlVector<IClientEntityListener*>* FindEntityListener()
 		IntPtr(Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
 			Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "EntListeners").value_or(0)
 		).get<Utils::UtlVector<IClientEntityListener*>>();
+	assert(pEntListener);
 	return pEntListener;
 }
 

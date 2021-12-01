@@ -8,6 +8,7 @@ TF2_NAMESPACE_BEGIN();
 
 static bool FindInSendProp(const SendTable* pTable, const char* target_name, SendProp** outProp, uint32_t* outOffset)
 {
+	assert(pTable);
 	for (int i = 0; i < pTable->NumProps; i++)
 	{
 		SendProp* prop = &pTable->Props[i];
@@ -39,6 +40,7 @@ static bool FindInSendProp(const SendTable* pTable, const char* target_name, Sen
 
 bool PropFinder::FindSendProp(ServerClass* pClass, const char* prop_name, SendProp** pProp, uint32_t* pOffset)
 {
+	assert(pClass);
 	return FindInSendProp(pClass->SendTable, prop_name, pProp, pOffset);
 }
 

@@ -154,6 +154,12 @@ public:
 	/// <returns>false if the attachement doesn't exists</returns>
 	SG_SDK_TF2 bool
 		GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles);
+	
+	/// <summary>
+	/// Test if the entity should collide with current collision properties
+	/// </summary>
+	SG_SDK_TF2 bool
+		ShouldCollide(Const::EntCollisionGroup groups, uint32_t mask);
 
 	/// <summary>
 	/// Get entity's entity
@@ -217,10 +223,9 @@ public:
 			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iTeamNum__To__m_pPhysicsObject").value_or(0);
 		}()
 	);
-
+	SG_DECL_RECVPROP(IBaseEntityInternal,	uint32_t,			Const::EntClassID::CBaseAnimating, "m_fFlags", EntFlags, 0);
 
 	SG_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
-	SG_DECL_DATAMAP(IBaseEntityInternal,	uint32_t,			true,		"m_iEFlags",	EntFlags, 0);
 	
 private:
 	DECL_RECVPROP(int,					"m_nRenderFX",			m_EntIndex,

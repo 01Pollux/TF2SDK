@@ -5,6 +5,7 @@ TF2_NAMESPACE_BEGIN();
 
 bool PropFinder::FindDataMap(EntityDataMap* datamap, const char* prop_name, DM_TypeDescription** pDesc, uint32_t* pOffset)
 {
+	assert(datamap);
 	while (datamap)
 	{
 		for (int i = 0; i < datamap->DataNumFields; i++)

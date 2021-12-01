@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Entity/BaseEntity.hpp"
-#include "Math/Vector.hpp"
-#include "Utils/UtlVector.hpp"
+#include "Studio/BSP.hpp"
 #include "GameEnumerator.hpp"
 
+#include "Math/Vector.hpp"
+#include "Utils/UtlVector.hpp"
 
 TF2_NAMESPACE_BEGIN();
 
@@ -23,41 +24,6 @@ namespace Const
 		static constexpr uint32_t SurProp2	= 1 << 4;
 	}
 }
-
-
-struct cplane_t
-{
-	Vector3D_F	Normal;
-	float		Dist;
-	uint8_t		Type;			// for fast side tests
-	uint8_t		SignBits;		// signx + (signy<<1) + (signz<<1)
-	uint8_t		_pad[2];
-};
-
-struct vcollide_t
-{
-	unsigned short SolidCount : 15;
-	unsigned short IsPacked : 1;
-	unsigned short DescSize;
-	IPhysCollide** Solids;
-	char* KeyValues;
-};
-
-struct cModelInfo
-{
-	Vector3D_F	Mins, Maxs;
-	Vector3D_F	Origin;		// for sounds or lights
-	int			HeadNode;
-
-	vcollide_t	CollisionData;
-};
-
-struct csurface_t
-{
-	const char* Name;
-	short		SurfaceProps;
-	unsigned short	Flags; // BUGBUG: These are declared per surface, not per material, but this database is per-material now
-};
 
 
 class GameTrace
@@ -127,7 +93,7 @@ inline bool GameTrace::DidHit(const IBaseEntityInternal* pEnt) const
 
 inline bool GameTrace::DidHitWorld() const
 {
-	return Entity == IBaseEntityInternal::GetEntity(0);
+	return Entity->GetEntIndex() == 0;
 }
 
 inline bool GameTrace::DidHitNonWorldEntity() const

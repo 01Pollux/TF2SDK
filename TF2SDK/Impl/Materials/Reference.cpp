@@ -10,9 +10,7 @@ TF2_NAMESPACE_BEGIN();
 IMaterialReference::IMaterialReference(char const* pMaterialName, const char* pTextureGroupName, bool bComplain)
 {
 	if (pMaterialName)
-	{
 		init(pMaterialName, pTextureGroupName, bComplain);
-	}
 }
 
 IMaterialReference::~IMaterialReference()

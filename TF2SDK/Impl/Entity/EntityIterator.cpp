@@ -17,6 +17,7 @@ namespace Impl::EntityIterator
 				Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") +
 				Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "BaseEntities").value_or(0)
 			).get<Utils::UtlLinkedList<IBaseEntityInternal*, unsigned short>>();
+			assert(EntityList);
 			return EntityList;
 		}
 	};

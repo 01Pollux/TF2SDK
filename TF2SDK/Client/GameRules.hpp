@@ -77,7 +77,8 @@ namespace Const
 class IGameRules
 {
 public:
-	SG_SDK_TF2 bool ShouldCollide(Const::EntCollisionGroup group0, Const::EntCollisionGroup group1);
+	SG_SDK_TF2 static bool 
+		ShouldCollide(Const::EntCollisionGroup group0, Const::EntCollisionGroup group1);
 
 	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInWaitingForPlayers", InWaitingForPlayers, 0);
 	SG_DECL_RECVPROP(IGameRules, Const::TFTeam,		Const::EntClassID::CTFGameRulesProxy, "m_iWinningTeam",			WinningTeam, 0);

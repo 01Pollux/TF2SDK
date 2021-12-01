@@ -13,6 +13,9 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 	ImGui::SameLineHelp(esp.MaxDistance);
 	ImGui::Separator();
 
+	state.add(ImGui::SliderFloat("Rainbow Speed", esp.Rainbow.Speed.data(), 0.f, 5.f, "%.2f", ImGuiSliderFlags_AlwaysClamp));
+	ImGui::Separator();
+
 	ImGui::Text("Modes:");
 	using draw_mode = ESPInfo::ESPMode::type;
 	float third_of_spacing = ImGui::GetContentRegionAvail().y / 3.f;
@@ -38,13 +41,13 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 	ImGui::SameLineHelp(esp.Text.Color);
 	ImGui::Separator();
 
-	state.add(ImGui::SliderFloat("Text size", esp.Text.Size.data(), 0.f, 50.f));
+	state.add(ImGui::SliderFloat("Text size", esp.Text.Size.data(), 0.f, 50.f, "%.3f", ImGuiSliderFlags_AlwaysClamp));
 	ImGui::SameLineHelp(esp.Text.Size);
 
-	state.add(ImGui::SliderFloat("Text height", esp.Text.Height.data(), 0.f, 50.f));
+	state.add(ImGui::SliderFloat("Text height", esp.Text.Height.data(), 0.f, 50.f, "%.3f", ImGuiSliderFlags_AlwaysClamp));
 	ImGui::SameLineHelp(esp.Text.Size);
 
-	state.add(ImGui::SliderFloat2("Text offset", esp.Text.Offset.data(), -100.f, 100.f));
+	state.add(ImGui::SliderFloat2("Text offset", esp.Text.Offset.data(), -100.f, 100.f, "%.3f", ImGuiSliderFlags_AlwaysClamp));
 	ImGui::SameLineHelp(esp.Text.Size);
 
 	ImGui::Separator();
@@ -56,7 +59,7 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 		state.add(ImGui::ColorEdit<false>("Line color", esp.Box.DrawColor->get()));
 		ImGui::SameLineHelp(esp.Box.DrawColor);
 
-		state.add(ImGui::SliderFloat("Line thickness", esp.Box.LineThickness.data(), 0.f, 15.f));
+		state.add(ImGui::SliderFloat("Line thickness", esp.Box.LineThickness.data(), 0.f, 15.f, "%.3f", ImGuiSliderFlags_AlwaysClamp));
 		ImGui::SameLineHelp(esp.Box.LineThickness);
 		break;
 	}
@@ -68,7 +71,7 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 		state.add(ImGui::ColorEdit<false>("Outline color", esp.OutlineBox.OutlineColor->get()));
 		ImGui::SameLineHelp(esp.OutlineBox.OutlineColor);
 
-		state.add(ImGui::SliderFloat("Line thickness", esp.OutlineBox.LineThickness.data(), ESPInfo::OutlineThicknessMin + 1.f, 15.f + ESPInfo::OutlineThicknessMin));
+		state.add(ImGui::SliderFloat("Line thickness", esp.OutlineBox.LineThickness.data(), ESPInfo::OutlineThicknessMin + 1.f, 15.f + ESPInfo::OutlineThicknessMin, "%.3f", ImGuiSliderFlags_AlwaysClamp));
 		ImGui::SameLineHelp(esp.OutlineBox.LineThickness);
 		break;
 	}
@@ -263,6 +266,7 @@ void GlobalESP::OnSaveConfig(Json& cfg)
 	auto SaveGeneric = [](const ESPInfo::Shared& cur_esp, Json& out_js)
 	{
 		cur_esp.Enable.to_json(out_js);
+		cur_esp.Rainbow.Speed.to_json(out_js["rainbow"]);
 		{
 			Json& box = out_js["box"];
 			cur_esp.Box.DrawColor.to_json(box);
@@ -343,6 +347,8 @@ void GlobalESP::OnReloadConfig(const Json& cfg)
 	auto LoadGeneric = [](ESPInfo::Shared& cur_esp, const Json& in_js)
 	{
 		cur_esp.Enable.from_json(in_js);
+		if (auto rainbow = in_js.find("rainbow"); rainbow != in_js.end() && rainbow->is_number_float())
+			cur_esp.Rainbow.Speed.from_json(*rainbow);
 		if (auto box = in_js.find("box"); box != in_js.end() && box->is_object())
 		{
 			cur_esp.Box.DrawColor.from_json(*box);

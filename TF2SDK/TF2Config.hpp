@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <cassert>
 #include "User/Version.hpp"
 
 #define TF2_NAMESPACE_BEGIN(...)			\

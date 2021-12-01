@@ -4,8 +4,10 @@
 #include "Math/Vector.hpp"
 
 TF2_NAMESPACE_BEGIN();
+
 class IBaseEntityInternal;
 class ITFPlayerInternal;
+
 TF2_NAMESPACE_END();
 
 TF2_NAMESPACE_BEGIN(::Utils);
@@ -13,17 +15,30 @@ TF2_NAMESPACE_BEGIN(::Utils);
 /// <summary>
 /// Process simple latency prediction
 /// </summary>
-SG_SDK_TF2 Vector3D_F Prediction_SimpleLatency(const Vector3D_F& position, const Vector3D_F& velocity);
+SG_SDK_TF2 Vector3D_F Prediction_SimpleLatency(
+	const Vector3D_F& position, 
+	const Vector3D_F& velocity
+);
 
-struct PredictionProjectileRet
-{
-	Vector3D_F Results;
-	Vector3D_F InitialResults;
-};
 /// <summary>
-/// Process a prediction, engine side
+/// Predict's projectile next position (velocity position)
 /// </summary>
-SG_SDK_TF2 PredictionProjectileRet Prediction_Projectile(IBaseEntityInternal* player, float time);
+SG_SDK_TF2 Vector3D_F Prediction_Projectile(
+	IBaseEntityInternal* pEnt,
+	const Vector3D_F& position,
+	float speed,
+	float projectile_gravity,
+	float gravity
+);
+
+///// <summary>
+///// Predict's entity next position, engine side
+///// </summary>
+//SG_SDK_TF2 Vector3D_F Prediction_EngineSide(
+//	IBaseEntityInternal* pEnt,
+//	float frame_time,
+//	const Vector3D_F* predict_velocity
+//);
 
 
 TF2_NAMESPACE_END();

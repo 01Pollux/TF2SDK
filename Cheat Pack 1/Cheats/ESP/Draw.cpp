@@ -66,45 +66,51 @@ void GlobalESP::DrawSharedInfo(
 	case ESPInfo::ESPMode::type::Box:
 	{
 		ImU32 line_color = ImGui::GetColorU32(esp_override ? 
-			*std::bit_cast<ImVec4*>(esp_override->Color.data()) :
-			*std::bit_cast<ImVec4*>(esp_info->Box.DrawColor.data())
+			esp_override->Color.to<ImVec4>() :
+			esp_info->Rainbow.Speed ? 
+			esp_info->Rainbow.Color.to<ImVec4>() :
+			esp_info->Box.DrawColor->to<ImVec4>()
 		);
+
 		for (size_t i = 0; i < 4; i++)
 		{
-			const auto cur_bot = boxinfo.GetPosition<PosType::Bottom>(i).to<ImVec2>();
-			const auto cur_up = boxinfo.GetPosition<PosType::Upper>(i).to<ImVec2>();
+			const auto& cur_bot = boxinfo.GetPosition<PosType::Bottom>(i).to<ImVec2>();
+			const auto& cur_up = boxinfo.GetPosition<PosType::Upper>(i).to<ImVec2>();
 
 			pDraw->AddLine(cur_bot, cur_up, line_color, esp_info->Box.LineThickness);
 
-			const auto next_bot = boxinfo.GetPosition<PosType::Bottom>((i + 1) % 4).to<ImVec2>();
+			const auto& next_bot = boxinfo.GetPosition<PosType::Bottom>((i + 1) % 4).to<ImVec2>();
 			pDraw->AddLine(cur_bot, next_bot, line_color, esp_info->Box.LineThickness);
 
-			const auto next_up = boxinfo.GetPosition<PosType::Upper>((i + 1) % 4).to<ImVec2>();
+			const auto& next_up = boxinfo.GetPosition<PosType::Upper>((i + 1) % 4).to<ImVec2>();
 			pDraw->AddLine(cur_up, next_up, line_color, esp_info->Box.LineThickness);
 		}
+
 		break;
 	}
 	case ESPInfo::ESPMode::type::BoxOutline:
 	{
 		ImU32 line_color = ImGui::GetColorU32(esp_override ?
-			*std::bit_cast<ImVec4*>(esp_override->Color.data()) :
-			*std::bit_cast<ImVec4*>(esp_info->OutlineBox.DrawColor.data())
+			esp_override->Color.to<ImVec4>() :
+			esp_info->Rainbow.Speed ?
+			esp_info->Rainbow.Color.to<ImVec4>() :
+			esp_info->OutlineBox.DrawColor->to<ImVec4>()
 		);
-		ImU32 outline_color = ImGui::GetColorU32(*std::bit_cast<ImVec4*>(esp_info->OutlineBox.OutlineColor.data()));
+		ImU32 outline_color = ImGui::GetColorU32(esp_info->OutlineBox.OutlineColor->to<ImVec4>());
 
 		for (size_t i = 0; i < 4; i++)
 		{
-			const auto cur_bot = boxinfo.GetPosition<PosType::Bottom>(i).to<ImVec2>();
-			const auto cur_up = boxinfo.GetPosition<PosType::Upper>(i).to<ImVec2>();
+			const auto& cur_bot = boxinfo.GetPosition<PosType::Bottom>(i).to<ImVec2>();
+			const auto& cur_up = boxinfo.GetPosition<PosType::Upper>(i).to<ImVec2>();
 
 			pDraw->AddLine(cur_bot, cur_up, line_color, esp_info->OutlineBox.LineThickness);
 			pDraw->AddLine(cur_bot, cur_up, outline_color, esp_info->OutlineBox.LineThickness - ESPInfo::OutlineThicknessMin);
 
-			const auto next_bot = boxinfo.GetPosition<PosType::Bottom>((i + 1) % 4).to<ImVec2>();
+			const auto& next_bot = boxinfo.GetPosition<PosType::Bottom>((i + 1) % 4).to<ImVec2>();
 			pDraw->AddLine(cur_bot, next_bot, line_color, esp_info->OutlineBox.LineThickness);
 			pDraw->AddLine(cur_bot, next_bot, outline_color, esp_info->OutlineBox.LineThickness - ESPInfo::OutlineThicknessMin);
 
-			const auto next_up = boxinfo.GetPosition<PosType::Upper>((i + 1) % 4).to<ImVec2>();
+			const auto& next_up = boxinfo.GetPosition<PosType::Upper>((i + 1) % 4).to<ImVec2>();
 			pDraw->AddLine(cur_up, next_up, line_color, esp_info->OutlineBox.LineThickness);
 			pDraw->AddLine(cur_up, next_up, outline_color, esp_info->OutlineBox.LineThickness - ESPInfo::OutlineThicknessMin);
 		}
@@ -287,16 +293,18 @@ TF2::Color4_F GlobalESP::GetHealthColor(int cur, int max)
 void GlobalESP::RenderESP()
 {
 	using namespace TF2;
+
 	ESPInfo::BoxInfo box_info;
 	ILocalPlayer pMe;
+	Const::TFTeam my_team = pMe->TeamNum;
+
 
 	for (auto pEnt : Utils::IBaseEntityIterator{})
 	{
 		if (pEnt->IsDormantEx() || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
 			continue;
-
+		
 		Const::EntClassID cls_id = pEnt->GetClientClass()->ClassID;
-
 		switch (cls_id)
 		{
 		case Const::EntClassID::CTFPlayer:
@@ -315,7 +323,7 @@ void GlobalESP::RenderESP()
 		}
 		}
 
-		if (!m_ObjectESPInfo.Enable || pEnt->TeamNum == pMe->TeamNum)
+		if (!m_ObjectESPInfo.Enable  || pEnt->TeamNum == my_team)
 			continue;
 
 		const char* name;
@@ -326,7 +334,7 @@ void GlobalESP::RenderESP()
 		{
 			if (!m_ObjectESPInfo.DrawRockets)
 				continue;
-			else 
+			else
 			{
 				name = "Rocket";
 				break;
@@ -359,7 +367,6 @@ void GlobalESP::RenderESP()
 					name = "Pipe bomb";
 					break;
 				}
-				//	data.AddEntityString(ObjectESPInfo.DrawName, L"Pipe Bomb"sv);
 			}
 			}
 			break;

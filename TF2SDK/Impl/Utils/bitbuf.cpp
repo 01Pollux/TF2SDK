@@ -88,6 +88,7 @@ static constexpr bit_buffer_constants bit_buffer_c;
 
 void bf_write::start_writing(void* pData, int nBytes, int iStartBit, int nBits)
 {
+	assert(pData);
 	nBytes &= ~3;
 
 	Data = static_cast<decltype(Data)>(pData);
@@ -368,6 +369,8 @@ void bf_write::write_sint64(int64_t data)
 
 bool bf_write::write_bits(const void* in_data, int numbits)
 {
+	assert(in_data);
+
 	const uint8_t* pOut = static_cast<const uint8_t*>(in_data);
 	int bits_left = numbits;
 
@@ -563,6 +566,8 @@ bool bf_write::write_string(const char* str)
 
 void bf_read::start_reading(const void* pData, int nBytes, int iStartBit, int nBits)
 {
+	assert(pData);
+
 	Data = static_cast<const uint8_t*>(pData);
 	DataBytes = nBytes;
 
@@ -593,6 +598,8 @@ int bf_read::read_bit()
 
 void bf_read::read_bits(void* data, int nBits)
 {
+	assert(data);
+
 	int8_t* pOut = static_cast<int8_t*>(data);
 	int nBitsLeft = nBits;
 

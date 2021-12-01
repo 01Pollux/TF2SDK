@@ -30,7 +30,7 @@ namespace Const
 		Count,
 	};
 
-	enum class TFCond
+	enum class TFCond : int
 	{
 		//0: Revving Minigun, Sniper Rifle.Gives zoomed / revved pose
 		Slowed,
@@ -362,6 +362,47 @@ namespace Const
 		Count,
 	};
 
+	struct TFCondFlags
+	{
+		uint32_t	Flags[4]{ };
+		constexpr TFCondFlags(std::initializer_list<TFCond> tfconds = { }) noexcept
+		{
+			if (std::is_constant_evaluated() && tfconds.size())
+				return;
+
+			for (TFCond tfcond : tfconds)
+			{
+				const int cond = std::to_underlying(tfcond);
+				const int bit = cond / 32;
+				Flags[bit] |= 1 << (cond - 32 * bit);
+			}
+		}
+
+		constexpr int size() const noexcept
+		{
+			return std::ssize(Flags);
+		}
+
+		constexpr uint32_t at(int bit_idx) const noexcept
+		{
+			return Flags[bit_idx];
+		}
+
+		constexpr bool any(int bit_idx) const noexcept
+		{
+			return at(bit_idx) != 0;
+		}
+
+		constexpr bool empty(int bit_idx) const noexcept
+		{
+			return !any(bit_idx);
+		}
+
+		constexpr bool is_set(int bit_idx, uint32_t flags) const noexcept
+		{
+			return (at(bit_idx) & flags) == flags;
+		}
+	};
 }
 
 class TFPlayerStreak
@@ -432,15 +473,20 @@ public:
 		Utils::AngleVectors(EyeAngles, fwd, right, up);
 	}
 
+	/// <summary>
+	/// Test if the player has those conditions
+	/// </summary>
 	SG_SDK_TF2 bool 
-		InCond(Const::TFCond cond) const;
+		InCond(const Const::TFCondFlags& conds) const;
 
-	template<typename _CondTy, typename... _Args>
-	bool InCond(_CondTy cond, _Args... conds) const
+	/// <summary>
+	/// Test if the player has those conditions
+	/// </summary>
+	template<typename... _CondTy>
+	requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
+	bool InCond(_CondTy... conds) const
 	{
-		if (!InCond(cond))
-			return false;
-		return InCond(conds...);
+		return InCond({ conds... });
 	}
 
 	/// <summary>
@@ -510,11 +556,38 @@ public:
 		return InCond(Kritzkrieged, CritRuneTemp, CritCanteen, CritMmmph, CritOnKill, CritOnDamage, CritOnFirstBlood, CritOnWin, CritRuneTemp, HalloweenCritCandy);
 	}
 
+	/// <summary>
+	/// Add those conditions to the player
+	/// </summary>
 	SG_SDK_TF2 void 
-		AddCond(Const::TFCond cond, float duration = -1.0);
+		AddCond(const Const::TFCondFlags& cond);
 
+	/// <summary>
+	/// Add those conditions to the player
+	/// </summary>
+	template<typename... _CondTy>
+		requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
+	bool AddCond(_CondTy... conds) const
+	{
+		return AddCond({ conds... });
+	}
+
+	/// <summary>
+	/// remove those conditions from the player
+	/// </summary>
 	SG_SDK_TF2 void 
-		RemoveCond(Const::TFCond cond);
+		RemoveCond(const Const::TFCondFlags& cond);
+
+	/// <summary>
+	/// remove those conditions from the player
+	/// </summary>
+	template<typename... _CondTy>
+		requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
+	bool RemoveCond(_CondTy... conds) const
+	{
+		return RemoveCond({ conds... });
+	}
+
 
 	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		Const::EntClassID::CTFPlayer, "m_Shared",				PlayerShared, 0);
 	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			Const::EntClassID::CTFPlayer, "m_PlayerClass",			PlayerClass, 0);

@@ -65,12 +65,14 @@ namespace ShadowGarden { extern IImGuiLoader* ImGuiLoader; }
 namespace ShadowGarden
 {
 	template<typename _Ty>
+		requires std::is_base_of_v<IInterface, std::remove_pointer_t<_Ty>>
 	inline void GetInterface_NoFail(const char* name, IPluginManager* pFactory, _Ty& iface)
 	{
 		pFactory->RequestInterface(name, std::bit_cast<IInterface**>(&iface));
 	}
 
 	template<typename _Ty>
+		requires std::is_base_of_v<IInterface, std::remove_pointer_t<_Ty>>
 	inline bool GetInterface(const char* name, IPluginManager* pFactory, _Ty& iface)
 	{
 		if (!pFactory->RequestInterface(name, std::bit_cast<IInterface**>(&iface)))
@@ -79,7 +81,7 @@ namespace ShadowGarden
 			SG_LOG_FATAL({
 				SG_MESSAGE("Failed to find interface."),
 				SG_LOGARG("Name", name)
-						 });
+			});
 #endif
 			return false;
 		}

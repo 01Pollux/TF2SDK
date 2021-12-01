@@ -153,6 +153,8 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 			{
 				*res = m_GameData->ReadSignature(name).get();
 			}
+
+			assert(*res);
 			if (!*res)
 				return false;
 		}

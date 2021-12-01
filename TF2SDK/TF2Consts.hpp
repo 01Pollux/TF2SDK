@@ -574,8 +574,24 @@ enum class EntCollisionGroup
 	PushAway,
 	// Used so NPCs in scripts ignore the player.
 	NPCActor,
-	// USed for NPCs in scripts that should not collide with each other
+	// Used for NPCs in scripts that should not collide with each other
 	NPCScripted,
+
+	Grenades,
+
+	Object,
+
+	Object_SolidToPlayerMovement,
+
+	CombatObject,
+
+	Rockets,
+
+	Respawn_Rooms,
+	
+	Tank,
+
+	Rocket_But_Not_With_Other_Rockets,
 
 	Count
 };

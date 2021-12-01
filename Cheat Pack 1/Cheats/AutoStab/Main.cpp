@@ -68,7 +68,7 @@ SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 		return{ };
 
 	TF2::IBaseWeapon pCurWpn(pMe->ActiveWeapon.get());
-	if (!pCurWpn || pCurWpn->GetWeaponSlot() != 2)
+	if (!pCurWpn || pCurWpn->GetWeaponSlot() != TF2::Const::WeaponSlot::Melee)
 		return{ };
 
 	if (pCurWpn->ReadyToBackstab)

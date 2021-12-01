@@ -118,6 +118,7 @@
     <ClCompile Include="Impl\Engine\Convar.cpp" />
     <ClCompile Include="Impl\Engine\DebugOverlay.cpp" />
     <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
+    <ClCompile Include="Impl\Entity\BaseProjectile.cpp" />
     <ClCompile Include="Impl\Entity\BaseWeapon.cpp" />
     <ClCompile Include="Impl\Entity\EconEntity.cpp" />
     <ClCompile Include="Impl\Entity\EntityIterator.cpp" />

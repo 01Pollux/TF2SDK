@@ -35,6 +35,7 @@ public:
 
 	constexpr ReturnType operator()(Args... args)
 	{
+		assert(Func);
 		return Func(args...);
 	}
 
@@ -77,6 +78,8 @@ public:
 
 	constexpr ReturnType operator()(const void* thisptr, Args... args)
 	{
+		assert(thisptr);
+		assert(Func);
 		return ((CallClass*)thisptr->*Func)(args...);
 	}
 
@@ -119,8 +122,12 @@ public:
 
 	constexpr _RTy operator()(const void* thisptr, _Args... args)
 	{
+		assert(thisptr);
+		assert(Offset);
+
 		void** vtable = *(void***)(thisptr);
 		IMemberFuncThunk<_RTy, _Args...> fn(vtable[Offset]);
+
 		return fn(thisptr, args...);
 	}
 

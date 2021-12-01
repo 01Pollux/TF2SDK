@@ -8,6 +8,7 @@ TF2_NAMESPACE_BEGIN();
 
 static bool FindInRecvTable(const RecvTable* pTable, const char* target_name, RecvProp** outProp, uint32_t* outOffset)
 {
+	assert(pTable);
 	for (int i = 0; i < pTable->NumProps; i++)
 	{
 		RecvProp* prop = &pTable->Props[i];
@@ -39,6 +40,7 @@ static bool FindInRecvTable(const RecvTable* pTable, const char* target_name, Re
 
 bool PropFinder::FindRecvProp(ClientClass* pClass, const char* prop_name, RecvProp** pProp, uint32_t* pOffset)
 {
+	assert(pClass);
 	return FindInRecvTable(pClass->RecvTable, prop_name, pProp, pOffset);
 }
 

@@ -117,6 +117,26 @@ namespace Const
 
 		Count
 	};
+
+	enum class WeaponSlot
+	{
+		Primary,
+		Secondary,
+		Melee,
+
+		Grenade,
+		Building,
+		PDA,
+		
+		Item1,
+		Item2,
+
+		Head,
+		Misc,
+		Melee_AllClasses,
+		Secondary2,
+		Primary2
+	};
 }
 
 class GameTrace;
@@ -133,49 +153,60 @@ public:
 		return static_cast<IBaseWeaponInternal*>(IBaseEntityInternal::GetEntity(hndl));
 	}
 
-	SG_SDK_TF2 int 
+	/// <summary>
+	/// Get weapon slot
+	/// </summary>
+	SG_SDK_TF2 Const::WeaponSlot
 		GetWeaponSlot() const noexcept;
 
+	/// <summary>
+	/// Traces a swing trace of melee
+	/// </summary>
 	SG_SDK_TF2 bool 
 		DoSwingTrace(GameTrace& trace) noexcept;
 
+	/// <summary>
+	/// Get melee's swing range
+	/// </summary>
 	SG_SDK_TF2 int
 		GetSwingRange() const noexcept;
 
+	/// <summary>
+	/// Get weapon's id
+	/// </summary>
 	SG_SDK_TF2 Const::WeaponType
 		GetWeaponId() const noexcept;
 
-	/*bool GetProjectileMinMaxs(Vector3D_F& mins, Vector3D_F& maxs) const noexcept
-	{
-		switch (this->GetWeaponId())
-		{
-		case Const::WeaponType::Crossbow:
-		{
-			mins = { -3.f, -3.f, -3.f };
-			maxs = { 3.f, 3.f, 3.f };
-			return true;
-		}
-		case Const::WeaponType::Compound_bow:
-		case Const::WeaponType::Jar:
-		case Const::WeaponType::Jar_milk:
-		case Const::WeaponType::Shotgun_building_rescue:
-		case Const::WeaponType::Spellbook:
-		case Const::WeaponType::Mechanical_arm:
-		case Const::WeaponType::Flamethrower_rocket:
-		{
-			mins = { -1.f, -1.f, -1.f };
-			maxs = { 1.f, 1.f, 1.f };
-			return true;
-		}
-		}
-	}*/
+	/// <summary>
+	/// Get weapon projectile's speed
+	/// </summary>
+	SG_SDK_TF2 float
+		GetProjectileSpeed() const noexcept;
+
+	/// <summary>
+	/// Get weapon projectile's gravity
+	/// </summary>
+	SG_SDK_TF2 float
+		GetProjectileGravity() const noexcept;
+
+	/// <summary>
+	/// Get weapon projectile's spread
+	/// </summary>
+	SG_SDK_TF2 float
+		GetProjectileSpread() const noexcept;
+
+	/// <summary>
+	/// Get weapon projectile's damage
+	/// </summary>
+	SG_SDK_TF2 float
+		GetProjectileDamage() const noexcept;
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iViewModelIndex",	ViewModelIndex, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iWorldModelIndex",	WorldModelIndex, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flLastFireTime",		LastFireTime, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flObservedCritChance", ObservedCritChance, 0);
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFSniperRifle,	"m_flChargedDamage",	ChargedDamage, 0);
+	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFSniperRifle,	"m_flChargedDamage",	SniperChargeDamage, 0);
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_flChargeLevel",		ChargeLevel, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_hHealingTarget",		HealingTarget, 0);
@@ -185,6 +216,8 @@ public:
 
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	ReadyToBackstab, 0);
 	SG_DECL_RECVPROP(IBaseWeaponInternal,	IBaseHandle,		Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	BackstabVictim, -4);
+
+	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CTFPipebombLauncher,	"m_flChargeBeginTime",	PipeChargeBeginTime, 0);
 };
 using IBaseWeapon = IBaseEntityWrapper<IBaseWeaponInternal>;
 
