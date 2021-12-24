@@ -14,8 +14,8 @@ private:
 
 	SG::MHookRes OnCreateMove(SG::PassArgs* pArgs);
 
-	void OnSaveConfig(Json& cfg);
-	void OnReloadConfig(const Json& cfg);
+	void OnSaveConfig(nlohmann::json& cfg);
+	void OnReloadConfig(const nlohmann::json& cfg);
 
 	bool OnRender();
 

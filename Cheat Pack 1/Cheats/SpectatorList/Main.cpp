@@ -1,15 +1,15 @@
 
-#include <Interfaces/GameData.hpp>
+#include <shadowgarden/interfaces/GameData.hpp>
 #include <imgui/imgui_internal.h>
 
-#include <User/Profiler.hpp>
-#include <User/FontAwesome_Icons.hpp>
+#include <shadowgarden/users/Profiler.hpp>
+#include <shadowgarden/users/FontAwesome_Icons.hpp>
 
-#include <Engine/ClientDll.hpp>
-#include <Engine/GlobalVars.hpp>
+#include <tf2/engine/ClientDll.hpp>
+#include <tf2/engine/GlobalVars.hpp>
 
-#include <Entity/BasePlayer.hpp>
-#include <Entity/BaseWeapon.hpp>
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/entity/BaseWeapon.hpp>
 
 #include "SpectatorList.hpp"
 

@@ -1,7 +1,7 @@
+#include <shadowgarden/interfaces/InterfacesSys.hpp>
 #include <imgui/imgui_internal.h>
-#include <Interfaces/InterfacesSys.hpp>
-#include "Defines.hpp"
 
+#include "Defines.hpp"
 #include "ICheatIFace.hpp"
 
 class IGlobalCheatIFace : public SG::IPluginImpl
@@ -51,19 +51,13 @@ public:
 			iface->OnPluginPauseChange(pausing);
 	}
 
-	void OnDropInterface(SG::IInterface* dropiface) override
-	{
-		for (auto iface : ICheatIFace::GetEntries())
-			iface->OnDropInterface(dropiface);
-	}
-
-	void OnSaveConfig(Json& cfg) override
+	void OnSaveConfig(nlohmann::json& cfg) override
 	{
 		for (auto iface : ICheatIFace::GetEntries())
 			iface->OnSaveConfig(cfg);
 	}
 
-	void OnReloadConfig(const Json& cfg) override
+	void OnReloadConfig(const nlohmann::json& cfg) override
 	{
 		for (auto iface : ICheatIFace::GetEntries())
 			iface->OnReloadConfig(cfg);

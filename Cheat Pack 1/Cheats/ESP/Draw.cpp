@@ -1,13 +1,13 @@
 
-#include <Engine/GlobalVars.hpp>
-#include <Engine/ClientDll.hpp>
+#include <tf2/engine/GlobalVars.hpp>
+#include <tf2/engine/ClientDll.hpp>
 
-#include <Entity/BaseProjectile.hpp>
-#include <Entity/BasePlayer.hpp>
-#include <Entity/EntityIterator.hpp>
+#include <tf2/entity/BaseProjectile.hpp>
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/entity/EntityIterator.hpp>
 
-#include <Studio/Model.hpp>
-#include <Utils/Draw.hpp>
+#include <tf2/studio/Model.hpp>
+#include <tf2/utils/Draw.hpp>
 
 #include "ESP.hpp"
 

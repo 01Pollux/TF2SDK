@@ -1,5 +1,5 @@
 
-#include <Interfaces/ImGui.hpp>
+#include <shadowgarden/interfaces/ImGui.hpp>
 #include "ESP.hpp"
 
 using ESPInst = ESPInfo::Shared&;
@@ -260,20 +260,22 @@ bool GlobalESP::OnRender()
 	return state;
 }
 
-void GlobalESP::OnSaveConfig(Json& cfg)
+void GlobalESP::OnSaveConfig(nlohmann::json& cfg)
 {
-	Json& esp_info = cfg["ESP"];
-	auto SaveGeneric = [](const ESPInfo::Shared& cur_esp, Json& out_js)
+	using nlohmann::json;
+
+	json& esp_info = cfg["ESP"];
+	auto SaveGeneric = [](const ESPInfo::Shared& cur_esp, json& out_js)
 	{
 		cur_esp.Enable.to_json(out_js);
 		cur_esp.Rainbow.Speed.to_json(out_js["rainbow"]);
 		{
-			Json& box = out_js["box"];
+			json& box = out_js["box"];
 			cur_esp.Box.DrawColor.to_json(box);
 			cur_esp.Box.LineThickness.to_json(box);
 		}
 		{
-			Json& outline_box = out_js["outline box"];
+			json& outline_box = out_js["outline box"];
 			cur_esp.OutlineBox.DrawColor.to_json(outline_box);
 			cur_esp.OutlineBox.OutlineColor.to_json(outline_box);
 			cur_esp.OutlineBox.LineThickness.to_json(outline_box);
@@ -292,10 +294,10 @@ void GlobalESP::OnSaveConfig(Json& cfg)
 	};
 
 	{
-		Json& player_esp = esp_info["Players"];
+		json& player_esp = esp_info["Players"];
 		for (int i = 0; i < std::ssize(m_PlayerESPInfo); i++)
 		{
-			Json& cur_team = player_esp[ESPInfo::TeamNames[i]];
+			json& cur_team = player_esp[ESPInfo::TeamNames[i]];
 			const auto& cur_esp = m_PlayerESPInfo[i];
 			
 			SaveGeneric(cur_esp, cur_team);
@@ -310,10 +312,10 @@ void GlobalESP::OnSaveConfig(Json& cfg)
 	}
 	
 	{
-		Json& building_esp = esp_info["Buildings"];
+		json& building_esp = esp_info["Buildings"];
 		for (int i = 0; i < std::ssize(m_BuildingESPInfo); i++)
 		{
-			Json& cur_team = building_esp[ESPInfo::TeamNames[i]];
+			json& cur_team = building_esp[ESPInfo::TeamNames[i]];
 			const auto& cur_esp = m_BuildingESPInfo[i];
 			
 			SaveGeneric(cur_esp, cur_team);
@@ -329,7 +331,7 @@ void GlobalESP::OnSaveConfig(Json& cfg)
 	}
 
 	{
-		Json& extra_esp = esp_info["Extras"];
+		json& extra_esp = esp_info["Extras"];
 		const auto& cur_esp = m_ObjectESPInfo;
 
 		SaveGeneric(cur_esp, extra_esp);
@@ -342,9 +344,11 @@ void GlobalESP::OnSaveConfig(Json& cfg)
 	}
 }
 
-void GlobalESP::OnReloadConfig(const Json& cfg)
+void GlobalESP::OnReloadConfig(const nlohmann::json& cfg)
 {
-	auto LoadGeneric = [](ESPInfo::Shared& cur_esp, const Json& in_js)
+	using nlohmann::json;
+
+	auto LoadGeneric = [](ESPInfo::Shared& cur_esp, const json& in_js)
 	{
 		cur_esp.Enable.from_json(in_js);
 		if (auto rainbow = in_js.find("rainbow"); rainbow != in_js.end() && rainbow->is_number_float())

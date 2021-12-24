@@ -1,8 +1,8 @@
 
-#include <Engine/GlobalVars.hpp>
-#include <Engine/ClientDll.hpp>
+#include <tf2/engine/GlobalVars.hpp>
+#include <tf2/engine/ClientDll.hpp>
 
-#include <Entity/BasePlayer.hpp>
+#include <tf2/entity/BasePlayer.hpp>
 
 #include "ESP.hpp"
 
@@ -107,7 +107,7 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 
 				if (building_esp->DrawBState)
 				{
-					if (const size_t healing_players = dispenser->HealingTargets->size())
+					if (const uint32_t healing_players = dispenser->HealingTargets->size())
 					{
 						sprintf_s(fmt, "Healing: %u Players", healing_players);
 						renderer.AddText(fmt);

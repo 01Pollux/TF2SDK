@@ -1,8 +1,9 @@
 #pragma once
 
+#include <tf2/math/Vector.hpp>
+#include <tf2/consts.hpp>
+
 #include "ICheatIFace.hpp"
-#include "Math/Vector.hpp"
-#include "TF2Consts.hpp"
 #include "Defines.hpp"
 
 struct ImGuiContextHook;
@@ -16,8 +17,8 @@ private:
 
 	static void OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx);
 
-	void OnSaveConfig(Json& cfg);
-	void OnReloadConfig(const Json& cfg);
+	void OnSaveConfig(nlohmann::json& cfg);
+	void OnReloadConfig(const nlohmann::json& cfg);
 
 	bool OnRender();
 

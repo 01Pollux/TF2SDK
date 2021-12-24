@@ -19,131 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client\ClientTools.hpp" />
-    <ClInclude Include="Client\Effects.hpp" />
-    <ClInclude Include="Client\EntityList.hpp" />
-    <ClInclude Include="Client\GameRules.hpp" />
-    <ClInclude Include="Engine\CNetChannel.hpp" />
-    <ClInclude Include="Engine\GlobalVars.hpp" />
-    <ClInclude Include="Client\Prediction.hpp" />
-    <ClInclude Include="Client\UserCmd.hpp" />
-    <ClInclude Include="Engine\AppSystem.hpp" />
-    <ClInclude Include="Engine\Convar.hpp" />
-    <ClInclude Include="Engine\Convar_Internal.hpp" />
-    <ClInclude Include="Engine\CVar.hpp" />
-    <ClInclude Include="Engine\DebugOverlay.hpp" />
-    <ClInclude Include="Engine\EngineIFace.hpp" />
-    <ClInclude Include="Engine\GameEnumerator.hpp" />
-    <ClInclude Include="Engine\GameTrace.hpp" />
-    <ClInclude Include="Engine\ModelRenderer.hpp" />
-    <ClInclude Include="Engine\NetMessages.hpp" />
-    <ClInclude Include="Engine\NetStrTable.hpp" />
-    <ClInclude Include="Client\RecipientFilter.hpp" />
-    <ClInclude Include="Engine\Sounds.hpp" />
-    <ClInclude Include="Engine\VGui.hpp" />
-    <ClInclude Include="Engine\GameEvent.hpp" />
-    <ClInclude Include="Entity\BaseProjectile.hpp" />
-    <ClInclude Include="Entity\EntityIterator.hpp" />
-    <ClInclude Include="Materials\Consts.hpp" />
-    <ClInclude Include="Materials\Material.hpp" />
-    <ClInclude Include="Materials\MaterialCfg.hpp" />
-    <ClInclude Include="Materials\MaterialSys.hpp" />
-    <ClInclude Include="Materials\MaterialVar.hpp" />
-    <ClInclude Include="Materials\Reference.hpp" />
-    <ClInclude Include="Materials\StudioRender.hpp" />
-    <ClInclude Include="Materials\Texture.hpp" />
-    <ClInclude Include="Materials\VTF.hpp" />
-    <ClInclude Include="Physics\Consts.hpp" />
-    <ClInclude Include="Physics\Friction.hpp" />
-    <ClInclude Include="Physics\VPhysics.hpp" />
-    <ClInclude Include="Studio\BSP.hpp" />
-    <ClInclude Include="Studio\LightDesc.hpp" />
-    <ClInclude Include="Studio\Model.hpp" />
-    <ClInclude Include="Utils\Byteswap.hpp" />
-    <ClInclude Include="Utils\Checksum.hpp" />
-    <ClInclude Include="Utils\Draw.hpp" />
-    <ClInclude Include="Utils\KeyValues.hpp" />
-    <ClInclude Include="Engine\Trace.hpp" />
-    <ClInclude Include="Engine\ModelInfo.hpp" />
-    <ClInclude Include="Engine\NetChannel.hpp" />
-    <ClInclude Include="Engine\SoundFlags.hpp" />
-    <ClInclude Include="Entity\BaseObject.hpp" />
-    <ClInclude Include="Entity\BasePlayer.hpp" />
-    <ClInclude Include="Entity\BaseWeapon.hpp" />
-    <ClInclude Include="GameProp\GameProp.hpp" />
-    <ClInclude Include="Server\ServerTools.hpp" />
-    <ClInclude Include="Studio\BoneCache.hpp" />
-    <ClInclude Include="Studio\Consts.hpp" />
-    <ClInclude Include="Utils\AutoList.hpp" />
-    <ClInclude Include="TF2Config.hpp" />
-    <ClInclude Include="TF2Consts.hpp" />
-    <ClInclude Include="Engine\ClientDll.hpp" />
-    <ClInclude Include="Entity\BaseEntity.hpp" />
-    <ClInclude Include="Entity\ClientEntity.hpp" />
-    <ClInclude Include="Entity\ClientEntity_Internal.hpp" />
-    <ClInclude Include="Entity\EconEntity.hpp" />
-    <ClInclude Include="Entity\HandleEntity.hpp" />
-    <ClInclude Include="Entity\ResourceEntity.hpp" />
-    <ClInclude Include="Studio\Studio.hpp" />
-    <ClInclude Include="GameProp\ClassID.hpp" />
-    <ClInclude Include="GameProp\Consts.hpp" />
-    <ClInclude Include="GameProp\DataMap.hpp" />
-    <ClInclude Include="GameProp\RecvProp.hpp" />
-    <ClInclude Include="GameProp\SendProp.hpp" />
-    <ClInclude Include="Math\Matrix.hpp" />
-    <ClInclude Include="Math\Vector.hpp" />
-    <ClInclude Include="Utils\bitbuf.hpp" />
-    <ClInclude Include="Utils\Prediction.hpp" />
-    <ClInclude Include="Utils\RefCount.hpp" />
-    <ClInclude Include="Utils\Thunks.hpp" />
-    <ClInclude Include="Utils\Trace.hpp" />
-    <ClInclude Include="Utils\UtlAlloc.hpp" />
-    <ClInclude Include="Utils\UtlBuffer.hpp" />
-    <ClInclude Include="Utils\UtlLinkedList.hpp" />
-    <ClInclude Include="Utils\UtlMemory.hpp" />
-    <ClInclude Include="Utils\UtlString.hpp" />
-    <ClInclude Include="Utils\UtlSymbol.hpp" />
-    <ClInclude Include="Utils\UtlVector.hpp" />
-    <ClInclude Include="Utils\Vector.hpp" />
-    <ClInclude Include="VGui\Consts.hpp" />
-    <ClInclude Include="VGui\Engine.hpp" />
-    <ClInclude Include="VGui\Input.hpp" />
-    <ClInclude Include="VGui\Panel.hpp" />
-    <ClInclude Include="VGui\Surface.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Impl\Client\Effects.cpp" />
-    <ClCompile Include="Impl\Client\EntityList.cpp" />
-    <ClCompile Include="Impl\Client\Gamerules.cpp" />
-    <ClCompile Include="Impl\Engine\Convar.cpp" />
-    <ClCompile Include="Impl\Engine\DebugOverlay.cpp" />
-    <ClCompile Include="Impl\Entity\BasePlayer.cpp" />
-    <ClCompile Include="Impl\Entity\BaseProjectile.cpp" />
-    <ClCompile Include="Impl\Entity\BaseWeapon.cpp" />
-    <ClCompile Include="Impl\Entity\EconEntity.cpp" />
-    <ClCompile Include="Impl\Entity\EntityIterator.cpp" />
-    <ClCompile Include="Impl\Entity\ResourceEntity.cpp" />
-    <ClCompile Include="Impl\GameProp\DataMap.cpp" />
-    <ClCompile Include="Impl\Materials\Reference.cpp" />
-    <ClCompile Include="Impl\Utils\bitbuf.cpp" />
-    <ClCompile Include="Impl\Utils\Checksum.cpp" />
-    <ClCompile Include="Impl\Utils\Draw.cpp" />
-    <ClCompile Include="Impl\Utils\KeyValues.cpp" />
-    <ClCompile Include="Impl\Engine\NetMessage.cpp" />
-    <ClCompile Include="Impl\Utils\Prediction.cpp" />
-    <ClCompile Include="Impl\Utils\Trace.cpp" />
-    <ClCompile Include="Impl\Utils\Vector.cpp" />
-    <ClCompile Include="Impl\Interfaces.cpp" />
-    <ClCompile Include="Impl\Entity\BaseEntity.cpp" />
-    <ClCompile Include="Impl\GameProp\RecvProp.cpp" />
-    <ClCompile Include="Impl\GameProp\SendProp.cpp" />
-    <ClCompile Include="Impl\Studio\BoneCache.cpp" />
+    <ClCompile Include="Client\Effects.cpp" />
+    <ClCompile Include="Client\EntityList.cpp" />
+    <ClCompile Include="Client\Gamerules.cpp" />
+    <ClCompile Include="Engine\Convar.cpp" />
+    <ClCompile Include="Engine\DebugOverlay.cpp" />
+    <ClCompile Include="Engine\NetMessage.cpp" />
+    <ClCompile Include="Entity\BaseEntity.cpp" />
+    <ClCompile Include="Entity\BasePlayer.cpp" />
+    <ClCompile Include="Entity\BaseProjectile.cpp" />
+    <ClCompile Include="Entity\BaseWeapon.cpp" />
+    <ClCompile Include="Entity\EconEntity.cpp" />
+    <ClCompile Include="Entity\EntityIterator.cpp" />
+    <ClCompile Include="Entity\ResourceEntity.cpp" />
+    <ClCompile Include="GameProp\DataMap.cpp" />
+    <ClCompile Include="GameProp\RecvProp.cpp" />
+    <ClCompile Include="GameProp\SendProp.cpp" />
+    <ClCompile Include="Interfaces.cpp" />
+    <ClCompile Include="Materials\Reference.cpp" />
+    <ClCompile Include="Studio\BoneCache.cpp" />
+    <ClCompile Include="Utils\bitbuf.cpp" />
+    <ClCompile Include="Utils\Checksum.cpp" />
+    <ClCompile Include="Utils\Draw.cpp" />
+    <ClCompile Include="Utils\KeyValues.cpp" />
+    <ClCompile Include="Utils\Prediction.cpp" />
+    <ClCompile Include="Utils\Trace.cpp" />
+    <ClCompile Include="Utils\Vector.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e8a9b7ae-6b99-4591-a15d-f33918e90544}</ProjectGuid>
-    <RootNamespace>TF2SDK</RootNamespace>
+    <ProjectGuid>{4a8008f3-ad62-453a-ab4e-a3247dfa6d40}</ProjectGuid>
+    <RootNamespace>tf2sdk</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -212,9 +119,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SG_LIBRARIES)Includes\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SG_INTERNALS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -227,16 +133,14 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SG_EXPORTED;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SG_LIBRARIES)Includes\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SG_INTERNALS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -255,9 +159,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SG_LIBRARIES)Includes\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SG_INTERNALS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -276,9 +179,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SG_LIBRARIES)Includes\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SG_INTERNALS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>

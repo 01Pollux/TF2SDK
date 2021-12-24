@@ -1,14 +1,14 @@
 
-#include <Interfaces/GameData.hpp>
 #include <imgui/imgui_internal.h>
+#include <shadowgarden/interfaces/GameData.hpp>
 
-#include <User/Profiler.hpp>
-#include <User/FontAwesome_Icons.hpp>
+#include <shadowgarden/users/Profiler.hpp>
+#include <shadowgarden/users/FontAwesome_Icons.hpp>
 
-#include <Engine/ClientDll.hpp>
+#include <tf2/Engine/ClientDll.hpp>
 
-#include <Entity/BasePlayer.hpp>
-#include <Entity/BaseWeapon.hpp>
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/entity/BaseWeapon.hpp>
 
 #include "ESP.hpp"
 

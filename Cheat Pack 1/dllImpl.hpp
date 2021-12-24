@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Interfaces/InterfacesSys.hpp"
-#include "Interfaces/PluginSys.hpp"
+#include <shadowgarden/interfaces/InterfacesSys.hpp>
+#include <shadowgarden/interfaces/PluginSys.hpp>
 
 namespace SG = ShadowGarden;
 namespace ShadowGarden
@@ -32,35 +32,34 @@ namespace ShadowGarden { extern IPluginManager* PluginManager; }
 #endif
 
 #ifdef SG_USING_LIBRARY
-#include "Interfaces/LibrarySys.hpp"
+#include <shadowgarden/interfaces/LibrarySys.hpp>
 namespace ShadowGarden { extern ILibraryManager* LibManager; }
 #endif
 
 #ifdef SG_USING_LOGGER
-#include "Interfaces/Logger.hpp"
+#include <shadowgarden/interfaces/Logger.hpp>
 namespace ShadowGarden { extern ILogger* Logger; }
 #endif
 
 #ifdef SG_USING_EVENT_MANAGER
-#include "Interfaces/EventManager.hpp"
+#include <shadowgarden/interfaces/EventManager.hpp>
 namespace ShadowGarden { extern IEventManager* EventManager; }
 #endif
 
 #ifdef SG_USING_DETOUR_MANAGER
-#include "Interfaces/HookArgs.hpp"
-#include "Interfaces/HooksManager.hpp"
+#include <shadowgarden/interfaces/HookArgs.hpp>
+#include <shadowgarden/interfaces/HooksManager.hpp>
 namespace ShadowGarden { extern IDetoursManager* DetourManager; }
 #endif
 
 #ifdef SG_USING_IMGUI
-#include "Interfaces/ImGui.hpp"
+#include <shadowgarden/interfaces/ImGui.hpp>
 namespace ShadowGarden { extern IImGuiLoader* ImGuiLoader; }
 #endif
 
 #ifdef SG_USING_PROFILER
-#include "User/Profiler.hpp"
+#include <shadowgarden/users/Profiler.hpp>
 #endif
-
 
 namespace ShadowGarden
 {

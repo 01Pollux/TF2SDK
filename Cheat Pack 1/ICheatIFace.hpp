@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Defines.hpp"
-#include "Utils/AutoList.hpp"
-#include "TF2Config.hpp"
+#include <tf2/utils/AutoList.hpp>
+#include <tf2/config.hpp>
 
 struct ImGuiContextHook;
 
@@ -56,11 +56,11 @@ public:
 	/// <summary>
 	/// Called when a plugin wants to save current data to json file
 	/// </summary>
-	virtual void OnSaveConfig(Json& cfg) { }
+	virtual void OnSaveConfig(nlohmann::json& cfg) { }
 
 	/// <summary>
 	/// Called when a plugin wants to load from json file to data
 	/// </summary>
-	virtual void OnReloadConfig(const Json& cfg) { }
+	virtual void OnReloadConfig(const nlohmann::json& cfg) { }
 
 };

@@ -1,5 +1,5 @@
 
-#include <Interfaces/ImGui.hpp>
+#include <shadowgarden/interfaces/ImGui.hpp>
 #include "SpectatorList.hpp"
 
 bool DisplaySpecList::OnRender()
@@ -44,9 +44,9 @@ bool DisplaySpecList::OnRender()
 	return state;
 }
 
-void DisplaySpecList::OnSaveConfig(Json& cfg)
+void DisplaySpecList::OnSaveConfig(nlohmann::json& cfg)
 {
-	Json& spec_list = cfg["Spectator list"];
+	auto& spec_list = cfg["Spectator list"];
 
 	m_Enabled.to_json(spec_list);
 	m_DisplayMode.to_json(spec_list);
@@ -58,7 +58,7 @@ void DisplaySpecList::OnSaveConfig(Json& cfg)
 	m_TextColor.to_json(spec_list);
 }
 
-void DisplaySpecList::OnReloadConfig(const Json& cfg)
+void DisplaySpecList::OnReloadConfig(const nlohmann::json& cfg)
 {
 	auto iter = cfg.find("Spectator list");
 	if (iter != cfg.end())

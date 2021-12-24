@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Entity/BaseObject.hpp>
-#include <Entity/BasePlayer.hpp>
-#include <Math/Vector.hpp>
+#include <tf2/entity/BaseObject.hpp>
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/math/Vector.hpp>
 
 #include "ICheatIFace.hpp"
 #include "Defines.hpp"
@@ -260,8 +260,8 @@ private:
 
 	static void OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx);
 
-	void OnSaveConfig(Json& cfg);
-	void OnReloadConfig(const Json& cfg);
+	void OnSaveConfig(nlohmann::json& cfg);
+	void OnReloadConfig(const nlohmann::json& cfg);
 
 	bool OnRender();
 

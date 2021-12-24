@@ -1,5 +1,5 @@
 
-#include <Interfaces/ImGui.hpp>
+#include <shadowgarden/interfaces/ImGui.hpp>
 #include "AutoStab.hpp"
 
 bool AutoBackstab::OnRender()
@@ -23,15 +23,15 @@ bool AutoBackstab::OnRender()
 	return state;
 }
 
-void AutoBackstab::OnSaveConfig(Json& cfg)
+void AutoBackstab::OnSaveConfig(nlohmann::json& cfg)
 {
-	Json& autostab = cfg["Auto-Backstab"];
+	auto& autostab = cfg["Auto-Backstab"];
 	m_Enabled.to_json(autostab);
 	m_CheckUber.to_json(autostab);
 	m_CheckInvisible.to_json(autostab);
 }
 
-void AutoBackstab::OnReloadConfig(const Json& cfg)
+void AutoBackstab::OnReloadConfig(const nlohmann::json& cfg)
 {
 	auto iter = cfg.find("Auto-Backstab");
 	if (iter != cfg.end())

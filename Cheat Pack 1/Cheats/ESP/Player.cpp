@@ -1,11 +1,11 @@
 
-#include <Engine/ClientDll.hpp>
-#include <Engine/ClientDll.hpp>
-
-#include <Engine/GlobalVars.hpp>
-#include <Entity/BasePlayer.hpp>
-#include <Entity/BaseWeapon.hpp>
-#include <Entity/ResourceEntity.hpp>
+#include <tf2/engine/ClientDll.hpp>
+#include <tf2/engine/ClientDll.hpp>
+		  
+#include <tf2/engine/GlobalVars.hpp>
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/entity/BaseWeapon.hpp>
+#include <tf2/entity/ResourceEntity.hpp>
 
 #include "ESP.hpp"
 
@@ -71,13 +71,13 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 			}
 			else if (player_esp->DrawClass)
 			{
-				sprintf_s(fmt, "Class: %s", Const::TFClassNames[pPlayer->Class.get<size_t>() - 1]);
+				sprintf_s(fmt, "Class: %s", Const::TFClassNames[pPlayer->Class.get<int>() - 1]);
 				renderer.AddText(fmt);
 			}
 
 			if (player_esp->DrawTeam)
 			{
-				sprintf_s(fmt, "Team: %s", Const::TFTeamNames::CStrings[pPlayer->TeamNum.get<size_t>()]);
+				sprintf_s(fmt, "Team: %s", Const::TFTeamNames::CStrings[pPlayer->TeamNum.get<int>()]);
 				renderer.AddText(fmt);
 			}
 
@@ -85,7 +85,7 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 			if (player_esp->DrawUberPerc && pPlayer->Class == Const::TFClass::Medic)
 			{
 				const auto& Weapons = pPlayer->MyWeapons;
-				for (size_t i = 0; Weapons[i] && i < 3; i++)
+				for (int i = 0; Weapons[i] && i < 3; i++)
 				{
 					const IBaseWeapon pWep(Weapons[i]);
 					if (pWep && pWep->IsClassID(Const::EntClassID::CWeaponMedigun))

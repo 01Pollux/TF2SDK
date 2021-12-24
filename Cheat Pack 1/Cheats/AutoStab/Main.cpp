@@ -1,12 +1,12 @@
 
-#include <Interfaces/GameData.hpp>
+#include <shadowgarden/interfaces/GameData.hpp>
+
+#include <tf2/entity/BasePlayer.hpp>
+#include <tf2/entity/BaseWeapon.hpp>
+
+#include <tf2/client/UserCmd.hpp>
 
 #include "AutoStab.hpp"
-
-#include <Entity/BasePlayer.hpp>
-#include <Entity/BaseWeapon.hpp>
-
-#include <Client/UserCmd.hpp>
 
 static AutoBackstab auto_stab;
 
