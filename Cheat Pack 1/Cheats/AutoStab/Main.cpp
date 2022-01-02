@@ -3,6 +3,7 @@
 
 #include <tf2/entity/BasePlayer.hpp>
 #include <tf2/entity/BaseWeapon.hpp>
+#include <tf2/engine/GameTrace.hpp>
 
 #include <tf2/client/UserCmd.hpp>
 
@@ -56,6 +57,9 @@ void AutoBackstab::OnPluginUnload()
 
 SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 {
+	if (!m_Enabled)
+		return{ };
+
 	auto cmd = pArgs->get<TF2::Const::UserCmd*>(1);
 	if (!cmd || !cmd->CmdNumber)
 		return{ };
@@ -73,17 +77,23 @@ SG::MHookRes AutoBackstab::OnCreateMove(SG::PassArgs* pArgs)
 
 	if (pCurWpn->ReadyToBackstab)
 	{
-		if (!m_CheckUber || !m_CheckInvisible)
+		if (m_CheckUber || m_CheckInvisible)
 		{
-			TF2::ITFPlayer pEnt(pCurWpn->BackstabVictim);
-			if (m_CheckUber && pEnt->IsPlayerInvunerable())
-				return{ };
+			TF2::GameTrace trace;
+			if (pCurWpn->DoSwingTrace(trace) && trace.Entity)
+			{
+				TF2::ITFPlayer pTarget{ trace.Entity };
+				if (m_CheckUber && pTarget->IsPlayerInvunerable())
+					return{ };
 
-			if (m_CheckInvisible && pEnt->IsPlayerInvisible())
-				return{ };
+				if (m_CheckInvisible && pTarget->IsPlayerInvisible())
+					return{ };
+			}
+			else return{ };
 		}
 
 		cmd->Buttons |= TF2::Const::UserCmd::Keys::Attack;
 	}
+
 	return{ };
 }

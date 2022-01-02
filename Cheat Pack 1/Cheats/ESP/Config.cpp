@@ -3,7 +3,7 @@
 #include "ESP.hpp"
 
 using ESPInst = ESPInfo::Shared&;
-static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG::Config<ESPInfo::HealthBarMode>* health_bar)
+static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG::ConVar<ESPInfo::HealthBarMode>* health_bar)
 {
 	state.add(ImGui::Checkbox("Enable", esp.Enable.data()));
 	ImGui::SameLineHelp(esp.Enable);
@@ -79,15 +79,15 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 
 	if (health_bar)
 	{
-		constexpr std::array names = ESPInfo::HealthBarMode::json_get_keyvalues();
-		size_t current_type = health_bar->get();
+		constexpr std::array names = ESPInfo::HealthBarMode::type_names();
+		size_t current_type = static_cast<size_t>(static_cast<ESPInfo::HealthBarMode::type>(health_bar->get()));
 
-		if (ImGui::BeginCombo("Health bar", names[current_type].first))
+		if (ImGui::BeginCombo("Health bar", names[current_type].first.data()))
 		{
 			for (size_t i = 0; i < static_cast<size_t>(ESPInfo::HealthBarMode::type::Count); i++)
 			{
 				const bool is_selected = i == current_type;
-				if (ImGui::Selectable(names[i].first, is_selected))
+				if (ImGui::Selectable(names[i].first.data(), is_selected))
 				{
 					state.set();
 					*health_bar = static_cast<ESPInfo::HealthBarMode::type>(i);
@@ -260,195 +260,78 @@ bool GlobalESP::OnRender()
 	return state;
 }
 
-void GlobalESP::OnSaveConfig(nlohmann::json& cfg)
+void GlobalESP::OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const
 {
-	using nlohmann::json;
+	SG::IPlugin::FileConfigs esp_cfg("esp_config");
 
-	json& esp_info = cfg["ESP"];
-	auto SaveGeneric = [](const ESPInfo::Shared& cur_esp, json& out_js)
+	auto SaveGeneric = [&esp_cfg](const ESPInfo::Shared& cur_esp)
 	{
-		cur_esp.Enable.to_json(out_js);
-		cur_esp.Rainbow.Speed.to_json(out_js["rainbow"]);
+		esp_cfg.insert(cur_esp.Enable);
+		esp_cfg.insert(cur_esp.Rainbow.Speed);
 		{
-			json& box = out_js["box"];
-			cur_esp.Box.DrawColor.to_json(box);
-			cur_esp.Box.LineThickness.to_json(box);
+			esp_cfg.insert(cur_esp.Box.DrawColor);
+			esp_cfg.insert(cur_esp.Box.LineThickness);
 		}
 		{
-			json& outline_box = out_js["outline box"];
-			cur_esp.OutlineBox.DrawColor.to_json(outline_box);
-			cur_esp.OutlineBox.OutlineColor.to_json(outline_box);
-			cur_esp.OutlineBox.LineThickness.to_json(outline_box);
+			esp_cfg.insert(cur_esp.OutlineBox.DrawColor);
+			esp_cfg.insert(cur_esp.OutlineBox.OutlineColor);
+			esp_cfg.insert(cur_esp.OutlineBox.LineThickness);
 		}
 		{
-			cur_esp.Text.Color.to_json(out_js);
-			cur_esp.Text.Offset.to_json(out_js);
-			cur_esp.Text.Height.to_json(out_js);
-			cur_esp.Text.Size.to_json(out_js);
+			esp_cfg.insert(cur_esp.Text.Color);
+			esp_cfg.insert(cur_esp.Text.Offset);
+			esp_cfg.insert(cur_esp.Text.Height);
+			esp_cfg.insert(cur_esp.Text.Size);
 		}
 
-		cur_esp.MaxDistance.to_json(out_js);
-		cur_esp.DrawMode.to_json(out_js);
-		cur_esp.DrawName.to_json(out_js);
-		cur_esp.DrawDistance.to_json(out_js);
+		esp_cfg.insert(cur_esp.MaxDistance);
+		esp_cfg.insert(cur_esp.DrawMode);
+		esp_cfg.insert(cur_esp.DrawName);
+		esp_cfg.insert(cur_esp.DrawDistance);
 	};
 
 	{
-		json& player_esp = esp_info["Players"];
 		for (int i = 0; i < std::ssize(m_PlayerESPInfo); i++)
 		{
-			json& cur_team = player_esp[ESPInfo::TeamNames[i]];
 			const auto& cur_esp = m_PlayerESPInfo[i];
-			
-			SaveGeneric(cur_esp, cur_team);
+			SaveGeneric(cur_esp);
 
-			cur_esp.DrawClass.to_json(cur_team);
-			cur_esp.DrawCond.to_json(cur_team);
-			cur_esp.DrawUberPerc.to_json(cur_team);
-			cur_esp.IgnoreCloak.to_json(cur_team);
-			cur_esp.DrawTeam.to_json(cur_team);
-			cur_esp.HealthbarMode.to_json(cur_team);
+			esp_cfg.insert(cur_esp.DrawClass);
+			esp_cfg.insert(cur_esp.DrawCond);
+			esp_cfg.insert(cur_esp.DrawUberPerc);
+			esp_cfg.insert(cur_esp.IgnoreCloak);
+			esp_cfg.insert(cur_esp.DrawTeam);
+			esp_cfg.insert(cur_esp.HealthbarMode);
 		}
 	}
 	
 	{
-		json& building_esp = esp_info["Buildings"];
 		for (int i = 0; i < std::ssize(m_BuildingESPInfo); i++)
 		{
-			json& cur_team = building_esp[ESPInfo::TeamNames[i]];
 			const auto& cur_esp = m_BuildingESPInfo[i];
-			
-			SaveGeneric(cur_esp, cur_team);
+			SaveGeneric(cur_esp);
 
-			cur_esp.DrawOwner.to_json(cur_team);
-			cur_esp.DrawAmmo.to_json(cur_team);
-			cur_esp.DrawLevel.to_json(cur_team);
-			cur_esp.DrawBState.to_json(cur_team);
-			cur_esp.DrawHealth.to_json(cur_team);
-			cur_esp.DrawTeam.to_json(cur_team);
-			cur_esp.HealthbarMode.to_json(cur_team);
+			esp_cfg.insert(cur_esp.DrawOwner);
+			esp_cfg.insert(cur_esp.DrawAmmo);
+			esp_cfg.insert(cur_esp.DrawLevel);
+			esp_cfg.insert(cur_esp.DrawBState);
+			esp_cfg.insert(cur_esp.DrawHealth);
+			esp_cfg.insert(cur_esp.DrawTeam);
+			esp_cfg.insert(cur_esp.HealthbarMode);
 		}
 	}
 
 	{
-		json& extra_esp = esp_info["Extras"];
 		const auto& cur_esp = m_ObjectESPInfo;
 
-		SaveGeneric(cur_esp, extra_esp);
+		SaveGeneric(cur_esp);
 
-		cur_esp.DrawPacks.to_json(extra_esp);
-		cur_esp.DrawRockets.to_json(extra_esp);
-		cur_esp.DrawPipes.to_json(extra_esp);
-		cur_esp.DrawStickies.to_json(extra_esp);
-		cur_esp.DrawNPC.to_json(extra_esp);
+		esp_cfg.insert(cur_esp.DrawPacks);
+		esp_cfg.insert(cur_esp.DrawRockets);
+		esp_cfg.insert(cur_esp.DrawPipes);
+		esp_cfg.insert(cur_esp.DrawStickies);
+		esp_cfg.insert(cur_esp.DrawNPC);
 	}
-}
 
-void GlobalESP::OnReloadConfig(const nlohmann::json& cfg)
-{
-	using nlohmann::json;
-
-	auto LoadGeneric = [](ESPInfo::Shared& cur_esp, const json& in_js)
-	{
-		cur_esp.Enable.from_json(in_js);
-		if (auto rainbow = in_js.find("rainbow"); rainbow != in_js.end() && rainbow->is_number_float())
-			cur_esp.Rainbow.Speed.from_json(*rainbow);
-		if (auto box = in_js.find("box"); box != in_js.end() && box->is_object())
-		{
-			cur_esp.Box.DrawColor.from_json(*box);
-			cur_esp.Box.LineThickness.from_json(*box);
-		}
-
-		if (auto outline_box = in_js.find("outline box"); outline_box != in_js.end() && outline_box->is_object())
-		{
-			cur_esp.OutlineBox.DrawColor.from_json(*outline_box);
-			cur_esp.OutlineBox.OutlineColor.from_json(*outline_box);
-			cur_esp.OutlineBox.LineThickness.from_json(*outline_box);
-		}
-		{
-
-			cur_esp.Text.Color.from_json(in_js);
-			cur_esp.Text.Offset.from_json(in_js);
-			cur_esp.Text.Height.from_json(in_js);
-			cur_esp.Text.Size.from_json(in_js);
-		}
-		cur_esp.MaxDistance.from_json(in_js);
-		cur_esp.DrawMode.from_json(in_js);
-		cur_esp.DrawName.from_json(in_js);
-		cur_esp.DrawDistance.from_json(in_js);
-	};
-
-	auto iter = cfg.find("ESP");
-	if (iter != cfg.end())
-	{
-		{
-			auto player_esp = iter->find("Players");
-			if (player_esp != iter->end())
-			{
-				for (int i = 0; i < std::ssize(m_PlayerESPInfo); i++)
-				{
-					auto cur_team_iter = player_esp->find(ESPInfo::TeamNames[i]);
-					if (cur_team_iter == player_esp->end())
-						continue;
-
-					const auto& cur_team = *cur_team_iter;
-					auto& cur_esp = m_PlayerESPInfo[i];
-
-					LoadGeneric(cur_esp, cur_team);
-
-					cur_esp.DrawClass.from_json(cur_team);
-					cur_esp.DrawCond.from_json(cur_team);
-					cur_esp.DrawUberPerc.from_json(cur_team);
-					cur_esp.IgnoreCloak.from_json(cur_team);
-					cur_esp.DrawTeam.from_json(cur_team);
-					cur_esp.HealthbarMode.from_json(cur_team);
-				}
-			}
-			
-		}
-
-		{
-			auto building_esp = iter->find("Players");
-			if (building_esp != iter->end())
-			{
-				for (int i = 0; i < std::ssize(m_BuildingESPInfo); i++)
-				{
-					const auto cur_team_iter = building_esp->find(ESPInfo::TeamNames[i]);
-					if (cur_team_iter == building_esp->end())
-						continue;
-
-					const auto& cur_team = *cur_team_iter;
-					auto& cur_esp = m_BuildingESPInfo[i];
-
-					LoadGeneric(cur_esp, cur_team);
-
-					cur_esp.DrawOwner.from_json(cur_team);
-					cur_esp.DrawAmmo.from_json(cur_team);
-					cur_esp.DrawLevel.from_json(cur_team);
-					cur_esp.DrawBState.from_json(cur_team);
-					cur_esp.DrawHealth.from_json(cur_team);
-					cur_esp.DrawTeam.from_json(cur_team);
-					cur_esp.HealthbarMode.from_json(cur_team);
-				}
-			}
-		}
-
-		{
-			auto extra_esp_iter = iter->find("Extras");
-
-			if (extra_esp_iter != iter->end())
-			{
-				const auto& extra_esp = *extra_esp_iter;
-				auto& cur_esp = m_ObjectESPInfo;
-
-				LoadGeneric(cur_esp, extra_esp);
-
-				cur_esp.DrawPacks.from_json(extra_esp);
-				cur_esp.DrawRockets.from_json(extra_esp);
-				cur_esp.DrawPipes.from_json(extra_esp);
-				cur_esp.DrawStickies.from_json(extra_esp);
-				cur_esp.DrawNPC.from_json(extra_esp);
-			}
-		}
-	}
+	cfg.emplace_back(std::move(esp_cfg));
 }

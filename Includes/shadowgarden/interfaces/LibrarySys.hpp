@@ -73,12 +73,13 @@ public:
 	static constexpr const char* MainName	= "Pleiades";
 	static constexpr const char* MainDir	= "Pleiades";
 	static constexpr const char* MainLog	= "Pleiades";
-	static constexpr const char* MainCfg	= "Pleiades\\Pleiades.json";
-	static constexpr const char* CommonTag	= "Pleiades\\Pleiades";
-	static constexpr const char* PluginsDir = "Pleiades\\Plugins";
-	static constexpr const char* SoundsDir	= "Pleiades\\Sounds";
-	static constexpr const char* LogsDir	= "Pleiades\\Logs";
-	static constexpr const char* ProfilerDir= "Pleiades\\Logs\\Profiler";
+	static constexpr const char* MainCfg	= "Pleiades/Pleiades.json";
+	static constexpr const char* CommonTag	= "Pleiades/Pleiades";
+	static constexpr const char* PluginsDir = "Pleiades/Plugins";
+	static constexpr const char* SoundsDir	= "Pleiades/Sounds";
+	static constexpr const char* ConfigDir	= "Pleiades/Configs";
+	static constexpr const char* LogsDir	= "Pleiades/Logs";
+	static constexpr const char* ProfilerDir= "Pleiades/Logs/Profiler";
 
 	/// <summary>
 	/// read a pre-loaded library

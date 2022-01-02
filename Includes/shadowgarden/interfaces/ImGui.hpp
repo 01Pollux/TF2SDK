@@ -2,217 +2,10 @@
 
 #include <array>
 #include <imgui/imgui.h>
-#include <nlohmann/json.hpp>
+#include <shadowgarden/config.hpp>
 #include "InterfacesSys.hpp"
 
 SG_NAMESPACE_BEGIN;
-
-template<typename _Ty>
-struct Config
-{
-	using value_type = _Ty;
-	using reference = value_type&;
-	using const_reference = const value_type&;
-	using pointer = value_type*;
-	using const_pointer = const value_type*;
-
-	/// <summary>
-	/// Construct a Config value in 'vars'
-	/// </summary>
-	/// <param name="key_name">section name in 'vars'</param>
-	/// <param name="name">variable's name that should be displayed in ImGui, key's name is 'name'</param>
-	/// <param name="defval">variable's value, key's name is 'value'</param>
-	/// <param name="description">variable's description, optioanl and should be used 'ImGui::DrawHelp', key's name is 'description'</param>
-	constexpr explicit Config(const char* key_name = "", const value_type& defval = value_type{}, const char* description = nullptr) :
-		CfgName(key_name), Description(description), Value(defval) { }
-
-	void set_key(const char* name) noexcept { CfgName = name; }
-	_NODISCARD const char* key() const noexcept { return CfgName; }
-
-	_NODISCARD bool has_description() const noexcept { return Description != nullptr; }
-	_NODISCARD const char* description() const noexcept { return Description; }
-
-	_NODISCARD const_reference get() const noexcept { return Value; }
-	_NODISCARD reference get() noexcept { return Value; }
-
-	_NODISCARD operator const_reference() const noexcept { return get(); }
-	_NODISCARD operator reference() noexcept { return get(); }
-
-	template<typename _OTypeInfo>
-	const_reference operator=(const Config<_OTypeInfo>& o) { return (Value = static_cast<const_reference>(o.Value)); }
-	template<typename _Ty>
-	const_reference operator=(const _Ty& o) { return (Value = static_cast<const_reference>(o)); }
-
-	template<typename _Ty = value_type> _NODISCARD auto operator<=>(const _Ty& o) const noexcept { return Value <=> static_cast<const_reference>(o); }
-	template<typename _Ty = value_type> _NODISCARD bool operator!=(const _Ty& o) const noexcept { return Value != static_cast<const_reference>(o); }
-
-	template<typename _Ty = value_type> _NODISCARD auto operator<=>(const Config<_Ty>& prop) const noexcept { return Value <=> static_cast<const_reference>(prop.Value); }
-	template<typename _Ty = value_type> _NODISCARD bool operator!=(const Config<_Ty>& prop) const noexcept { return Value != static_cast<const_reference>(prop.Value); }
-
-	_NODISCARD auto operator+() const noexcept { return +this->Value; }
-	_NODISCARD auto operator-() const noexcept { return -this->Value; }
-	_NODISCARD auto operator~() const noexcept { return ~this->Value; }
-
-	auto operator++() { return ++Value; }
-	auto operator--() { return --Value; }
-	auto operator++(int) { return Value++; }
-	auto operator--(int) { return Value--; }
-
-public:
-
-#define SG_CONFIG_OPEARTOR(SYMBOL)												\
-	reference operator##SYMBOL##=(const Config& prop) noexcept					\
-	{																			\
-		Value SYMBOL##= prop.Value;												\
-		return *this;															\
-	}																			\
-	template<typename _Ty>														\
-	reference operator##SYMBOL##=(const _Ty& o)	noexcept						\
-	{																			\
-		Value SYMBOL##= static_cast<const_reference>(o);						\
-		return *this;															\
-	}																			\
-	_NODISCARD value_type operator##SYMBOL(const Config& prop) const noexcept	\
-	{																			\
-		return Value SYMBOL prop.Value;											\
-	}																			\
-	template<typename _Ty>														\
-	_NODISCARD value_type operator##SYMBOL(const _Ty& o) const noexcept			\
-	{																			\
-		return Value SYMBOL static_cast<const_reference>(o);					\
-	}
-
-	SG_CONFIG_OPEARTOR(+);
-	SG_CONFIG_OPEARTOR(-);
-	SG_CONFIG_OPEARTOR(/ );
-	SG_CONFIG_OPEARTOR(*);
-	SG_CONFIG_OPEARTOR(%);
-	SG_CONFIG_OPEARTOR(&);
-	SG_CONFIG_OPEARTOR(| );
-	SG_CONFIG_OPEARTOR(^);
-	SG_CONFIG_OPEARTOR(<<);
-	SG_CONFIG_OPEARTOR(>>);
-
-#undef SG_CONFIG_OPEARTOR
-
-public:
-	_NODISCARD auto data() const noexcept
-	{
-		if constexpr (requires(const _Ty& v) { v.data(); })
-			return Value.data();
-		else
-			return &Value;
-	}
-
-	_NODISCARD auto data() noexcept
-	{
-		if constexpr (requires(const _Ty& v) { v.data(); })
-			return Value.data();
-		else
-			return &Value;
-	}
-
-	_NODISCARD auto begin() const noexcept
-	{
-		if constexpr (requires(const _Ty& v) { std::begin(v); })
-			return Value.begin();
-		else
-			return &Value;
-	}
-
-	_NODISCARD auto begin() noexcept
-	{
-		if constexpr (requires(const _Ty& v) { std::begin(v); })
-			return Value.begin();
-		else
-			return &Value;
-	}
-
-	_NODISCARD auto end() const noexcept
-	{
-		if constexpr (requires(const _Ty& v) { std::end(v); })
-			return Value.end();
-		else
-			return begin() + sizeof(_Ty);
-	}
-
-	_NODISCARD auto end() noexcept
-	{
-		if constexpr (requires(const _Ty& v) { std::end(v); })
-			return Value.end();
-		else
-			return begin() + sizeof(_Ty);
-	}
-
-public:
-	pointer operator->() noexcept { return &Value; }
-	constexpr const_pointer operator->() const noexcept { return &Value; }
-
-	template<typename _IdxType = size_t>
-	_NODISCARD const auto& operator[](const _IdxType& _idx) const noexcept
-	{
-		return Value[_idx];
-	}
-
-	template<typename _IdxType = size_t>
-	_NODISCARD auto& operator[](const _IdxType& _idx) noexcept
-	{
-		return Value[_idx];
-	}
-
-	void to_json(nlohmann::json& js) const
-	{
-		nlohmann::json& sec{ js[key()] };
-		constexpr bool has_to_json = requires(const _Ty& v, nlohmann::json & js) { v.to_json(js); };
-		constexpr bool has_get = requires(const _Ty& v) { v.get(); };
-		nlohmann::json& value = sec["value"];
-
-		if constexpr (has_to_json)
-		{
-			Value.to_json(value);
-		}
-		else if constexpr (has_get)
-		{
-			value = Value.get();
-		}
-		else
-		{
-			sec["value"] = Value;
-		}
-		if (has_description())
-			sec["description"] = Description;
-	}
-
-	void from_json(const nlohmann::json& js)
-	{
-		const auto iter = js.find(key());
-		if (iter != js.end())
-		{
-			constexpr bool has_from_json = requires(_Ty& v, const nlohmann::json & js) { v.from_json(js); };
-			constexpr bool has_get = requires(_Ty& v) { v.get(); };
-			const nlohmann::json& value = (*iter)["value"];
-
-			if constexpr (has_from_json)
-			{
-				Value.from_json(value);
-			}
-			else if constexpr (has_get)
-			{
-				value.get_to(Value.get());
-			}
-			else
-			{
-				value.get_to(Value);
-			}
-		}
-	}
-	
-private:
-	const char* Description;
-	const char* CfgName;
-	_Ty Value;
-};
-
 
 class ConfigState
 {
@@ -227,66 +20,6 @@ public:
 private:
 	bool m_Changed{ };
 };
-
-
-#define SG_CONFIG_GET_ENUM()							\
-static constexpr auto json_get_keyvalues() noexcept
-
-
-#define SG_CONFIG_IMPL_GET_ENUM(Var)					\
-void to_json(nlohmann::json& js) const					\
-{														\
-	for (auto& [name, value] : json_get_keyvalues())	\
-	{													\
-		if (Var == value)								\
-		{												\
-			js = name;									\
-			break;										\
-		}												\
-	}													\
-}														\
-														\
-void from_json(const nlohmann::json& js)				\
-{														\
-	for (auto& [name, value] : json_get_keyvalues())	\
-	{													\
-		if (js == name)									\
-		{												\
-			Var = value;								\
-			break;										\
-		}												\
-	}													\
-}
-
-/*
-class MyTestClass
-{
-public:
-	enum class type : char
-	{
-		e0,
-		e1,
-		e2
-	};
-
-	constexpr MyTestClass(type type = type::e0) noexcept : m_Type(type) { }
-	constexpr operator type() const noexcept { return m_Type; }
-
-	SG_CONFIG_GET_ENUM()
-	{
-		return std::array{
-			std::pair{ "var0", type::e0 },
-			std::pair{ "var1", type::e1 },
-			std::pair{ "var2 outline", type::e2 },
-		};
-	}
-	SG_CONFIG_IMPL_GET_ENUM();
-
-private:
-	type m_Type;
-}
-*/
-
 
 using ImGuiPluginCallback = std::function<bool()>;
 using ImGuiPlCallbackId = uint32_t;
@@ -336,7 +69,7 @@ SG_NAMESPACE_END;
 // Helpers for SG::Config, etc
 namespace ImGui
 {
-	inline void DrawHelp(const char* text)
+	inline void DrawHelp(const char* text, const char* end_text = nullptr)
 	{
 		ImGui::TextDisabled("(?)");
 		if (ImGui::IsItemHovered())
@@ -352,7 +85,7 @@ namespace ImGui
 	}
 
 	template<typename _Ty>
-	inline void Help(const SG::Config<_Ty>& var)
+	inline void Help(const SG::ConVar<_Ty>& var)
 	{
 		if (var.has_description())
 			DrawHelp(var.description());
@@ -364,13 +97,12 @@ namespace ImGui
 		DrawHelp(text);
 	}
 
-	template<typename _Ty>
-	inline void SameLineHelp(const SG::Config<_Ty>& var)
+	inline void SameLineHelp(const SG::ConCommand& var)
 	{
 		if (var.has_description())
 		{
 			ImGui::SameLine();
-			DrawHelp(var.description());
+			DrawHelp(var.description().data(), var.description().data() + var.description().size());
 		}
 	}
 	

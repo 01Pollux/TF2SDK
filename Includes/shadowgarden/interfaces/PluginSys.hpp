@@ -1,10 +1,9 @@
 #pragma once
 
 #include <map>
-#include <vector>
-#include <nlohmann/json_fwd.hpp>
 #include <shadowgarden/users/Version.hpp>
 #include "InterfacesSys.hpp"
+#include <shadowgarden/config.hpp>
 
 SG_NAMESPACE_BEGIN;
 
@@ -56,16 +55,6 @@ public:
 	virtual void OnPluginPauseChange(bool pausing) { }
 
 	/// <summary>
-	/// Called when a plugin wants to save current data to json file
-	/// </summary>
-	virtual void OnSaveConfig(nlohmann::json& cfg) { }
-
-	/// <summary>
-	/// Called when a plugin wants to load from json file to data
-	/// </summary>
-	virtual void OnReloadConfig(const nlohmann::json& cfg) { }
-
-	/// <summary>
 	/// Get registered plugin info
 	/// </summary>
 	const PluginInfo* GetPluginInfo() const noexcept
@@ -105,9 +94,31 @@ public:
 		return m_FileName;
 	}
 
+	struct FileConfigs
+	{
+		std::string_view FileName;
+		std::vector<std::pair<std::string_view, std::string>> Commands;
+
+		template<typename _Ty>
+		void insert(const _Ty& cvar)
+		{
+			Commands.emplace_back(
+				cvar.name(),
+				cvar.str()
+			);
+		}
+
+		FileConfigs(const std::string_view& name = "") noexcept(std::is_nothrow_constructible_v<decltype(Commands), decltype(FileName)>) :
+			FileName(name)
+		{ }
+	};
+
+	virtual void OnSaveConfig(std::vector<FileConfigs>& configs) const
+	{ }
+
 private:
 	std::string m_FileName;
-	bool m_IsPaused;
+	bool m_IsPaused{ true };
 	const PluginInfo m_PluginInfo;
 };
 

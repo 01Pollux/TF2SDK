@@ -51,16 +51,10 @@ public:
 			iface->OnPluginPauseChange(pausing);
 	}
 
-	void OnSaveConfig(nlohmann::json& cfg) override
+	void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const override
 	{
 		for (auto iface : ICheatIFace::GetEntries())
 			iface->OnSaveConfig(cfg);
-	}
-
-	void OnReloadConfig(const nlohmann::json& cfg) override
-	{
-		for (auto iface : ICheatIFace::GetEntries())
-			iface->OnReloadConfig(cfg);
 	}
 
 private:

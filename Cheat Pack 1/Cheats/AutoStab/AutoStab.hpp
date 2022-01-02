@@ -14,15 +14,14 @@ private:
 
 	SG::MHookRes OnCreateMove(SG::PassArgs* pArgs);
 
-	void OnSaveConfig(nlohmann::json& cfg);
-	void OnReloadConfig(const nlohmann::json& cfg);
+	void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const override;
 
 	bool OnRender();
 
 	SG::ISHookToken m_CreateMove;
 
-	SG::Config<bool> m_Enabled{ "enable", false, "Enable auto-backstab" };
+	SG::ConVar<bool> m_Enabled{ "autostab_enable", false, "Enable auto-backstab" };
 
-	SG::Config<bool> m_CheckUber{ "check ubercharge", true, "Don't backstab when the enemy is invunerable" };
-	SG::Config<bool> m_CheckInvisible{ "check visible", true, "Don't backstab when the enemy is invisible" };
+	SG::ConVar<bool> m_CheckUber{ "autostab_check_uber", true, "Don't backstab when the enemy is invunerable" };
+	SG::ConVar<bool> m_CheckInvisible{ "autostab_check_visible", true, "Don't backstab when the enemy is invisible" };
 };

@@ -28,37 +28,42 @@ namespace ShadowGarden
 
 
 #ifdef SG_USING_PL_MANAGER
-namespace ShadowGarden { extern IPluginManager* PluginManager; }
+namespace ShadowGarden { inline IPluginManager* PluginManager; }
 #endif
 
 #ifdef SG_USING_LIBRARY
 #include <shadowgarden/interfaces/LibrarySys.hpp>
-namespace ShadowGarden { extern ILibraryManager* LibManager; }
+namespace ShadowGarden { inline ILibraryManager* LibManager; }
 #endif
 
 #ifdef SG_USING_LOGGER
 #include <shadowgarden/interfaces/Logger.hpp>
-namespace ShadowGarden { extern ILogger* Logger; }
+namespace ShadowGarden { inline ILogger* Logger; }
 #endif
 
 #ifdef SG_USING_EVENT_MANAGER
 #include <shadowgarden/interfaces/EventManager.hpp>
-namespace ShadowGarden { extern IEventManager* EventManager; }
+namespace ShadowGarden { inline IEventManager* EventManager; }
 #endif
 
 #ifdef SG_USING_DETOUR_MANAGER
 #include <shadowgarden/interfaces/HookArgs.hpp>
 #include <shadowgarden/interfaces/HooksManager.hpp>
-namespace ShadowGarden { extern IDetoursManager* DetourManager; }
+namespace ShadowGarden { inline IDetoursManager* DetourManager; }
 #endif
 
 #ifdef SG_USING_IMGUI
 #include <shadowgarden/interfaces/ImGui.hpp>
-namespace ShadowGarden { extern IImGuiLoader* ImGuiLoader; }
+namespace ShadowGarden { inline IImGuiLoader* ImGuiLoader; }
 #endif
 
 #ifdef SG_USING_PROFILER
 #include <shadowgarden/users/Profiler.hpp>
+#endif
+
+#ifdef SG_USING_CONCOMMANDS
+#include <shadowgarden/config.hpp>
+namespace ShadowGarden { inline IConsoleManager* ConsoleManager; }
 #endif
 
 namespace ShadowGarden

@@ -194,9 +194,9 @@
     <ClCompile Include="Cheats\ESP\Config.cpp" />
     <ClCompile Include="Cheats\ESP\Draw.cpp" />
     <ClCompile Include="Cheats\ESP\Main.cpp" />
+    <ClCompile Include="Cheats\ESP\Player.cpp" />
     <ClCompile Include="Cheats\SpectatorList\Config.cpp" />
     <ClCompile Include="Cheats\SpectatorList\Main.cpp" />
-    <ClCompile Include="Cheats\ESP\Player.cpp" />
     <ClCompile Include="dllImpl.cpp" />
     <ClCompile Include="cheat_pack.cpp" />
   </ItemGroup>

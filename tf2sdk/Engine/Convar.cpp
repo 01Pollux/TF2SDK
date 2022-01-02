@@ -79,13 +79,14 @@ void ConCommandBase::CreateBase(const char* pName, const char* pHelpString, uint
 
 	if (!(Flags & Const::ConvarFlags::Unregistered))
 	{
-		NextBase = ConCommandBases;
-		ConCommandBases = this;
+		NextBase = ConCommandBase::ConCommandBases;
+		ConCommandBase::ConCommandBases = this;
 	}
 	else
-		NextBase = NULL;
+		NextBase = nullptr;
 
-	Init();
+	if (ConCommandBase::Accessor)
+		Init();
 }
 
 void ConCommandBase::Shutdown()

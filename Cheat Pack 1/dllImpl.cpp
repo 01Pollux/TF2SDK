@@ -1,40 +1,16 @@
 
 #include "Defines.hpp"
-#include <boost/config.hpp>
-
-namespace ShadowGarden
-{
-#ifdef SG_USING_PL_MANAGER
-	IPluginManager* PluginManager;
-#endif
-#ifdef SG_USING_LIBRARY
-	ILibraryManager* LibManager;
-#endif
-#ifdef SG_USING_LOGGER
-	ILogger* Logger;
-#endif
-#ifdef SG_USING_EVENT_MANAGER
-	IEventManager* EventManager;
-#endif
-#ifdef SG_USING_DETOUR_MANAGER
-	IDetoursManager* DetourManager;
-#endif
-#ifdef SG_USING_IMGUI
-	IImGuiLoader* ImGuiLoader;
-#endif
-}
 
 extern "C" BOOST_SYMBOL_EXPORT
-SG::IPlugin * Tella_GetPlugin()
+SG::IPlugin* Tella_GetPlugin()
 {
 	return SG::ThisPlugin;
 }
 
-
 SG::IPluginImpl::IPluginImpl() noexcept : IPlugin(SG::ThisPluginInfo) { }
 
 #if defined SG_USING_PROFILER && !defined SG_USING_LIBRARY
-#include "Interfaces/LibrarySys.hpp"
+#include <shadowgarden/interfaces/LibrarySys.hpp>
 #endif
 
 bool SG::IPluginImpl::OnPluginLoad(SG::IPluginManager* ifacemgr)
@@ -71,5 +47,10 @@ bool SG::IPluginImpl::OnPluginLoad(SG::IPluginManager* ifacemgr)
 		SG::Profiler::Manager::Set(pProfiler);
 	}
 #endif
+#ifdef SG_USING_CONCOMMANDS
+	if (!SG::GetInterface(Interface_ConsoleManager, ifacemgr, ConsoleManager))
+		return false;
+#endif
+	SG::ConCommand::Init(SG::ThisPlugin, ConsoleManager);
 	return this->OnPluginLoad2(ifacemgr);
 }

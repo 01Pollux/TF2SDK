@@ -33,19 +33,19 @@
     <ClCompile Include="Cheats\SpectatorList\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cheats\ESP\Main.cpp">
+    <ClCompile Include="Cheats\ESP\Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cheats\ESP\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cheats\ESP\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cheats\ESP\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cheats\ESP\Building.cpp">
+    <ClCompile Include="Cheats\ESP\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats\ESP\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

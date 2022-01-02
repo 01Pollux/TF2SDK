@@ -3,10 +3,11 @@
 #include <type_traits>
 #include <array>
 #include <cmath>
+
 #include <tf2/config.hpp>
+#include <shadowgarden/config/args.hpp>
 
 TF2_NAMESPACE_BEGIN();
-
 
 template<typename _Ty, size_t _Size>
 class VectorXD
@@ -113,26 +114,26 @@ public:
 			v = -v;
 	}
 
-	_NODISCARD constexpr double dot(const VectorXD& other) const noexcept
+	_NODISCARD constexpr float dot(const VectorXD& other) const noexcept
 	{
-		double res = 0.;
+		float res = 0.;
 		for (
 			auto meit = cbegin(), oit = other.cbegin();
 			meit != cend();
 			meit++, oit++
 		)
 		{
-			res += static_cast<double>(*meit) * *oit;
+			res += static_cast<float>(*meit) * *oit;
 		}
 		return res;
 	}
 
-	_NODISCARD constexpr double length_sqr() const noexcept
+	_NODISCARD constexpr float length_sqr() const noexcept
 	{
 		return dot(*this);
 	}
 
-	_NODISCARD constexpr double length() const noexcept
+	_NODISCARD constexpr float length() const noexcept
 	{
 		return std::sqrt(length_sqr());
 	}
@@ -157,9 +158,9 @@ public:
 		return true;
 	}
 
-	double normalize() noexcept
+	float normalize() noexcept
 	{
-		double len = this->length();
+		float len = this->length();
 		if (len)
 		{
 			this->operator/=(static_cast<value_type>(len));
@@ -186,12 +187,12 @@ public:
 		return true;
 	}
 	
-	_NODISCARD constexpr double distance_to(const VectorXD& other) const noexcept
+	_NODISCARD constexpr float distance_to(const VectorXD& other) const noexcept
 	{
 		return (other - *this).length();
 	}
 
-	_NODISCARD constexpr double distance_to_sqr(const VectorXD& other) const noexcept
+	_NODISCARD constexpr float distance_to_sqr(const VectorXD& other) const noexcept
 	{
 		return (other - *this).length_sqr();
 	}
@@ -216,7 +217,7 @@ public:
 
 
 	// Multiply, add, and assign to this (ie: *this = a + b * scalar). This
-	void mult_add(const VectorXD& a, const VectorXD& b, double scalar) noexcept
+	void mult_add(const VectorXD& a, const VectorXD& b, float scalar) noexcept
 	{
 		iterator meit = begin();
 		for (
@@ -435,14 +436,97 @@ using Quaternion_F = Vector4D_F;
 using Quaternion_D = Vector4D_D;
 
 using Color3_8		= VectorXD<uint8_t, 3>;
-using Color3_16		= VectorXD<uint16_t, 3>;
-using Color3_32		= VectorXD<uint32_t, 3>;
 using Color3_F		= VectorXD<float, 3>;
 
 using Color4_8		= VectorXD<uint8_t, 4>;
-using Color4_16		= VectorXD<uint16_t, 4>;
-using Color4_32		= VectorXD<uint32_t, 4>;
 using Color4_F		= VectorXD<float, 4>;
 
-
 TF2_NAMESPACE_END();
+
+
+template<>                                                                 
+struct ShadowGarden::CommandParser<TF2::Vector2D_I>::typeinfo
+{                                                                          
+    using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_I::array_type>::typeinfo;
+    static constexpr const char* type_name = parent_type::type_name;	   
+    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
+};                                                                          
+
+template<>                                                                 
+struct ShadowGarden::CommandParser<TF2::Vector3D_I>::typeinfo
+{                                                                          
+    using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_I::array_type>::typeinfo;
+    static constexpr const char* type_name = parent_type::type_name;	   
+    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
+};                                                                          
+
+template<>                                                                 
+struct ShadowGarden::CommandParser<TF2::Vector4D_I>::typeinfo
+{                                                                          
+    using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_I::array_type>::typeinfo;
+    static constexpr const char* type_name = parent_type::type_name;	   
+    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
+};                                                                          
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector2D_F>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_F::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector3D_F>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_F::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector4D_F>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_F::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector2D_D>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_D::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector3D_D>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_D::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+template<>
+struct ShadowGarden::CommandParser<TF2::Vector4D_D>::typeinfo
+{
+	using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_D::array_type>::typeinfo;
+	static constexpr const char* type_name = parent_type::type_name;
+	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
+};
+
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_I, TF2::Vector2D_I::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_I, TF2::Vector3D_I::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_I, TF2::Vector4D_I::array_type);
+//
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_F, TF2::Vector2D_F::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_F, TF2::Vector3D_F::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_F, TF2::Vector4D_F::array_type);
+//
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_D, TF2::Vector2D_D::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_D, TF2::Vector3D_D::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_D, TF2::Vector4D_D::array_type);
+//
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Color3_8,	TF2::Color3_8::array_type);
+//SG_CONVAR_TYPEINFO_INHERIT(TF2::Color4_8,	TF2::Color4_8::array_type);

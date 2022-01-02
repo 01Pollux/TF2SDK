@@ -56,11 +56,5 @@ public:
 	/// <summary>
 	/// Called when a plugin wants to save current data to json file
 	/// </summary>
-	virtual void OnSaveConfig(nlohmann::json& cfg) { }
-
-	/// <summary>
-	/// Called when a plugin wants to load from json file to data
-	/// </summary>
-	virtual void OnReloadConfig(const nlohmann::json& cfg) { }
-
+	virtual void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const { }
 };

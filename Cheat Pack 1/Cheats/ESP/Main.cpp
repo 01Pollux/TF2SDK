@@ -119,8 +119,6 @@ void GlobalESP::OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx)
 		clr[0] = static_cast<float>(std::sin(color_time) * .5 + 0.5);
 		clr[1] = static_cast<float>(std::sin(color_time + 0.6666 * std::numbers::pi) * .5 + 0.5);
 		clr[2] = static_cast<float>(std::sin(color_time + 1.3333 * std::numbers::pi) * .5 + 0.5);
-
-		Interfaces::EngineClient->Con_NPrintf(esp_idx + 10, "%f %f %f", clr[0], clr[1], clr[2]);
 	}
 
 	if (should_draw)

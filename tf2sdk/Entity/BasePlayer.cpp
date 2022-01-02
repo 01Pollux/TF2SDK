@@ -104,7 +104,6 @@ namespace Utils
 		const Vector3D_F to_target = end - start;
 		VectorAngles(to_target, res);
 
-		ITFPlayer ps;
 		if (useLocalPunchAng)
 			res -= ILocalPlayer{}->PunchAngle.get();
 

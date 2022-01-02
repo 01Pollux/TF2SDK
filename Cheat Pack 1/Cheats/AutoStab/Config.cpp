@@ -6,38 +6,31 @@ bool AutoBackstab::OnRender()
 {
 	SG::ConfigState state;
 
-	if (ImGui::Checkbox(m_Enabled.key(), m_Enabled.data()))
+	if (ImGui::Checkbox("Enable", m_Enabled.data()))
 		state.set();
+
 	ImGui::SameLineHelp(m_Enabled);
 
-	if (ImGui::Checkbox(m_CheckUber.key(), m_CheckUber.data()))
+	if (ImGui::Checkbox("Check uber", m_CheckUber.data()))
 		state.set();
 	ImGui::SameLineHelp(m_CheckUber);
 
 	ImGui::SameLine();
 
-	if (ImGui::Checkbox(m_CheckInvisible.key(), m_CheckInvisible.data()))
+	if (ImGui::Checkbox("Check invisible", m_CheckInvisible.data()))
 		state.set();
 	ImGui::SameLineHelp(m_CheckInvisible);
 
 	return state;
 }
 
-void AutoBackstab::OnSaveConfig(nlohmann::json& cfg)
+void AutoBackstab::OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const
 {
-	auto& autostab = cfg["Auto-Backstab"];
-	m_Enabled.to_json(autostab);
-	m_CheckUber.to_json(autostab);
-	m_CheckInvisible.to_json(autostab);
-}
+	SG::IPlugin::FileConfigs backstab;
 
-void AutoBackstab::OnReloadConfig(const nlohmann::json& cfg)
-{
-	auto iter = cfg.find("Auto-Backstab");
-	if (iter != cfg.end())
-	{
-		m_Enabled.from_json(*iter);
-		m_CheckUber.from_json(*iter);
-		m_CheckInvisible.from_json(*iter);
-	}
+	backstab.insert(m_Enabled);
+	backstab.insert(m_CheckUber);
+	backstab.insert(m_CheckInvisible);
+
+	cfg.emplace_back(std::move(backstab));
 }

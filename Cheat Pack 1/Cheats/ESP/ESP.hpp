@@ -14,36 +14,69 @@ namespace ESPInfo
 	static constexpr float OutlineThicknessMin = 3.5f;
 	static constexpr const char* TeamNames[]{ "Blue", "Red" };
 
-	class ESPMode
+	struct ESPMode
 	{
-	public:
 		enum class type : char
 		{
 			None,
 			Box,
-			BoxOutline
+			BoxOutline,
+
+			Count
 		};
 
-		constexpr ESPMode(type type = type::None) noexcept : m_Type(type) { }
-		constexpr operator const type() const noexcept { return m_Type; }
+		static constexpr const char* description = 
+R"(ESP's draw mode.
+values: 
+	] none.
+	] box.
+	] box outline.)";
 
-		SG_CONFIG_GET_ENUM()
+		constexpr ESPMode(type _type = type::None) noexcept : m_Value(_type) { }
+
+		constexpr operator type() const noexcept	{ return m_Value; }
+		constexpr operator type&() noexcept			{ return m_Value; }
+
+		static constexpr ESPMode from_str(const std::string_view& value)
 		{
-			return std::array{
-				std::pair{ "none", type::None },
-				std::pair{ "box", type::Box },
-				std::pair{ "box outline", type::BoxOutline },
+			for (auto& val : type_names())
+			{
+				if (value == val.first)
+					return val.second;
+			}
+			throw std::runtime_error("Invalid type name was passed for HealthBarMode.");
+		}
+
+		static constexpr std::string to_str(const ESPMode& value)
+		{
+			for (auto& val : type_names())
+			{
+				if (value == val.second)
+					return { val.first.begin(), val.first.end() };
+			}
+			throw std::runtime_error("Invalid type name was passed for HealthBarMode.");
+		}
+
+		constexpr static
+			std::array<
+			std::pair<std::string_view, type>,
+			static_cast<std::underlying_type_t<type>>(type::Count)
+			>
+			type_names() noexcept
+		{
+			return {
+					std::pair{ "none",			type::None },
+					std::pair{ "box",			type::Box },
+					std::pair{ "box outline",	type::BoxOutline }
 			};
 		}
-		SG_CONFIG_IMPL_GET_ENUM(m_Type);
 
 	private:
-		type m_Type;
+		type m_Value{ };
 	};
 		
-	class HealthBarMode
+	struct HealthBarMode
 	{
-	public:
 		enum class type : char
 		{
 			Disabled,
@@ -56,96 +89,302 @@ namespace ESPInfo
 			Count
 		};
 
-		constexpr HealthBarMode(type type = type::Disabled) noexcept : m_Type(type) { }
-		constexpr operator type() const noexcept { return m_Type; }
-		constexpr operator size_t() const noexcept { return static_cast<size_t>(m_Type); }
+		static constexpr const char* description =
+R"(Draw how much health a player has.
+values: 
+	] none.
+	] horizantal up.
+	] horizantal down.
+	] vertical up.
+	] vertical down.)";
+		
+		constexpr HealthBarMode(type _type = type::Disabled) noexcept : m_Value(_type) { }
 
-		SG_CONFIG_GET_ENUM()
+		constexpr operator type() const noexcept	{ return m_Value; }
+		constexpr operator type&() noexcept			{ return m_Value; }
+
+		static constexpr HealthBarMode from_str(const std::string_view& value)
 		{
-			return std::array{
-				std::pair{ "none",				type::Disabled },
-				std::pair{ "horizantal up",		type::Horizantal_Up },
-				std::pair{ "horizantal down",	type::Horizantal_Down },
-				std::pair{ "vertical left",		type::Vertical_Right },
-				std::pair{ "vertical right",	type::Vertical_Left }
+			for (auto& val : type_names())
+			{
+				if (value == val.first)
+					return val.second;
+			}
+			throw std::runtime_error("Invalid type name was passed for HealthBarMode.");
+		}
+
+		static constexpr std::string to_str(const HealthBarMode& value)
+		{
+			for (auto& val : type_names())
+			{
+				if (value == val.second)
+					return { val.first.begin(), val.first.end() };
+			}
+			throw std::runtime_error("Invalid type name was passed for HealthBarMode.");
+		}
+
+		constexpr static 
+			std::array<
+				std::pair<std::string_view, type>,
+				static_cast<std::underlying_type_t<type>>(type::Count)
+			>
+		type_names() noexcept
+		{
+			return {
+					std::pair{ "none",				type::Disabled },
+					std::pair{ "horizantal up",		type::Horizantal_Up },
+					std::pair{ "horizantal down",	type::Horizantal_Down },
+					std::pair{ "vertical left",		type::Vertical_Right },
+					std::pair{ "vertical right",	type::Vertical_Left }
 			};
 		}
-		SG_CONFIG_IMPL_GET_ENUM(m_Type);
 
 	private:
-		type m_Type;
+		type m_Value{ };
 	};
 	
 	struct Shared
 	{
-		SG::Config<bool> Enable				{ "enable",			false };
+		SG::ConVar<bool> Enable;
 		
-		struct
+		struct _Rainbow_t
 		{
-			TF2::Color4_F				Color { 1.f, 1.f, 1.f, 1.f };
-			SG::Config<float>			Speed			{ "rainbow sped",	.5f };
+			TF2::Color4_F				Color	{ 1.f, 1.f, 1.f, 1.f };
+			SG::ConVar<float>			Speed;
+
+			_Rainbow_t(
+				const char* rainbow_speed_color
+			) : 
+				Speed(rainbow_speed_color, .5f, "ESP rainbow speed time")
+			{ }
 		} Rainbow;
 
-		struct
+		struct _3DBox_t
 		{
-			SG::Config<TF2::Color4_F>	DrawColor		{ "draw color",	{ 1.f, 1.f, 1.f, 1.f }, "box's draw color" };
-			SG::Config<float>			LineThickness	{ "line's thickness",	1.f, "box's line size" };
+			SG::ConVar<TF2::Color4_F>	DrawColor;
+			SG::ConVar<float>			LineThickness;
+
+			_3DBox_t(
+				const char* draw_color,
+				const char* line_thickness
+			) :
+				DrawColor(draw_color,			{ 1.f, 1.f, 1.f, 1.f }, "ESP box's draw color"),
+				LineThickness(line_thickness,	1.f, "ESP box's line size")
+			{ }
 		} Box;
 
-		struct
+		struct _Outline3DBox_t
 		{
-			SG::Config<TF2::Color4_F>	DrawColor		{ "draw color",		{ 1.f, 1.f, 1.f, 1.f }, "box's draw color" };
-			SG::Config<TF2::Color4_F>	OutlineColor	{ "outline color",	{ 1.f, 1.f, 1.f, 1.f }, "box's outline color" };
-			SG::Config<float>			LineThickness	{ "line's thickness",	1.f, "box's line size" };
+			SG::ConVar<TF2::Color4_F>	DrawColor;
+			SG::ConVar<TF2::Color4_F>	OutlineColor;
+			SG::ConVar<float>			LineThickness;
+
+			_Outline3DBox_t(
+				const char* draw_color,
+				const char* outline_color,
+				const char* line_thickness
+			) :
+				DrawColor(draw_color,			{ 1.f, 1.f, 1.f, 1.f }, "box's draw color"),
+				OutlineColor(outline_color,		{ 1.f, 1.f, 1.f, 1.f }, "box's outline color"),
+				LineThickness(line_thickness,	1.f, "box's line size")
+			{ }
 		} OutlineBox;
 
-		struct
+		struct _Text_t
 		{
-			SG::Config<TF2::Color4_F>	Color		{ "text color",		{ 1.f, 1.f, 1.f, 1.f }, "ESP's text color" };
-			SG::Config<TF2::Vector2D_F>	Offset		{ "text offset",	{ 0.f, 0.f }, "text's offset"};
-			SG::Config<float>			Height		{ "text height",	0.5f, "text's height" };
-			SG::Config<float>			Size		{ "text size",		12.f, "ESP's text size" };
+			SG::ConVar<TF2::Color4_F>	Color;
+			SG::ConVar<TF2::Vector2D_F>	Offset;
+			SG::ConVar<float>			Height;
+			SG::ConVar<float>			Size;
+
+			_Text_t(
+				const char* draw_color,
+				const char* text_offset,
+				const char* text_height,
+				const char* text_size
+			) :
+				Color(draw_color,	{ 1.f, 1.f, 1.f, 1.f }, "ESP's text color"),
+				Offset(text_offset, { 0.f, 0.f }, "text's offset"),
+				Height(text_height,	.5f, "text's height"),
+				Size(text_size,		12.f, "ESP's text size")
+			{ }
 		} Text;
 
-		SG::Config<int> MaxDistance			{ "max distance",	1024, "ESP's max draw distance" };
+		SG::ConVar<int> MaxDistance;
 
-		SG::Config<ESPMode> DrawMode		{ "draw mode",		ESPMode::type::Box, "ESP's draw mode" };
+		SG::ConVar<ESPMode> DrawMode;
 
-		SG::Config<bool> DrawName			{ "draw name",		false, "Draw entity's name, or player's name" };
-		SG::Config<bool> DrawDistance		{ "draw distance",	false, "Draw distance from entity to local player" };
+		SG::ConVar<bool> DrawName;
+		SG::ConVar<bool> DrawDistance;
+
+		Shared(
+			const char* enable,
+
+			const char* rainbow_speed_color,
+
+			const char* box3d_draw_color,
+			const char* box3d_line_thickness,
+
+			const char* outlinebox3d_draw_color,
+			const char* outlinebox3d_outline_color,
+			const char* outlinebox3d_line_thickness,
+
+			const char* text_color,
+			const char* text_offset,
+			const char* text_height,
+			const char* text_size,
+
+			const char* max_distance,
+			const char* draw_mode,
+			const char* draw_name,
+			const char* draw_distance
+		) :
+			Enable(enable,				false, "Enable esp"),
+
+			Rainbow(rainbow_speed_color),
+			Box(box3d_draw_color, box3d_line_thickness),
+			OutlineBox(outlinebox3d_draw_color, outlinebox3d_outline_color, outlinebox3d_line_thickness),
+			Text(text_color, text_offset, text_height, text_size),
+
+			MaxDistance(max_distance,	1024,	"ESP's max draw distance."),
+			DrawMode(draw_mode,			{ },	ESPMode::description),
+			DrawName(draw_name,			false,	"Draw entity's name, or player's name."),
+			DrawDistance(draw_distance,	false,	"Draw distance from entity to local player.")
+		{ }
 	};
 
 	struct Player : public Shared
 	{
-		SG::Config<bool> DrawClass		{ "draw class",		false,	"Draw player tf-class" };
-		SG::Config<bool> DrawClassIcon	{ "draw class icon",false,	"Draw player tf-class" };
-		SG::Config<bool> DrawCond		{ "draw condition", false,	"Draw some player's conds" };
-		SG::Config<bool> DrawUberPerc	{ "draw uber",		false,	"Draw how much uber a medic has" };
-		SG::Config<bool> IgnoreCloak	{ "ignore cloak",	true,	"Don't draw cloaked spies" };
-		SG::Config<bool> DrawTeam		{ "draw team",		false,	"Draw player's team" };
+		SG::ConVar<bool> DrawClass; 
+		SG::ConVar<bool> DrawClassIcon;
+		SG::ConVar<bool> DrawCond;
+		SG::ConVar<bool> DrawUberPerc;
+		SG::ConVar<bool> IgnoreCloak;
+		SG::ConVar<bool> DrawTeam;
 
-		SG::Config<HealthBarMode> HealthbarMode { "healthbar mode",		{ }, "Draw how much health a player has" };
+		SG::ConVar<HealthBarMode> HealthbarMode;
+
+		Player(
+			bool is_red
+		) :
+			Shared(
+				is_red ? "esp_red_player_enable" : "esp_blue_player_enable",
+
+				is_red ? "esp_red_player_rainbow_speed_color" : "esp_blue_player_rainbow_speed_color",
+
+				is_red ? "esp_red_player_3dbox_color"	: "esp_red_player_3dbox_thickness", 
+				is_red ? "esp_blue_player_3dbox_color"	: "esp_blue_player_3dbox_thickness",
+
+				is_red ? "esp_red_player_outlinebox_incolor"	: "esp_blue_player_outlinebox_incolor",
+				is_red ? "esp_red_player_outlinebox_outcolor"	: "esp_blue_player_outlinebox_outcolor",
+				is_red ? "esp_red_player_outlinebox_thickness"	: "esp_blue_player_outlinebox_thickness",
+
+				is_red ? "esp_red_player_text_color"	: "esp_blue_player_text_color",
+				is_red ? "esp_red_player_text_offset"	: "esp_blue_player_text_offset",
+				is_red ? "esp_red_player_text_height"	: "esp_blue_player_text_height",
+				is_red ? "esp_red_player_text_size"		: "esp_blue_player_text_size",
+
+				is_red ? "esp_red_player_max_distance"	: "esp_blue_player_max_distance",
+				is_red ? "esp_red_player_draw_mode"		: "esp_blue_player_draw_mode",
+				is_red ? "esp_red_player_draw_name"		: "esp_blue_player_draw_name",
+				is_red ? "esp_red_player_draw_distance" : "esp_blue_player_draw_distance"
+			),
+			DrawClass(is_red ?		"esp_red_player_class" :		"esp_blue_player_class",		false,	"Draw player tf-class."),
+			DrawClassIcon(is_red ?	"esp_red_player_class_icon" :	"esp_blue_player_class_icon",	false,	"Draw player tf-class' icon."),
+			DrawCond(is_red ?		"esp_red_player_cond" :			"esp_blue_player_cond",			false,	"Draw some player's conds."),
+			DrawUberPerc(is_red ?	"esp_red_player_uberperc" :		"esp_blue_player_uberperc",		false,	"Draw how much uber a medic has."),
+			IgnoreCloak(is_red ?	"esp_red_player_nocloak" :		"esp_blue_player_nocloak",		false,	"Don't draw cloaked spies."),
+			DrawTeam(is_red ?		"esp_red_player_team" :			"esp_blue_player_team",			false,	"Draw player's team."),
+
+			HealthbarMode(is_red ?	"esp_red_player_hpmode" :		"esp_blue_player_hpmode",		{ },	HealthBarMode::description)
+		{ }
 	};
 
 	struct Building : public Shared
 	{
-		SG::Config<bool> DrawOwner	{ "draw owner",		false, "Draw building's owner" };
-		SG::Config<bool> DrawAmmo	{ "draw ammo",		false, "Draw building's ammo" };
-		SG::Config<bool> DrawLevel	{ "draw level",		false, "Draw building's level" };
-		SG::Config<bool> DrawBState	{ "draw state",		false, "Draw building's state" };
-		SG::Config<bool> DrawTeam	{ "draw team",		false, "Draw building's team" };
-		SG::Config<bool> DrawHealth	{ "draw health",	false, "Draw building's health" };
+		SG::ConVar<bool> DrawOwner;
+		SG::ConVar<bool> DrawAmmo;
+		SG::ConVar<bool> DrawLevel;
+		SG::ConVar<bool> DrawBState;
+		SG::ConVar<bool> DrawTeam;
+		SG::ConVar<bool> DrawHealth;
 
-		SG::Config<HealthBarMode> HealthbarMode { "healthbar mode",		{ }, "Draw how much health a player has" };
+		SG::ConVar<HealthBarMode> HealthbarMode;
+
+		Building(
+			bool is_red
+		) :
+			Shared(
+				is_red ? "esp_red_building_enable" : "esp_blue_building_enable",
+
+				is_red ? "esp_red_building_rainbow_speed_color" : "esp_blue_building_rainbow_speed_color",
+
+				is_red ? "esp_red_building_3dbox_color"		: "esp_red_building_3dbox_thickness",
+				is_red ? "esp_blue_building_3dbox_color"	: "esp_blue_building_3dbox_thickness",
+
+				is_red ? "esp_red_building_outlinebox_incolor"		: "esp_blue_building_outlinebox_incolor",
+				is_red ? "esp_red_building_outlinebox_outcolor"		: "esp_blue_building_outlinebox_outcolor",
+				is_red ? "esp_red_building_outlinebox_thickness"	: "esp_blue_building_outlinebox_thickness",
+
+				is_red ? "esp_red_building_text_color"	: "esp_blue_building_text_color",
+				is_red ? "esp_red_building_text_offset" : "esp_blue_building_text_offset",
+				is_red ? "esp_red_building_text_height" : "esp_blue_building_text_height",
+				is_red ? "esp_red_building_text_size"	: "esp_blue_building_text_size",
+
+				is_red ? "esp_red_building_max_distance"	: "esp_blue_building_max_distance",
+				is_red ? "esp_red_building_draw_mode"		: "esp_blue_building_draw_mode",
+				is_red ? "esp_red_building_draw_name"		: "esp_blue_building_draw_name",
+				is_red ? "esp_red_building_draw_distance"	: "esp_blue_building_draw_distance"
+			),
+			DrawOwner(is_red ?		"esp_red_building_owner" :		"esp_blue_building_owner",		false,	"Draw building's owner."),
+			DrawAmmo(is_red ?		"esp_red_building_ammo" :		"esp_blue_building_ammo",		false,	"Draw building's ammo."),
+			DrawLevel(is_red ?		"esp_red_building_level" :		"esp_blue_building_level",		false,	"Draw building's level."),
+			DrawBState(is_red ?		"esp_red_building_state" :		"esp_blue_building_state",		false,	"Draw building's state."),
+			DrawTeam(is_red ?		"esp_red_building_team" :		"esp_blue_building_team",		false,	"Draw building's team."),
+			DrawHealth(is_red ?		"esp_red_building_health" :		"esp_blue_building_health",		false,	"Draw building's health."),
+
+			HealthbarMode(is_red ?	"esp_red_building_hpmode" :		"esp_blue_building_hpmode",		{ },	HealthBarMode::description)
+		{ }
 	};
 
 	struct Object : public Shared
 	{
-		SG::Config<bool> DrawPacks			{ "draw packs",		false, "Draw Packs" };
-		SG::Config<bool> DrawRockets		{ "draw rockets",	false, "Draw Rockets" };
-		SG::Config<bool> DrawPipes			{ "draw pipes",		false, "Draw Pipe bomb" };
-		SG::Config<bool> DrawStickies		{ "draw stickies",	false, "Draw stickie bomb" };
-		SG::Config<bool> DrawNPC			{ "draw npcs",		false, "Draw npcs" };
+		SG::ConVar<bool> DrawPacks;
+		SG::ConVar<bool> DrawRockets;
+		SG::ConVar<bool> DrawPipes;
+		SG::ConVar<bool> DrawStickies;
+		SG::ConVar<bool> DrawNPC;
+
+		Object(
+		) :
+			Shared(
+				"esp_objects_enable",
+
+				"esp_objects_rainbow_speed_color",
+
+				"esp_objects_3dbox_color",
+				"esp_objects_3dbox_thickness",
+
+				"esp_objects_outlinebox_incolor",
+				"esp_objects_outlinebox_outcolor",
+				"esp_objects_outlinebox_thickness",
+
+				"esp_objects_text_color",
+				"esp_objects_text_offset",
+				"esp_objects_text_height",
+				"esp_objects_text_size",
+
+				"esp_objects_max_distance",
+				"esp_objects_draw_mode",
+				"esp_objects_draw_name",
+				"esp_objects_draw_distance"
+			),
+			DrawPacks("esp_objects_packs",	false,	"Draw Packs."),
+			DrawRockets("esp_objects_rockets",	false,	"Draw Rockets."),
+			DrawPipes("esp_objects_pipes",	false,	"Draw Pipe bomb."),
+			DrawStickies("esp_objects_stickies",	false,	"Draw stickie bomb."),
+			DrawNPC("esp_objects_npc",		false,	"Draw npcs.")
+		{ }
 	};
 
 	struct BoxInfo
@@ -260,8 +499,7 @@ private:
 
 	static void OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx);
 
-	void OnSaveConfig(nlohmann::json& cfg);
-	void OnReloadConfig(const nlohmann::json& cfg);
+	void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const override;
 
 	bool OnRender();
 
@@ -291,8 +529,8 @@ private:
 	void RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index);
 
 private:
-	ESPInfo::Player		m_PlayerESPInfo[ESPInfo::MaxTeams];
-	ESPInfo::Building	m_BuildingESPInfo[ESPInfo::MaxTeams];
+	ESPInfo::Player		m_PlayerESPInfo[ESPInfo::MaxTeams]{ true, false };
+	ESPInfo::Building	m_BuildingESPInfo[ESPInfo::MaxTeams]{ true, false };
 	ESPInfo::Object		m_ObjectESPInfo;
 
 	std::unordered_map<int, ESPOverride> m_ESPOverride;
