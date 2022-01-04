@@ -1,10 +1,11 @@
 
-#include <shadowgarden/interfaces/ImGui.hpp>
+#include <px/interfaces/ImGui.hpp>
 #include "AutoStab.hpp"
+#include <tf2/math/Vector.hpp>
 
 bool AutoBackstab::OnRender()
 {
-	SG::ConfigState state;
+	px::ConfigState state;
 
 	if (ImGui::Checkbox("Enable", m_Enabled.data()))
 		state.set();
@@ -24,9 +25,9 @@ bool AutoBackstab::OnRender()
 	return state;
 }
 
-void AutoBackstab::OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const
+void AutoBackstab::OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const
 {
-	SG::IPlugin::FileConfigs backstab;
+	px::IPlugin::FileConfigs backstab;
 
 	backstab.insert(m_Enabled);
 	backstab.insert(m_CheckUber);

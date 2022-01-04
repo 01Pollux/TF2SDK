@@ -6,7 +6,7 @@
 
 struct ImGuiContextHook;
 
-class ICheatIFace : public TF2::Utils::IAutoList<ICheatIFace>
+class ICheatIFace : public tf2::utils::IAutoList<ICheatIFace>
 {
 public:
 	ICheatIFace() { }
@@ -17,7 +17,7 @@ public:
 	/// <returns>
 	/// true if plugin is all set to be loaded, false otherwise
 	/// </returns>
-	virtual void OnPluginPreLoad(SG::IPluginManager* ifacemgr) { }
+	virtual void OnPluginPreLoad(px::IPluginManager* ifacemgr) { }
 
 	/// <summary>
 	/// Called when plugin is first loaded
@@ -25,7 +25,7 @@ public:
 	/// <returns>
 	/// true if plugin is all set to be loaded, false otherwise
 	/// </returns>
-	virtual bool OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config) { return true; }
+	virtual bool OnAskPluginLoad(tf2::interfaces::SDKManager::Config& config) { return true; }
 
 	/// <summary>
 	/// Called when the plugin is fully loaded after 'OnAskPluginLoad' return true
@@ -51,10 +51,10 @@ public:
 	/// <summary>
 	/// Called when an interface is being unloaded from the process
 	/// </summary>
-	virtual void OnDropInterface(SG::IInterface* iface) { }
+	virtual void OnDropInterface(px::IInterface* iface) { }
 
 	/// <summary>
 	/// Called when a plugin wants to save current data to json file
 	/// </summary>
-	virtual void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const { }
+	virtual void OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const { }
 };

@@ -7,7 +7,7 @@ TF2_NAMESPACE_BEGIN();
 class IVDebugOverlay;
 class IBaseEntityInternal;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVDebugOverlay, DebugOverlay, "VDebugOverlay003");
 }
@@ -55,31 +55,31 @@ private:
 
 namespace NDebugOverlay
 {
-	SG_SDK_TF2 void Box(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void BoxDirection(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Vector3D_F& forward, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void BoxAngles(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void SweptBox(const Vector3D_F& start, const Vector3D_F& end, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void EntityBounds(IBaseEntityInternal* pEntity, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void Line(const Vector3D_F& origin, const Vector3D_F& target, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const Vector3D_F& p3, int r, int g, int b, int a, bool noDepthTest, float duration);
-	SG_SDK_TF2 void EntityText(int entityID, int text_offset, const char* text, float flDuration, int r = 255, int g = 255, int b = 255, int a = 255);
-	SG_SDK_TF2 void EntityTextAtPosition(const Vector3D_F& origin, int text_offset, const char* text, float flDuration, int r = 255, int g = 255, int b = 255, int a = 255);
-	SG_SDK_TF2 void Grid(const Vector3D_F& vPosition);
-	SG_SDK_TF2 void Text(const Vector3D_F& origin, const char* text, float flDuration);
-	SG_SDK_TF2 void ScreenText(float fXpos, float fYpos, const char* text, int r, int g, int b, int a, float flDuration);
-	SG_SDK_TF2 void Cross3D(const Vector3D_F& position, const Vector3D_F& mins, const Vector3D_F& maxs, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Cross3D(const Vector3D_F& position, float size, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Cross3DOriented(const Vector3D_F& position, const Angle_F& angles, float size, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void DrawTickMarkedLine(const Vector3D_F& startPos, const Vector3D_F& endPos, float tickDist, int tickTextDist, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void DrawGroundCrossHairOverlay();
-	SG_SDK_TF2 void HorzArrow(const Vector3D_F& startPos, const Vector3D_F& endPos, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void YawArrow(const Vector3D_F& startPos, float yaw, float length, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void VertArrow(const Vector3D_F& startPos, const Vector3D_F& endPos, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Axis(const Vector3D_F& position, const Angle_F& angles, float size, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Sphere(const Vector3D_F& center, float radius, int r, int g, int b, bool noDepthTest, float flDuration);
-	SG_SDK_TF2 void Circle(const Vector3D_F& position, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
-	SG_SDK_TF2 void Circle(const Vector3D_F& position, const Angle_F& angles, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
-	SG_SDK_TF2 void Circle(const Vector3D_F& position, const Vector3D_F& xAxis, const Vector3D_F& yAxis, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
-	SG_SDK_TF2 void Sphere(const Vector3D_F& position, const Angle_F& angles, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
+	PX_SDK_TF2 void Box(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void BoxDirection(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Vector3D_F& forward, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void BoxAngles(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void SweptBox(const Vector3D_F& start, const Vector3D_F& end, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void EntityBounds(IBaseEntityInternal* pEntity, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void Line(const Vector3D_F& origin, const Vector3D_F& target, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const Vector3D_F& p3, int r, int g, int b, int a, bool noDepthTest, float duration);
+	PX_SDK_TF2 void EntityText(int entityID, int text_offset, const char* text, float flDuration, int r = 255, int g = 255, int b = 255, int a = 255);
+	PX_SDK_TF2 void EntityTextAtPosition(const Vector3D_F& origin, int text_offset, const char* text, float flDuration, int r = 255, int g = 255, int b = 255, int a = 255);
+	PX_SDK_TF2 void Grid(const Vector3D_F& vPosition);
+	PX_SDK_TF2 void Text(const Vector3D_F& origin, const char* text, float flDuration);
+	PX_SDK_TF2 void ScreenText(float fXpos, float fYpos, const char* text, int r, int g, int b, int a, float flDuration);
+	PX_SDK_TF2 void Cross3D(const Vector3D_F& position, const Vector3D_F& mins, const Vector3D_F& maxs, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Cross3D(const Vector3D_F& position, float size, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Cross3DOriented(const Vector3D_F& position, const Angle_F& angles, float size, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void DrawTickMarkedLine(const Vector3D_F& startPos, const Vector3D_F& endPos, float tickDist, int tickTextDist, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void DrawGroundCrossHairOverlay();
+	PX_SDK_TF2 void HorzArrow(const Vector3D_F& startPos, const Vector3D_F& endPos, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void YawArrow(const Vector3D_F& startPos, float yaw, float length, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void VertArrow(const Vector3D_F& startPos, const Vector3D_F& endPos, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Axis(const Vector3D_F& position, const Angle_F& angles, float size, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Sphere(const Vector3D_F& center, float radius, int r, int g, int b, bool noDepthTest, float flDuration);
+	PX_SDK_TF2 void Circle(const Vector3D_F& position, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
+	PX_SDK_TF2 void Circle(const Vector3D_F& position, const Angle_F& angles, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
+	PX_SDK_TF2 void Circle(const Vector3D_F& position, const Vector3D_F& xAxis, const Vector3D_F& yAxis, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
+	PX_SDK_TF2 void Sphere(const Vector3D_F& position, const Angle_F& angles, float radius, int r, int g, int b, int a, bool bNoDepthTest, float flDuration);
 };
 TF2_NAMESPACE_END();

@@ -6,7 +6,7 @@
 TF2_NAMESPACE_BEGIN();
 
 class IGameRules;
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE_S(IGameRules, GameRules, "CGameRules");
 }
@@ -77,22 +77,22 @@ namespace Const
 class IGameRules
 {
 public:
-	SG_SDK_TF2 static bool 
+	PX_SDK_TF2 static bool 
 		ShouldCollide(Const::EntCollisionGroup group0, Const::EntCollisionGroup group1);
 
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInWaitingForPlayers", InWaitingForPlayers, 0);
-	SG_DECL_RECVPROP(IGameRules, Const::TFTeam,		Const::EntClassID::CTFGameRulesProxy, "m_iWinningTeam",			WinningTeam, 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInOvertime",			InOvertime , 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInSetup",				InSetup , 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bSwitchedTeamsThisRound",SwitchedTeamsThisRound, 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bAwaitingReadyRestart",AwaitingReadyRestart, 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bIsUsingSpells",		IsUsingSpells, 0);
-	SG_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bTruceActive",			TruceActive, 0);
-	SG_DECL_RECVPROP(IGameRules, float,				Const::EntClassID::CTFGameRulesProxy, "m_flRestartRoundTime",	MapResetTime, 0);
-	SG_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nRoundsPlayed",		RoundsPlayed, 0);
-	SG_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nBossHealth",			BossHealth, 0);
-	SG_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nMaxBossHealth",		MaxBossHealth, 0);
-	SG_DECL_RECVPROP(IGameRules, Const::RoundState, Const::EntClassID::CTFGameRulesProxy, "m_iRoundState",			RoundState, 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInWaitingForPlayers", InWaitingForPlayers, 0);
+	PX_DECL_RECVPROP(IGameRules, Const::TFTeam,		Const::EntClassID::CTFGameRulesProxy, "m_iWinningTeam",			WinningTeam, 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInOvertime",			InOvertime , 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bInSetup",				InSetup , 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bSwitchedTeamsThisRound",SwitchedTeamsThisRound, 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bAwaitingReadyRestart",AwaitingReadyRestart, 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bIsUsingSpells",		IsUsingSpells, 0);
+	PX_DECL_RECVPROP(IGameRules, bool,				Const::EntClassID::CTFGameRulesProxy, "m_bTruceActive",			TruceActive, 0);
+	PX_DECL_RECVPROP(IGameRules, float,				Const::EntClassID::CTFGameRulesProxy, "m_flRestartRoundTime",	MapResetTime, 0);
+	PX_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nRoundsPlayed",		RoundsPlayed, 0);
+	PX_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nBossHealth",			BossHealth, 0);
+	PX_DECL_RECVPROP(IGameRules, int,				Const::EntClassID::CTFGameRulesProxy, "m_nMaxBossHealth",		MaxBossHealth, 0);
+	PX_DECL_RECVPROP(IGameRules, Const::RoundState, Const::EntClassID::CTFGameRulesProxy, "m_iRoundState",			RoundState, 0);
 };
 
 

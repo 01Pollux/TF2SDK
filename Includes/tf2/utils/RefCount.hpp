@@ -2,7 +2,7 @@
 
 #include <tf2/config.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 //-----------------------------------------------------------------------------
 // Purpose:	Implement a standard reference counted interface. Use of this

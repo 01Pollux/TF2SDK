@@ -3,26 +3,23 @@
 #include <stdint.h>
 #include <cassert>
 
-#include <shadowgarden/users/Version.hpp>
+#include <px/version.hpp>
 
 #define TF2_NAMESPACE_BEGIN(...)			\
-namespace ShadowGarden::TF2##__VA_ARGS__	{
+namespace px::tf2##__VA_ARGS__	{
 
 #define TF2_NAMESPACE_END() }
 
 TF2_NAMESPACE_BEGIN();
 TF2_NAMESPACE_END();
 
-namespace SG = ShadowGarden;
-namespace TF2 = SG::TF2;
+namespace tf2 = px::tf2;
 
-
-#ifdef SG_EXPORTED
-#define SG_SDK_TF2 __declspec(dllexport)
+#ifdef PX_EXPORTED
+#define PX_SDK_TF2 __declspec(dllexport)
 #else 
-#define SG_SDK_TF2
+#define PX_SDK_TF2
 #endif
-
 
 #define TF2_EXPORT_INTERFACE(CLASS, NAME, KEY)	\
 inline CLASS* NAME;								\
@@ -35,40 +32,37 @@ static constexpr inline bool NAME##_Sig = true;	\
 static constexpr const char* NAME##_Key = KEY
 
 
-namespace ShadowGarden
+namespace px
 {
 	class IGameData;
 }
 
+TF2_NAMESPACE_BEGIN(::interfaces);
 
-TF2_NAMESPACE_BEGIN(::Interfaces);
-
-
-static constexpr SG::Version TF2SDKVersion{ 1, 0, 0, 0 };
-
+static constexpr px::version TF2SDKVersion{ "1.2.0.0" };
 
 class SDKManager
 {
 public:
 	struct Config;
 
-	SG_SDK_TF2 bool
-		init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list = { });
+	PX_SDK_TF2 bool
+		init(px::IGameData* game_data, const Config& config, const std::initializer_list<std::string>& sig_list = { });
 
-	SG_SDK_TF2 ~SDKManager();
+	PX_SDK_TF2 ~SDKManager();
 
-	void set_gamedata(SG::IGameData* new_gamedata) noexcept
+	void set_gamedata(px::IGameData* new_gamedata) noexcept
 	{
 		m_GameData = new_gamedata;
 	}
 
-	static SG::IGameData* Get()
+	static px::IGameData* Get()
 	{
 		return Manager->m_GameData;
 	}
 
 private:
-	SG::IGameData* m_GameData;
+	px::IGameData* m_GameData;
 	static inline SDKManager* Manager = nullptr;
 };
 

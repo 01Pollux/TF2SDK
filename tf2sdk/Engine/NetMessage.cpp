@@ -11,7 +11,7 @@
 
 TF2_NAMESPACE_BEGIN();
 
-bool CLC_VoiceData::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_VoiceData::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -22,7 +22,7 @@ bool CLC_VoiceData::WriteToBuffer(Utils::bf_write& buffer)
 	return buffer.write_bits(DataOut.data(), Length);
 }
 
-bool CLC_VoiceData::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_VoiceData::ReadFromBuffer(utils::bf_read& buffer)
 {
 	Length = buffer.read_word();	// length in bits
 
@@ -31,7 +31,7 @@ bool CLC_VoiceData::ReadFromBuffer(Utils::bf_read& buffer)
 	return buffer.seek_relative(Length);
 }
 
-bool CLC_Move::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_Move::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 	Length = DataOut.bits_written();
@@ -44,7 +44,7 @@ bool CLC_Move::WriteToBuffer(Utils::bf_write& buffer)
 	return buffer.write_bits(DataOut.data(), Length);
 }
 
-bool CLC_Move::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_Move::ReadFromBuffer(utils::bf_read& buffer)
 {
 	NewCommands = buffer.read_ubit(Const::NetMsg_NewCommandBits);
 	BackupCommands = buffer.read_ubit(Const::NetMsg_BackupCommandBits);
@@ -53,7 +53,7 @@ bool CLC_Move::ReadFromBuffer(Utils::bf_read& buffer)
 	return buffer.seek_relative(Length);
 }
 
-bool CLC_ClientInfo::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_ClientInfo::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -81,7 +81,7 @@ bool CLC_ClientInfo::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_ClientInfo::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_ClientInfo::ReadFromBuffer(utils::bf_read& buffer)
 {
 	ServerCount = buffer.read_long();
 	SendTableCRC = buffer.read_long();
@@ -106,7 +106,7 @@ bool CLC_ClientInfo::ReadFromBuffer(Utils::bf_read& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_BaselineAck::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_BaselineAck::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 	buffer.write_long(BaselineTick);
@@ -114,14 +114,14 @@ bool CLC_BaselineAck::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_BaselineAck::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_BaselineAck::ReadFromBuffer(utils::bf_read& buffer)
 {
 	BaselineTick = buffer.read_long();
 	BaselineNr = buffer.read_ubit(1);
 	return !buffer.has_overflown();
 }
 
-bool CLC_RespondCvarValue::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_RespondCvarValue::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -134,7 +134,7 @@ bool CLC_RespondCvarValue::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_RespondCvarValue::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_RespondCvarValue::ReadFromBuffer(utils::bf_read& buffer)
 {
 	Cookie = buffer.read_sbit(32);
 	StatusCode = static_cast<Const::QueryCvarValueStatus>(buffer.read_sbit(4));
@@ -191,7 +191,7 @@ static int FindCommonPrefix(const char* pStr)
 }
 
 
-bool CLC_FileCRCCheck::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_FileCRCCheck::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -234,7 +234,7 @@ bool CLC_FileCRCCheck::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_FileCRCCheck::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_FileCRCCheck::ReadFromBuffer(utils::bf_read& buffer)
 {
 	// Reserved for future use.
 	buffer.read_bit();
@@ -304,7 +304,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(Utils::bf_read& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_FileMD5Check::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_FileMD5Check::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -339,7 +339,7 @@ bool CLC_FileMD5Check::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool CLC_FileMD5Check::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_FileMD5Check::ReadFromBuffer(utils::bf_read& buffer)
 {
 	// Reserved for future use.
 	buffer.read_bit();
@@ -388,12 +388,12 @@ CLC_CmdKeyValues::~CLC_CmdKeyValues()
 	KV = nullptr;
 }
 
-bool CLC_CmdKeyValues::WriteToBuffer(Utils::bf_write& buffer)
+bool CLC_CmdKeyValues::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool CLC_CmdKeyValues::ReadFromBuffer(Utils::bf_read& buffer)
+bool CLC_CmdKeyValues::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
@@ -405,35 +405,35 @@ SVC_CmdKeyValues::~SVC_CmdKeyValues()
 	KV = nullptr;
 }
 
-bool SVC_CmdKeyValues::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_CmdKeyValues::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_CmdKeyValues::ReadFromBuffer(Utils::bf_read& buffer)
-{
-	return false;
-}
-
-
-bool SVC_Print::WriteToBuffer(Utils::bf_write& buffer)
-{
-	return false;
-}
-
-bool SVC_Print::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_CmdKeyValues::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
 
-bool NET_StringCmd::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_Print::WriteToBuffer(utils::bf_write& buffer)
+{
+	return false;
+}
+
+bool SVC_Print::ReadFromBuffer(utils::bf_read& buffer)
+{
+	return false;
+}
+
+
+bool NET_StringCmd::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 	return buffer.write_string(Command ? Command : " NET_StringCmd NULL");
 }
 
-bool NET_StringCmd::ReadFromBuffer(Utils::bf_read& buffer)
+bool NET_StringCmd::ReadFromBuffer(utils::bf_read& buffer)
 {
 	Command = CommandBuffer;
 
@@ -441,17 +441,17 @@ bool NET_StringCmd::ReadFromBuffer(Utils::bf_read& buffer)
 }
 
 
-bool SVC_ServerInfo::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_ServerInfo::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_ServerInfo::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_ServerInfo::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool NET_SignonState::WriteToBuffer(Utils::bf_write& buffer)
+bool NET_SignonState::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 	buffer.write_byte(static_cast<uint8_t>(SignonState));
@@ -460,7 +460,7 @@ bool NET_SignonState::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool NET_SignonState::ReadFromBuffer(Utils::bf_read& buffer)
+bool NET_SignonState::ReadFromBuffer(utils::bf_read& buffer)
 {
 	SignonState = static_cast<Const::SignonStateType>(buffer.read_byte());
 	SpawnCount = buffer.read_long();
@@ -469,70 +469,70 @@ bool NET_SignonState::ReadFromBuffer(Utils::bf_read& buffer)
 }
 
 
-bool SVC_BSPDecal::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_BSPDecal::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_BSPDecal::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_BSPDecal::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_SetView::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_SetView::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_SetView::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_SetView::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_FixAngle::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_FixAngle::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_FixAngle::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_FixAngle::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_CrosshairAngle::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_CrosshairAngle::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_CrosshairAngle::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_CrosshairAngle::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_VoiceInit::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_VoiceInit::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_VoiceInit::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_VoiceInit::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
 
-bool SVC_VoiceData::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_VoiceData::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_VoiceData::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_VoiceData::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
 #define NET_TICK_SCALEUP	100000.0f
 
-bool NET_Tick::WriteToBuffer(Utils::bf_write& buffer)
+bool NET_Tick::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 	buffer.write_long(Tick);
@@ -541,7 +541,7 @@ bool NET_Tick::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool NET_Tick::ReadFromBuffer(Utils::bf_read& buffer)
+bool NET_Tick::ReadFromBuffer(utils::bf_read& buffer)
 {
 	Tick = buffer.read_long();
 	HostFrameTime = (float)buffer.read_ubit(16) / NET_TICK_SCALEUP;
@@ -549,37 +549,37 @@ bool NET_Tick::ReadFromBuffer(Utils::bf_read& buffer)
 	return !buffer.has_overflown();
 }
 
-bool SVC_UserMessage::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_UserMessage::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_UserMessage::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_UserMessage::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_SetPause::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_SetPause::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_SetPause::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_SetPause::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_SetPauseTimed::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_SetPauseTimed::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_SetPauseTimed::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_SetPauseTimed::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool NET_SetConVar::WriteToBuffer(Utils::bf_write& buffer)
+bool NET_SetConVar::WriteToBuffer(utils::bf_write& buffer)
 {
 	buffer.write_ubit(static_cast<uint32_t>(GetType()), Const::NetMsgType_Bits);
 
@@ -597,7 +597,7 @@ bool NET_SetConVar::WriteToBuffer(Utils::bf_write& buffer)
 	return !buffer.has_overflown();
 }
 
-bool NET_SetConVar::ReadFromBuffer(Utils::bf_read& buffer)
+bool NET_SetConVar::ReadFromBuffer(utils::bf_read& buffer)
 {
 	int numvars = buffer.read_byte();
 
@@ -615,123 +615,123 @@ bool NET_SetConVar::ReadFromBuffer(Utils::bf_read& buffer)
 }
 
 
-bool SVC_UpdateStringTable::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_UpdateStringTable::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_UpdateStringTable::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_UpdateStringTable::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_CreateStringTable::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_CreateStringTable::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_CreateStringTable::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_CreateStringTable::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_Sounds::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_Sounds::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_Sounds::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_Sounds::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_Prefetch::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_Prefetch::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_Prefetch::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_Prefetch::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_TempEntities::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_TempEntities::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_TempEntities::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_TempEntities::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_ClassInfo::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_ClassInfo::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_ClassInfo::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_ClassInfo::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_GameEvent::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_GameEvent::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 
 }
 
-bool SVC_GameEvent::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_GameEvent::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_SendTable::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_SendTable::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_SendTable::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_SendTable::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_EntityMessage::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_EntityMessage::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_EntityMessage::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_EntityMessage::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_PacketEntities::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_PacketEntities::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_PacketEntities::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_PacketEntities::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_Menu::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_Menu::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_Menu::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_Menu::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }
 
-bool SVC_GameEventList::WriteToBuffer(Utils::bf_write& buffer)
+bool SVC_GameEventList::WriteToBuffer(utils::bf_write& buffer)
 {
 	return false;
 }
 
-bool SVC_GameEventList::ReadFromBuffer(Utils::bf_read& buffer)
+bool SVC_GameEventList::ReadFromBuffer(utils::bf_read& buffer)
 {
 	return false;
 }

@@ -1,10 +1,10 @@
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 
 #include <tf2/entity/EntityIterator.hpp>
 
 #include <tf2/utils/UtlLinkedList.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 namespace Impl::EntityIterator
 {
@@ -13,9 +13,9 @@ namespace Impl::EntityIterator
 		static auto Get()
 		{
 			static auto EntityList = IntPtr(
-				Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") +
-				Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "BaseEntities").value_or(0)
-			).get<Utils::UtlLinkedList<IBaseEntityInternal*, unsigned short>>();
+				interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") +
+				interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "BaseEntities").value_or(0)
+			).get<utils::UtlLinkedList<IBaseEntityInternal*, unsigned short>>();
 			assert(EntityList);
 			return EntityList;
 		}

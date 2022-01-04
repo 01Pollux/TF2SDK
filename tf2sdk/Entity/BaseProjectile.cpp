@@ -7,7 +7,7 @@
 
 TF2_NAMESPACE_BEGIN();
 
-void Utils::QueryProjectileInfo(const IEconEntityInternal* pEnt, Const::EntClassID class_id, float* speed, float* gravity, float* start_velocity)
+void utils::QueryProjectileInfo(const IEconEntityInternal* pEnt, Const::EntClassID class_id, float* speed, float* gravity, float* start_velocity)
 {
 	constexpr auto set_if_valid = [](float* pVal, float res) { if (pVal) *pVal = res; };
 
@@ -124,7 +124,7 @@ void Utils::QueryProjectileInfo(const IEconEntityInternal* pEnt, Const::EntClass
 	case Const::EntClassID::CTFGrenadePipebombProjectile:
 	{
 		const float charge_time = static_cast<const IBaseWeaponInternal*>(pEnt)->PipeChargeBeginTime ?
-			0.f : Interfaces::GlobalVars->CurTime - static_cast<const IBaseWeaponInternal*>(pEnt)->PipeChargeBeginTime;
+			0.f : interfaces::GlobalVars->CurTime - static_cast<const IBaseWeaponInternal*>(pEnt)->PipeChargeBeginTime;
 		const float speed_begin = pEnt->ItemDefinitionIndex == 1150 ? 925.38f : 925.38f;
 
 		set_if_valid(speed, std::lerp(925.38f, 2409.2f, std::min(charge_time / 4.f, 1.f)));
@@ -157,7 +157,7 @@ void Utils::QueryProjectileInfo(const IEconEntityInternal* pEnt, Const::EntClass
 	case Const::EntClassID::CTFCompoundBow:
 	{
 		const float charge_time = static_cast<const IBaseWeaponInternal*>(pEnt)->SniperChargeDamage ?
-			0.f : Interfaces::GlobalVars->CurTime - static_cast<const IBaseWeaponInternal*>(pEnt)->SniperChargeDamage;
+			0.f : interfaces::GlobalVars->CurTime - static_cast<const IBaseWeaponInternal*>(pEnt)->SniperChargeDamage;
 		const float speed_begin = pEnt->ItemDefinitionIndex == 1150 ? 925.38f : 925.38f;
 
 		set_if_valid(speed, std::lerp(1812.1f, 2600.f, std::min(charge_time / 1.f, 1.f)));

@@ -9,7 +9,7 @@ TF2_NAMESPACE_BEGIN();
 
 class IVModelRender;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVModelRender, ModelRenderer, "VEngineModel016");
 }

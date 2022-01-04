@@ -86,17 +86,17 @@ public:
 class ITFParticle
 {
 public:
-	SG_SDK_TF2 void SetControlPoint(int point, const Vector3D_F& val);
-	SG_SDK_TF2 void SetControlPoint(int point, const IBaseEntity pEnt);
+	PX_SDK_TF2 void SetControlPoint(int point, const Vector3D_F& val);
+	PX_SDK_TF2 void SetControlPoint(int point, const IBaseEntity pEnt);
 };
 
 class ITFParticleFactory
 {
 public:
-	SG_SDK_TF2 static void DispatchParticleEffect(const IBaseEntity entity, const char* particle, const Vector3D_F& origins, const Angle_F& angles);
+	PX_SDK_TF2 static void DispatchParticleEffect(const IBaseEntity entity, const char* particle, const Vector3D_F& origins, const Angle_F& angles);
 
-	SG_SDK_TF2 ITFParticle* Create(const char* particle_name, ParticleAttachment attach_type, int attach_point = 0, const Vector3D_F& attach_position = { }) noexcept;
-	SG_SDK_TF2 void StopEmission(ITFParticle* pEffect = nullptr, bool bWakeOnStop = false, bool bDestroyAsleepSystems = false) noexcept;
+	PX_SDK_TF2 ITFParticle* Create(const char* particle_name, ParticleAttachment attach_type, int attach_point = 0, const Vector3D_F& attach_position = { }) noexcept;
+	PX_SDK_TF2 void StopEmission(ITFParticle* pEffect = nullptr, bool bWakeOnStop = false, bool bDestroyAsleepSystems = false) noexcept;
 };
 
 

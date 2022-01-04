@@ -1,5 +1,5 @@
 
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 #include <tf2/utils/Thunks.hpp>
 
 #include <tf2/entity/BaseEntity.hpp>
@@ -25,7 +25,7 @@ bool IBaseHandle::valid_entity() const noexcept
 IBaseEntityInternal* IBaseEntityInternal::GetLocalPlayer()
 {
 	static IBaseEntityInternal** local_player =
-		Interfaces::SDKManager::Get()->ReadSignature("pLocalPlayer").get<IBaseEntityInternal*>();
+		interfaces::SDKManager::Get()->ReadSignature("pLocalPlayer").get<IBaseEntityInternal*>();
 	assert(local_player);
 	return *local_player;
 }
@@ -33,8 +33,8 @@ IBaseEntityInternal* IBaseEntityInternal::GetLocalPlayer()
 int IBaseEntityInternal::GetHighestEntityIndex()
 {
 	static int* highest_ent_index = IntPtr(
-		Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
-		Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "HighestEntityIndex").value_or(0)
+		interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
+		interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "HighestEntityIndex").value_or(0)
 		).get<int>();
 	assert(highest_ent_index);
 	return *highest_ent_index;
@@ -42,26 +42,26 @@ int IBaseEntityInternal::GetHighestEntityIndex()
 
 IBaseEntityInternal* IBaseEntityInternal::GetEntity(IBaseHandle hndl)
 {
-	assert(Interfaces::ClientList);
-	return Interfaces::ClientList->GetClientEntityFromHandle(hndl);
+	assert(interfaces::ClientList);
+	return interfaces::ClientList->GetClientEntityFromHandle(hndl);
 }
 
 IBaseEntityInternal* IBaseEntityInternal::GetEntity(int idx)
 {
-	assert(Interfaces::ClientList);
-	return Interfaces::ClientList->GetClientEntity(idx);
+	assert(interfaces::ClientList);
+	return interfaces::ClientList->GetClientEntity(idx);
 }
 
 
 bool IBaseEntityInternal::BadLocal()
 {
-	assert(Interfaces::EngineClient);
-	return !Interfaces::EngineClient->IsInGame() || BadEntity(GetLocalPlayer());
+	assert(interfaces::EngineClient);
+	return !interfaces::EngineClient->IsInGame() || BadEntity(GetLocalPlayer());
 }
 
 bool IBaseEntityInternal::IsBaseCombatWeapon() const noexcept
 {
-	static Utils::IMemberVFuncThunk<bool> is_combat_weapon{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable" }, "IsBaseCombatWeapon").value_or(-1)};
+	static utils::MemberVFuncThunk<bool> is_combat_weapon{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable" }, "IsBaseCombatWeapon").value_or(-1)};
 	assert(is_combat_weapon);
 	return is_combat_weapon(this);
 }
@@ -70,13 +70,13 @@ EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const noexcept
 {
 	if (is_pred)
 	{
-		static Utils::IMemberVFuncThunk<EntityDataMap*> get_preddescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetPredDescMap").value_or(-1) };
+		static utils::MemberVFuncThunk<EntityDataMap*> get_preddescmap{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetPredDescMap").value_or(-1) };
 		assert(get_preddescmap);
 		return get_preddescmap(this);
 	}
 	else
 	{
-		static Utils::IMemberVFuncThunk<EntityDataMap*> get_datadescmap{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetDataDescMap").value_or(-1) };
+		static utils::MemberVFuncThunk<EntityDataMap*> get_datadescmap{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetDataDescMap").value_or(-1) };
 		assert(get_datadescmap);
 		return get_datadescmap(this);
 	}
@@ -84,20 +84,20 @@ EntityDataMap* IBaseEntityInternal::GetDataMap(bool is_pred) const noexcept
 
 const IBoneCache* IBaseEntityInternal::GetBoneCache() const
 {
-	static Utils::IMemberFuncThunk<IBoneCache*, studiohdr_t*> get_bonecache(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "GetBoneCache").get());
+	static utils::MemberFuncThunk<IBoneCache*, studiohdr_t*> get_bonecache(interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "GetBoneCache").get());
 	assert(get_bonecache);
 	return get_bonecache(this, nullptr);
 }
 
 bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
 {
-	assert(Interfaces::ModelInfo);
+	assert(interfaces::ModelInfo);
 
 	const ModelInfo* mdl = GetModel();
 	if (!mdl)
 		return false;
 
-	const studiohdr_t* shdr = Interfaces::ModelInfo->GetStudiomodel(mdl);
+	const studiohdr_t* shdr = interfaces::ModelInfo->GetStudiomodel(mdl);
 	if (!shdr)
 		return false;
 
@@ -116,13 +116,13 @@ bool IBaseEntityInternal::QueryBoneInfo(IBoneInfo& results) const
 
 bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResult& results) const
 {
-	assert(Interfaces::ModelInfo);
+	assert(interfaces::ModelInfo);
 
 	const ModelInfo* mdl = GetModel();
 	if (!mdl)
 		return false;
 
-	const studiohdr_t* shdr = Interfaces::ModelInfo->GetStudiomodel(mdl);
+	const studiohdr_t* shdr = interfaces::ModelInfo->GetStudiomodel(mdl);
 	if (!shdr)
 		return false;
 
@@ -147,7 +147,7 @@ bool IBaseEntityInternal::GetBonePosition(int bone_position, BoneResult& results
 
 void IBaseEntityInternal::SetModel(int modelidx)
 {
-	static Utils::IMemberFuncThunk<void, int> set_modelidx(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "SetModelIndex").get());
+	static utils::MemberFuncThunk<void, int> set_modelidx(interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "SetModelIndex").get());
 	assert(set_modelidx);
 	set_modelidx(this, modelidx);
 }
@@ -167,28 +167,28 @@ bool IBaseEntityInternal::IsGhost() const noexcept
 
 void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel) const
 {
-	static Utils::IMemberFuncThunk<void, Vector3D_F&> estimate_velocity(Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
+	static utils::MemberFuncThunk<void, Vector3D_F&> estimate_velocity(interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "EstimateAbsVelocity").get());
 	assert(estimate_velocity);
 	estimate_velocity(this, vel);
 }
 
 int IBaseEntityInternal::LookupAttachment(const char* name)
 {
-	static Utils::IMemberVFuncThunk<int> lookup_attachment{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "LookupAttachment").value_or(-1) };
+	static utils::MemberVFuncThunk<int> lookup_attachment{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "LookupAttachment").value_or(-1) };
 	assert(lookup_attachment);
 	return lookup_attachment(this);
 }
 
 bool IBaseEntityInternal::GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles)
 {
-	static Utils::IMemberVFuncThunk<bool, int, Vector3D_F&, Angle_F&> get_attachment{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetAttachment").value_or(-1) };
+	static utils::MemberVFuncThunk<bool, int, Vector3D_F&, Angle_F&> get_attachment{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetAttachment").value_or(-1) };
 	assert(get_attachment);
 	return get_attachment(this, attach_pt, origin, angles);
 }
 
 bool IBaseEntityInternal::ShouldCollide(Const::EntCollisionGroup groups, uint32_t mask)
 {
-	static Utils::IMemberVFuncThunk<bool, Const::EntCollisionGroup, uint32_t> should_collide{ Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "ShouldCollide").value_or(-1) };
+	static utils::MemberVFuncThunk<bool, Const::EntCollisionGroup, uint32_t> should_collide{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "ShouldCollide").value_or(-1) };
 	assert(should_collide);
 	return should_collide(this, groups, mask);
 }

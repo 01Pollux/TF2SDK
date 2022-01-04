@@ -196,7 +196,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2
+	PX_SDK_TF2
 	bool FindDataMap(EntityDataMap* datamap, const char* prop_name, DM_TypeDescription** pDesc, uint32_t* pOffset);
 }
 

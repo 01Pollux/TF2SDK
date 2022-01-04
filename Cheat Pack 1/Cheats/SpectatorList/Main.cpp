@@ -1,9 +1,9 @@
 
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 #include <imgui/imgui_internal.h>
 
-#include <shadowgarden/users/Profiler.hpp>
-#include <shadowgarden/users/FontAwesome_Icons.hpp>
+#include <px/profiler.hpp>
+#include <px/icons/FontAwesome.hpp>
 
 #include <tf2/engine/ClientDll.hpp>
 #include <tf2/engine/GlobalVars.hpp>
@@ -15,7 +15,7 @@
 
 static DisplaySpecList spec_list;
 
-bool DisplaySpecList::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config)
+bool DisplaySpecList::OnAskPluginLoad(tf2::interfaces::SDKManager::Config& config)
 {
 	config.Engine.GlobalVars = true;
 	config.Engine.EngineClient = true;
@@ -28,8 +28,8 @@ bool DisplaySpecList::OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& confi
 
 void DisplaySpecList::OnPluginLoad()
 {
-	m_DisplayFont = SG::ImGuiLoader->FindFont("Arimo-Medium, medium");
-	SG::ImGuiLoader->AddCallback(SG::ThisPlugin, "Spectator list", std::bind(&DisplaySpecList::OnRender, this));
+	m_DisplayFont = px::ImGuiLoader->FindFont("Arimo-Medium, medium");
+	px::ImGuiLoader->AddCallback(px::ThisPlugin, "Spectator list", std::bind(&DisplaySpecList::OnRender, this));
 
 	ImGuiContextHook draw_hook;
 	draw_hook.Type = ImGuiContextHookType_EndFramePre;
@@ -45,14 +45,14 @@ void DisplaySpecList::OnPluginUnload()
 
 void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 {
-	if (SG::ThisPlugin->IsPluginPaused() || !spec_list.m_Enabled)
+	if (px::ThisPlugin->IsPluginPaused() || !spec_list.m_Enabled)
 		return;
 
-	using namespace TF2;
+	using namespace tf2;
 	if (ITFPlayerInternal::BadLocal())
 		return;
 
-	SG_PROFILE_SECTION("Visuals", "DisplaySpecList::OnDrawSpecList");
+	PX_PROFILE_SECTION("Visuals", "DisplaySpecList::OnDrawSpecList");
 
 	ILocalPlayer pMe;
 	PlayerInfo playerinfo;
@@ -65,7 +65,7 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 	std::vector<NameAndMode> spectators;
 	spectators.reserve(4);
 
-	for (int i = 1; i <= Interfaces::GlobalVars->MaxClients && spectators.size() <= static_cast<size_t>(spec_list.m_DisplayCount); i++)
+	for (int i = 1; i <= interfaces::GlobalVars->MaxClients && spectators.size() <= static_cast<size_t>(spec_list.m_DisplayCount); i++)
 	{
 		ITFPlayer player(i);
 		if (!player || player == pMe)
@@ -106,7 +106,7 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 		}
 		else spec_mode = "";
 
-		if (Interfaces::EngineClient->GetPlayerInfo(i, &playerinfo))
+		if (interfaces::EngineClient->GetPlayerInfo(i, &playerinfo))
 			spectators.emplace_back(spec_mode, playerinfo.Name);
 	}
 

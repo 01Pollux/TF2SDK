@@ -9,9 +9,9 @@
 
 #include "ESP.hpp"
 
-void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& box_info)
+void GlobalESP::RenderPlayerESP(const tf2::ITFPlayer pPlayer, ESPInfo::BoxInfo& box_info)
 {
-	using namespace TF2;
+	using namespace tf2;
 	ILocalPlayer pMe;
 	ESPInfo::Player* esp_info;
 	switch (pPlayer->TeamNum)
@@ -51,7 +51,7 @@ void GlobalESP::RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& 
 			if (player_esp->DrawName)
 			{
 				PlayerInfo info;
-				if (Interfaces::EngineClient->GetPlayerInfo(pPlayer->GetEntIndex(), &info))
+				if (interfaces::EngineClient->GetPlayerInfo(pPlayer->GetEntIndex(), &info))
 				{
 					sprintf_s(fmt, "Name: %s", info.Name);
 					renderer.AddText(fmt);

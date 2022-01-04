@@ -1,9 +1,9 @@
 
-#include <shadowgarden/interfaces/ImGui.hpp>
+#include <px/interfaces/ImGui.hpp>
 #include "ESP.hpp"
 
 using ESPInst = ESPInfo::Shared&;
-static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG::ConVar<ESPInfo::HealthBarMode>* health_bar)
+static void DrawGeneric_ImGuiSelections(ESPInst esp, px::ConfigState& state, px::ConVar<ESPInfo::HealthBarMode>* health_bar)
 {
 	state.add(ImGui::Checkbox("Enable", esp.Enable.data()));
 	ImGui::SameLineHelp(esp.Enable);
@@ -104,7 +104,7 @@ static void DrawGeneric_ImGuiSelections(ESPInst esp, SG::ConfigState& state, SG:
 
 bool GlobalESP::OnRender()
 {
-	SG::ConfigState state;
+	px::ConfigState state;
 	constexpr float third_of_spacing = 160.f;
 
 	if (ImGui::CollapsingHeader("Player Manager"))
@@ -260,9 +260,9 @@ bool GlobalESP::OnRender()
 	return state;
 }
 
-void GlobalESP::OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const
+void GlobalESP::OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const
 {
-	SG::IPlugin::FileConfigs esp_cfg("esp_config");
+	px::IPlugin::FileConfigs esp_cfg("esp_config");
 
 	auto SaveGeneric = [&esp_cfg](const ESPInfo::Shared& cur_esp)
 	{

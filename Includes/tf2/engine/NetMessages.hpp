@@ -235,7 +235,7 @@ struct NetPacket
 	int				Source;		// received source 
 	double			Received;	// received time
 	unsigned char*	Data;		// pointer to raw packet data
-	Utils::bf_read	Message;	// easy bitbuf data access
+	utils::bf_read	Message;	// easy bitbuf data access
 	int				Size;		// size in bytes
 	int				WireSize;   // size in bytes before decompression
 	bool			Stream;		// was send as stream
@@ -255,8 +255,8 @@ using QueryCVarCookie = int;
 		void				SetNetChannel(INetChannel* netchan)		final { Channel = netchan; }					\
 		void				SetReliable(bool state)					final { Reliable = state; }						\
 		bool				IsReliable()				const final { return Reliable; }							\
-		SG_SDK_TF2 bool		ReadFromBuffer(Utils::bf_read& buffer)	final;											\
-		SG_SDK_TF2 bool		WriteToBuffer(Utils::bf_write& buffer)	final;											\
+		PX_SDK_TF2 bool		ReadFromBuffer(utils::bf_read& buffer)	final;											\
+		PX_SDK_TF2 bool		WriteToBuffer(utils::bf_write& buffer)	final;											\
 		const char*			ToString()					const final { return ""; }									\
 		Const::NetMsgType	GetType()					const final { return Const::NetMsgType::NAME##_##TYPE; }	\
 		const char*			GetName()					const final { return #NAME## "_" #TYPE; }					\
@@ -276,8 +276,8 @@ public:
 
 	virtual bool	Process()						abstract; // calles the recently set handler to process this message
 
-	virtual	bool	ReadFromBuffer(Utils::bf_read& buffer) abstract; // returns true if parsing was OK
-	virtual	bool	WriteToBuffer(Utils::bf_write& buffer) abstract;	// returns true if writing was OK
+	virtual	bool	ReadFromBuffer(utils::bf_read& buffer) abstract; // returns true if parsing was OK
+	virtual	bool	WriteToBuffer(utils::bf_write& buffer) abstract;	// returns true if writing was OK
 
 	virtual bool	IsReliable()			const abstract;  // true, if message needs reliable handling
 
@@ -326,7 +326,7 @@ public:
 		}
 	};
 
-	Utils::UtlVector<cvar_t> ConVars;
+	utils::UtlVector<cvar_t> ConVars;
 };
 
 
@@ -382,13 +382,13 @@ class CLC_ClientInfo : public INetMessage
 	DECLARE_NET_MESSAGE(ClientInfo, Generic, clc, IClientMessageHandler);
 
 public:
-	Utils::CRC32_t	SendTableCRC;
+	utils::CRC32_t	SendTableCRC;
 	int				ServerCount;
 	bool			IsHLTV;
 	bool			IsReplay;
 	uint32_t		FriendsID;
 	char			FriendsName[32];
-	Utils::CRC32_t	CustomFiles[4];
+	utils::CRC32_t	CustomFiles[4];
 };
 
 
@@ -423,8 +423,8 @@ public:
 	int				BackupCommands;
 	int				NewCommands;
 	int				Length;
-	Utils::bf_read	DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read	DataIn;
+	utils::bf_write	DataOut;
 };
 
 
@@ -436,8 +436,8 @@ class CLC_VoiceData : public INetMessage
 
 public:
 	int				Length;
-	Utils::bf_read	DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read	DataIn;
+	utils::bf_write	DataOut;
 	uint64_t		ID;
 };
 
@@ -461,8 +461,8 @@ class CLC_FileCRCCheck : public INetMessage
 public:	
 	char		PathID[_MAX_PATH];
 	char			Filename[_MAX_PATH];
-	Utils::MD5Value	MD5;
-	Utils::CRC32_t	CRCIOs;
+	utils::MD5Value	MD5;
+	utils::CRC32_t	CRCIOs;
 	int				FileHashType;
 	int				FileLen;
 	int				PackFileNumber;
@@ -478,7 +478,7 @@ class CLC_FileMD5Check : public INetMessage
 public:
 	char		PathID[_MAX_PATH];
 	char		Filename[_MAX_PATH];
-	Utils::MD5Value	MD5;
+	utils::MD5Value	MD5;
 };
 
 
@@ -537,8 +537,8 @@ public:	// member vars are public for faster handling
 	bool			IsHLTV;		// HLTV server ?
 	bool			IsReplay;	// Replay server ?
 	OSType			OS;			// L = linux, W = Win32
-	Utils::CRC32_t	MapCRC;		// server map CRC (only used by older demos)
-	Utils::MD5Value	MapMD5;		// server map MD5
+	utils::CRC32_t	MapCRC;		// server map CRC (only used by older demos)
+	utils::MD5Value	MapMD5;		// server map MD5
 	int				MaxClients;	// max number of clients on server
 	int				MaxClasses;	// max number of server classes
 	int				PlayerSlot;	// our client slot number
@@ -562,8 +562,8 @@ class SVC_SendTable : public INetMessage
 public:
 	bool			NeedsDecoder;
 	int				Length;
-	Utils::bf_read	DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read	DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_ClassInfo : public INetMessage
@@ -584,7 +584,7 @@ public:
 	} class_t;
 
 	bool					CreateOnClient{ };	// if true, client creates own SendTables & classinfos from game.dll
-	Utils::UtlVector<class_t>		Classes;
+	utils::UtlVector<class_t>		Classes;
 	int						NumServerClasses{ };
 };
 
@@ -629,8 +629,8 @@ public:
 	int			UserDataSizeBits;
 	bool		IsFilenames;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 	bool		DataCompressed;
 
 private:
@@ -645,8 +645,8 @@ public:
 	int				TableID;	// table to be updated
 	int				ChangedEntries; // number of how many entries has changed
 	int				Length;	// data length in bits
-	Utils::bf_read			DataIn;
-	Utils::bf_write		DataOut;
+	utils::bf_read			DataIn;
+	utils::bf_write		DataOut;
 };
 
 // SVC_VoiceInit
@@ -704,7 +704,7 @@ public:
 	int				Length;		// data length in bits
 	uint64_t		xuid;			// X360 player ID
 
-	Utils::bf_read			DataIn;
+	utils::bf_read			DataIn;
 	void* DataOut;
 };
 
@@ -717,8 +717,8 @@ public:
 	bool		ReliableSound;
 	int			NumSounds;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_Prefetch : public INetMessage
@@ -788,8 +788,8 @@ class SVC_GameEvent : public INetMessage
 
 public:
 	int			Length;	// data length in bits
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_UserMessage : public INetMessage
@@ -801,8 +801,8 @@ class SVC_UserMessage : public INetMessage
 public:
 	int				MsgType;
 	int				Length;	// data length in bits
-	Utils::bf_read	DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read	DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_EntityMessage : public INetMessage
@@ -815,8 +815,8 @@ public:
 	int			EntityIndex;
 	int			ClassID;
 	int			Length;	// data length in bits
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 /* class SVC_SpawnBaseline: public INetMessage
@@ -828,8 +828,8 @@ public:
 	int			EntityIndex;
 	int			ClassID;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 
 }; */
 
@@ -846,8 +846,8 @@ public:
 	int			Baseline;
 	int			DeltaFrom;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_TempEntities : public INetMessage
@@ -859,8 +859,8 @@ class SVC_TempEntities : public INetMessage
 public:
 	int			NumEntries;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 class SVC_Menu : public INetMessage
@@ -894,8 +894,8 @@ public:
 
 	int			NumEvents;
 	int			Length;
-	Utils::bf_read		DataIn;
-	Utils::bf_write	DataOut;
+	utils::bf_read		DataIn;
+	utils::bf_write	DataOut;
 };
 
 

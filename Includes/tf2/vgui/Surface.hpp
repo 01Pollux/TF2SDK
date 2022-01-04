@@ -13,7 +13,7 @@ namespace VGui
 }
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(VGui::ISurface, Surface, "VGUI_Surface030");
 }

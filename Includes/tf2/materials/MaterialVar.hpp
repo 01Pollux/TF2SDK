@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Math/Matrix.hpp"
-#include "Utils/UtlSymbol.hpp"
+#include "utils/UtlSymbol.hpp"
 
 TF2_NAMESPACE_BEGIN();
 
@@ -43,7 +43,7 @@ protected:
 	uint8_t m_nNumVectorComps : 3;
 	uint8_t m_bFakeMaterialVar : 1;
 	uint8_t m_nTempIndex;
-	Utils::UtlSymbol m_Name;
+	utils::UtlSymbol m_Name;
 
 public:
 	// class factory methods

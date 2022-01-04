@@ -2,7 +2,7 @@
 
 #include <tf2/utils/bitbuf.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils)
+TF2_NAMESPACE_BEGIN(::utils)
 
 struct bit_buffer_constants
 {

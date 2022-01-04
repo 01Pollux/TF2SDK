@@ -2,7 +2,7 @@
 
 #include <tf2/consts.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils::VAlloc);
+TF2_NAMESPACE_BEGIN(::utils::VAlloc);
 
 
 template <class T>

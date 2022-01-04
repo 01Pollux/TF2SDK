@@ -39,7 +39,7 @@ struct client_textmessage_t;
 struct PlayerInfo;
 struct PVSInfo_t;
 
-namespace Utils
+namespace utils
 {
 	template<size_t>
 	class UtlBitVec;
@@ -49,7 +49,7 @@ using QueryCvarCookie = int32_t;
 enum class EQueryCvarValueStatus;
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVEngineServer, EngineServer,	"VEngineServer023");
 	TF2_EXPORT_INTERFACE(IServerGameDLL, ServerDLL,		"ServerGameDLL010");
@@ -165,7 +165,7 @@ public:
 	virtual void		StaticDecal(const Vector3D_F& originInEntitySpace, int decalIndex, int entityIndex, int modelIndex, bool lowpriority) abstract;
 
 	// Given the current PVS(or PAS) and origin, determine which players should hear/receive the message
-	virtual void		Message_DetermineMulticastRecipients(bool usepas, const Vector3D_F& origin, Utils::UtlBitVec<Const::MaxPlayers_Absolute>& playerbits) abstract;
+	virtual void		Message_DetermineMulticastRecipients(bool usepas, const Vector3D_F& origin, utils::UtlBitVec<Const::MaxPlayers_Absolute>& playerbits) abstract;
 
 	// Begin a message from a server side entity to its client side counterpart (func_breakable glass, e.g.)
 	virtual bf_write* EntityMessageBegin(int ent_index, ServerClass* ent_class, bool reliable) abstract;
@@ -278,7 +278,7 @@ public:
 	// Also, this will return NULL if the client doesn't exist or if this client hasn't acked any frames yet.
 	// 
 	// iClientIndex is the CLIENT index, so if you use pPlayer->entindex(), subtract 1.
-	virtual const Utils::UtlBitVec<Const::MaxEdicts>* GetEntityTransmitBitsForClient(int iClientIndex) abstract;
+	virtual const utils::UtlBitVec<Const::MaxEdicts>* GetEntityTransmitBitsForClient(int iClientIndex) abstract;
 
 	// Is the game paused?
 	virtual bool		IsPaused() abstract;

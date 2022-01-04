@@ -11,7 +11,7 @@
 TF2_NAMESPACE_BEGIN();
 
 class IMaterialSystem;
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IMaterialSystem, MatSys, "VMaterialSystem081");
 }
@@ -596,7 +596,7 @@ public:
 // Passed as the callback object to Async functions in the material system
 // so that callers don't have to worry about memory going out of scope before the 
 // results return.
-class IAsyncTextureOperationReceiver : public Utils::IRefCounted
+class IAsyncTextureOperationReceiver : public utils::IRefCounted
 {
 public:
 	virtual void OnAsyncCreateComplete(ITexture * pTex, void* pExtraArgs) abstract;
@@ -608,7 +608,7 @@ public:
 };
 
 
-class IMatRenderContext : public Utils::IRefCounted
+class IMatRenderContext : public utils::IRefCounted
 {
 public:
 	virtual void				BeginRender() abstract;

@@ -2,147 +2,185 @@
 
 #include <tf2/config.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils)
+TF2_NAMESPACE_BEGIN(::utils)
 
 #ifdef _WIN32
-#define SG_MAKE_DLL(NAME)	NAME##".dll"
+#define PX_MAKE_DLL(NAME)	NAME##".dll"
 #elif defined __linux__
-#define SG_MAKE_DLL(NAME)	NAME##".so"
+#define PX_MAKE_DLL(NAME)	NAME##".so"
 #else
-#define SG_MAKE_DLL(...)
+#define PX_MAKE_DLL(...)
 #endif
 
-#define TF2_ENGINE_DLL		SG_MAKE_DLL("engine")
-#define TF2_CLIENT_DLL		SG_MAKE_DLL("client")
-#define TF2_SERVER_DLL		SG_MAKE_DLL("server")
-#define TF2_VALVESTD_DLL	SG_MAKE_DLL("vstdlib")
-#define TF2_MATSURFACE_DLL	SG_MAKE_DLL("vguimatsurface")
+#define TF2_ENGINE_DLL		PX_MAKE_DLL("engine")
+#define TF2_CLIENT_DLL		PX_MAKE_DLL("client")
+#define TF2_SERVER_DLL		PX_MAKE_DLL("server")
+#define TF2_VALVESTD_DLL	PX_MAKE_DLL("vstdlib")
+#define TF2_MATSURFACE_DLL	PX_MAKE_DLL("vguimatsurface")
 
 
-class CallClass { };
+#include <type_traits>
+#include <assert.h>
 
-template<typename ReturnType, typename... Args>
-class IFuncThunk
+class _empty_callclass { };
+
+template<typename _Ty>
+constexpr _empty_callclass* to_empty_class(const _Ty& cls) noexcept
 {
-	using FnPtr = ReturnType(*)(Args...);
-public:
-	IFuncThunk(void* ptr = nullptr) noexcept { set(ptr); }
+    return std::bit_cast<_empty_callclass*>(&cls);
+}
 
-	constexpr operator bool() const noexcept
-	{
-		return Func != nullptr;
-	}
+enum class callconv_t : char
+{
+    cc_cdecl,
+    cc_stdcall,
+    cc_fastcall,
+#if defined _M_CEE_PURE || defined MRTDLL
+    cc_clrcall,
+#endif
+    cc_vectorcall,
+    cc_thiscall,
 
-	constexpr ReturnType operator()(Args... args)
-	{
-		assert(Func);
-		return Func(args...);
-	}
-
-	void set(void* ptr) noexcept
-	{
-		union
-		{
-			FnPtr fn;
-			void* ptr;
-		} u{ .ptr = ptr };
-
-		Func = u.fn;
-	}
-
-	void* get() const noexcept
-	{
-		union
-		{
-			FnPtr fn;
-			void* ptr;
-		} u{ .fn = Func };
-		return u.ptr;
-	}
-
-private:
-	FnPtr Func{ };
+    cc_winapi = cc_stdcall
 };
 
-template<typename ReturnType, typename... Args>
-class IMemberFuncThunk
+template<typename _RTy, callconv_t conv = callconv_t::cc_cdecl, typename... _Args>
+class FuncThunkEx
 {
-	using FnPtr = ReturnType(CallClass::*)(Args...);
 public:
-	IMemberFuncThunk(void* ptr = nullptr) noexcept { set(ptr); }
+    using return_type = _RTy;
+    using args_pack = std::tuple<_Args...>;
+    using func_type = 
+        std::conditional_t<conv == callconv_t::cc_cdecl, return_type(_cdecl*)(_Args...),
+            std::conditional_t<conv == callconv_t::cc_stdcall, return_type(_stdcall*)(_Args...),
+                std::conditional_t<conv == callconv_t::cc_fastcall, return_type(_fastcall*)(_Args...),
+                    std::conditional_t<conv == callconv_t::cc_vectorcall, return_type(_vectorcall*)(_Args...),
+                        std::conditional_t< conv == callconv_t::cc_thiscall, return_type(__thiscall*)(_Args...),
+#if defined _M_CEE_PURE || defined MRTDLL
+                        std::conditional_t<conv == callconv_t::cc_clrcall, return_type(__clrcall*)(_Args...),
+                        void>
+#else
+                        void
+#endif
+                    >
+                >
+            >
+        >
+    >;
 
-	constexpr operator bool() const noexcept
-	{
-		return Func != nullptr;
-	}
+    constexpr FuncThunkEx(void* ptr = nullptr) noexcept : _U({ .ptr = ptr }) { }
 
-	constexpr ReturnType operator()(const void* thisptr, Args... args)
-	{
-		assert(thisptr);
-		assert(Func);
-		return ((CallClass*)thisptr->*Func)(args...);
-	}
+    constexpr operator bool() const noexcept
+    {
+        return get() != nullptr;
+    }
 
-	void set(void* ptr) noexcept
-	{
-		union
-		{
-			FnPtr fn;
-			void* ptr;
-		} u{ .ptr = ptr };
+    constexpr return_type operator()(_Args... args)
+    {
+        assert(get());
+        return (*_U.func)(std::forward<_Args>(args)...);
+    }
 
-		Func = u.fn;
-	}
+    void set(void* ptr) noexcept
+    {
+        _U.ptr = ptr;
+    }
 
-	void* get() const noexcept
-	{
-		union
-		{
-			FnPtr fn;
-			void* ptr;
-		} u{ .fn = Func };
-		return u.ptr;
-	}
-
+    constexpr void* get() const noexcept
+    {
+        return _U.ptr;
+    }
 private:
-	FnPtr Func{ };
+    union {
+        func_type func;
+        void* ptr;
+    } _U;
 };
-
 
 template<typename _RTy, typename... _Args>
-class IMemberVFuncThunk
+class MemberFuncThunk
 {
 public:
-	IMemberVFuncThunk(int offset = -1) noexcept : Offset(offset) { };
+    using return_type = _RTy;
+    using args_pack = std::tuple<_Args...>;
+    using func_type = return_type(_empty_callclass::*)(_Args...);
 
-	constexpr operator bool() const noexcept
-	{
-		return Offset != -1;
-	}
+    constexpr MemberFuncThunk(void* ptr = nullptr) noexcept : _U({ .ptr = ptr }) { }
 
-	constexpr _RTy operator()(const void* thisptr, _Args... args)
-	{
-		assert(thisptr);
-		assert(Offset);
+    constexpr operator bool() const noexcept
+    {
+        return get() != nullptr;
+    }
 
-		void** vtable = *(void***)(thisptr);
-		IMemberFuncThunk<_RTy, _Args...> fn(vtable[Offset]);
+    constexpr return_type operator()(const void* this_ptr, _Args... args)
+    {
+        assert(get());
+        return (to_empty_class(this_ptr)->*_U.func)(
+            std::forward<_Args>(args)...
+        );
+    }
 
-		return fn(thisptr, args...);
-	}
+    void set(void* ptr) noexcept
+    {
+        _U.ptr = ptr;
+    }
 
-	void set(int offset) noexcept
-	{
-		Offset = offset;
-	}
-
-	int get() const noexcept
-	{
-		return Offset;
-	}
+    constexpr void* get() const noexcept
+    {
+        return _U.ptr;
+    }
 
 private:
-	int Offset{ };
+    union {
+        func_type func;
+        void* ptr;
+    } _U;
 };
+
+template<typename _RTy, typename... _Args>
+class MemberVFuncThunk
+{
+public:
+    using return_type = _RTy;
+    using args_pack = std::tuple<_Args...>;
+    using func_type = return_type(_empty_callclass::*)(_Args...);
+
+    constexpr MemberVFuncThunk(int offset = -1) noexcept : m_Offset(offset) { };
+
+    constexpr operator bool() const noexcept
+    {
+        return get() != -1;
+    }
+
+    constexpr return_type operator()(const void* this_ptr, _Args... args)
+    {
+        assert(get()  != -1);
+
+        union {
+            func_type func;
+            void* ptr;
+        } u{ .ptr = (*(void***)(this_ptr))[get()] };
+
+        return (to_empty_class(this_ptr)->*u.func)(
+            std::forward<_Args>(args)...
+        );
+    }
+
+    void set(int offset) noexcept
+    {
+        m_Offset = offset;
+    }
+
+    int get() const noexcept
+    {
+        return m_Offset;
+    }
+
+private:
+    int m_Offset{ };
+};
+
+template<typename _RTy, typename... _Args>
+using FuncThunk = FuncThunkEx<_RTy, callconv_t::cc_cdecl, _Args...>;
 
 TF2_NAMESPACE_END();

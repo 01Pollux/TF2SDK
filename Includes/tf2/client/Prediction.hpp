@@ -8,7 +8,7 @@ TF2_NAMESPACE_BEGIN();
 class IPrediction;
 class IGameMovement;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IPrediction, Prediction, "VClientPrediction001");
 	TF2_EXPORT_INTERFACE(IGameMovement, GameMovement, "GameMovement001");

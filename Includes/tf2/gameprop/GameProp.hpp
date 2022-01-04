@@ -189,7 +189,7 @@ private:
 
 
 
-#define SG_DECL_UNKOWN_PROP_A(Class, Type, Size, GETTER, CustomName, EXTRA)			\
+#define PX_DECL_UNKOWN_PROP_A(Class, Type, Size, GETTER, CustomName, EXTRA)			\
 struct TypeInfo_##CustomName##Class													\
 {																					\
 	using type = std::conditional_t<(Size > 0), std::array<Type, Size>, Type>;		\
@@ -209,11 +209,11 @@ struct TypeInfo_##CustomName##Class													\
 };																					\
 UnknowProp<TypeInfo_##CustomName##Class> CustomName
 
-#define SG_DECL_UNKOWN_PROP(Class, Type, GETTER, CustomName, EXTRA)					\
-		SG_DECL_UNKOWN_PROP_A(Class, Type, 0, GETTER, CustomName, EXTRA)
+#define PX_DECL_UNKOWN_PROP(Class, Type, GETTER, CustomName, EXTRA)					\
+		PX_DECL_UNKOWN_PROP_A(Class, Type, 0, GETTER, CustomName, EXTRA)
 
 
-#define SG_DECL_UNKOWN_PROP_THIS_A(Class, Type, Size, GETTER, CustomName, EXTRA)	\
+#define PX_DECL_UNKOWN_PROP_THIS_A(Class, Type, Size, GETTER, CustomName, EXTRA)	\
 struct TypeInfo_##CustomName##Class													\
 {																					\
 	using type = std::conditional_t<(Size > 0), std::array<Type, Size>, Type>;		\
@@ -233,12 +233,12 @@ struct TypeInfo_##CustomName##Class													\
 };																					\
 UnknowProp<TypeInfo_##CustomName##Class> CustomName
 
-#define SG_DECL_UNKOWN_PROP_THIS(Class, Type, GETTER, CustomName, EXTRA)			\
-		SG_DECL_UNKOWN_PROP_THIS_A(Class, Type, 0, GETTER, CustomName, EXTRA)		\
+#define PX_DECL_UNKOWN_PROP_THIS(Class, Type, GETTER, CustomName, EXTRA)			\
+		PX_DECL_UNKOWN_PROP_THIS_A(Class, Type, 0, GETTER, CustomName, EXTRA)		\
 
 
-#define SG_DECL_RECVPROP_A(Class, Type, Size, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
-SG_DECL_UNKOWN_PROP_A(																			\
+#define PX_DECL_RECVPROP_A(Class, Type, Size, Class_Name, Prop_Name, Custom_Name, ExtraOffset)	\
+PX_DECL_UNKOWN_PROP_A(																			\
 	Class, 																						\
 	Type,																						\
 	Size,																						\
@@ -252,12 +252,12 @@ SG_DECL_UNKOWN_PROP_A(																			\
 	ExtraOffset																					\
 )
 
-#define SG_DECL_RECVPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)			\
-		SG_DECL_RECVPROP_A(Class, Type, 0, Class_Name, Prop_Name, Custom_Name, ExtraOffset)
+#define PX_DECL_RECVPROP(Class, Type, Class_Name, Prop_Name, Custom_Name, ExtraOffset)			\
+		PX_DECL_RECVPROP_A(Class, Type, 0, Class_Name, Prop_Name, Custom_Name, ExtraOffset)
 
 
-#define SG_DECL_DATAMAP_A(Class, Type, Size, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)	\
-SG_DECL_UNKOWN_PROP_THIS_A(																	\
+#define PX_DECL_DATAMAP_A(Class, Type, Size, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)	\
+PX_DECL_UNKOWN_PROP_THIS_A(																	\
 	Class, 																					\
 	Type, 																					\
 	Size, 																					\
@@ -272,8 +272,8 @@ SG_DECL_UNKOWN_PROP_THIS_A(																	\
 )
 
 
-#define SG_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)			\
-		SG_DECL_DATAMAP_A(Class, Type, 0, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)
+#define PX_DECL_DATAMAP(Class, Type, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)			\
+		PX_DECL_DATAMAP_A(Class, Type, 0, Is_Pred, Prop_Name, Custom_Name, ExtraOffset)
 
 
 TF2_NAMESPACE_END();

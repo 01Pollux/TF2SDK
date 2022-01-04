@@ -3,7 +3,7 @@
 #include "UtlMemory.hpp"
 #include <list>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 //-----------------------------------------------------------------------------
 // class UtlLinkedList:
@@ -589,7 +589,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::alloc(bool multilis
 	if (elem == invalid_index())
 		return elem;
 
-	Utils::VAlloc::Construct(&at(elem));
+	utils::VAlloc::Construct(&at(elem));
 
 	return elem;
 }
@@ -600,7 +600,7 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::free(_IdxTy elem)
 	unlink(elem);
 
 	ListElem_t& internalElem = at_internal(elem);
-	Utils::VAlloc::Destruct(&internalElem.m_Element);
+	utils::VAlloc::Destruct(&internalElem.m_Element);
 	internalElem.m_Next = m_FirstFree;
 	m_FirstFree = elem;
 }
@@ -620,8 +620,8 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_before(_IdxTy 
 	// Link it in
 	link_before(before, newNode);
 
-	// Utils::VAlloc::Construct the data
-	Utils::VAlloc::Construct(&at(newNode));
+	// utils::VAlloc::Construct the data
+	utils::VAlloc::Construct(&at(newNode));
 
 	return newNode;
 }
@@ -637,8 +637,8 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_after(_IdxTy a
 	// Link it in
 	link_after(after, newNode);
 
-	// Utils::VAlloc::Construct the data
-	Utils::VAlloc::Construct(&at(newNode));
+	// utils::VAlloc::Construct the data
+	utils::VAlloc::Construct(&at(newNode));
 
 	return newNode;
 }
@@ -671,7 +671,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_before(_IdxTy 
 	// Link it in
 	link_before(before, newNode);
 
-	// Utils::VAlloc::Construct the data
+	// utils::VAlloc::Construct the data
 	CopyConstruct(&at(newNode), src);
 
 	return newNode;
@@ -688,7 +688,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_after(_IdxTy a
 	// Link it in
 	link_after(after, newNode);
 
-	// Utils::VAlloc::Construct the data
+	// utils::VAlloc::Construct the data
 	CopyConstruct(&at(newNode), src);
 
 	return newNode;
@@ -765,7 +765,7 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::clear()
 			if (is_valid(i)) // skip elements already in the free list
 			{
 				ListElem_t& internalElem = at_internal(i);
-				Utils::VAlloc::Destruct(&internalElem.m_Element);
+				utils::VAlloc::Destruct(&internalElem.m_Element);
 				internalElem.m_Previous = i;
 				internalElem.m_Next = m_FirstFree;
 				m_FirstFree = i;
@@ -783,7 +783,7 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::clear()
 		{
 			next_el = next(i);
 			ListElem_t& internalElem = at_internal(i);
-			Utils::VAlloc::Destruct(&internalElem.m_Element);
+			utils::VAlloc::Destruct(&internalElem.m_Element);
 			internalElem.m_Previous = i;
 			internalElem.m_Next = next_el == invalid_index() ? m_FirstFree : next_el;
 			i = next_el;

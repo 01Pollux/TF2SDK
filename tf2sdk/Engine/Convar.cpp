@@ -16,7 +16,7 @@ namespace ConCommandHelper
 	public:
 		bool RegisterConCommandBase(ConCommandBase* pVar) final
 		{
-			Interfaces::CVar->RegisterConCommand(pVar);
+			interfaces::CVar->RegisterConCommand(pVar);
 			return true;
 		}
 	};
@@ -25,13 +25,13 @@ namespace ConCommandHelper
 
 void ConCommandBase::Register(uint32_t nCVarFlag, IConCommandBaseAccessor* pAccessor)
 {
-	assert(!(Interfaces::CVar || ConCommandHelper::ConBaseRegistered));
-	if (!Interfaces::CVar || ConCommandHelper::ConBaseRegistered)
+	assert(!(interfaces::CVar || ConCommandHelper::ConBaseRegistered));
+	if (!interfaces::CVar || ConCommandHelper::ConBaseRegistered)
 		return;
 
 	ConCommandHelper::ConBaseRegistered = true;
 	ConCommandHelper::ConBaseFlags = nCVarFlag;
-	ConCommandHelper::DLLIdentifier = Interfaces::CVar->AllocateDLLIdentifier();
+	ConCommandHelper::DLLIdentifier = interfaces::CVar->AllocateDLLIdentifier();
 
 	ConCommandBase::Accessor = pAccessor ? pAccessor : &ConCommandHelper::DefaultAccessor;
 	ConCommandBase* pCur = ConCommandBase::ConCommandBases;
@@ -46,17 +46,17 @@ void ConCommandBase::Register(uint32_t nCVarFlag, IConCommandBaseAccessor* pAcce
 		pCur = pNext;
 	}
 
-	Interfaces::CVar->ProcessQueuedMaterialThreadConVarSets();
+	interfaces::CVar->ProcessQueuedMaterialThreadConVarSets();
 	ConCommandBase::ConCommandBases = nullptr;
 }
 
 void ConCommandBase::Unregister()
 {
-	assert(!(Interfaces::CVar || ConCommandHelper::ConBaseRegistered));
-	if (!Interfaces::CVar || !ConCommandHelper::ConBaseRegistered)
+	assert(!(interfaces::CVar || ConCommandHelper::ConBaseRegistered));
+	if (!interfaces::CVar || !ConCommandHelper::ConBaseRegistered)
 		return;
 
-	Interfaces::CVar->UnregisterConCommands(ConCommandHelper::DLLIdentifier);
+	interfaces::CVar->UnregisterConCommands(ConCommandHelper::DLLIdentifier);
 	ConCommandHelper::DLLIdentifier = -1;
 	ConCommandHelper::ConBaseRegistered = false;
 }
@@ -91,8 +91,8 @@ void ConCommandBase::CreateBase(const char* pName, const char* pHelpString, uint
 
 void ConCommandBase::Shutdown()
 {
-	if (Interfaces::CVar)
-		Interfaces::CVar->UnregisterConCommand(this);
+	if (interfaces::CVar)
+		interfaces::CVar->UnregisterConCommand(this);
 }
 
 inline std::string ConCommandBase::CopyString(const char* from)
@@ -121,7 +121,7 @@ ConCommand::ConCommand(const char* pName, ConCommandCallback callback, const cha
 	ConCommandBase::CreateBase(pName, pHelpString, flags);
 }
 
-int ConCommand::AutoCompleteSuggest(const char* partial, Utils::UtlVector<const char*>& commands)
+int ConCommand::AutoCompleteSuggest(const char* partial, utils::UtlVector<const char*>& commands)
 {
 	if (UsingCommandCallbackInterface)
 		return 0;
@@ -159,9 +159,9 @@ void ConVar::InternalSetValue(const char* value)
 {
 	if (IsFlagSet(Const::ConvarFlags::MatThreadMask))
 	{
-		if (Interfaces::CVar && !Interfaces::CVar->IsMaterialThreadSetAllowed())
+		if (interfaces::CVar && !interfaces::CVar->IsMaterialThreadSetAllowed())
 		{
-			Interfaces::CVar->QueueMaterialThreadSetValue(this, value);
+			interfaces::CVar->QueueMaterialThreadSetValue(this, value);
 			return;
 		}
 	}
@@ -197,9 +197,9 @@ void ConVar::InternalSetFloatValue(float fNewValue, bool force)
 
 	if (IsFlagSet(Const::ConvarFlags::MatThreadMask))
 	{
-		if (Interfaces::CVar && !Interfaces::CVar->IsMaterialThreadSetAllowed())
+		if (interfaces::CVar && !interfaces::CVar->IsMaterialThreadSetAllowed())
 		{
-			Interfaces::CVar->QueueMaterialThreadSetValue(this, fNewValue);
+			interfaces::CVar->QueueMaterialThreadSetValue(this, fNewValue);
 			return;
 		}
 	}
@@ -225,9 +225,9 @@ void ConVar::InternalSetIntValue(int nValue)
 
 	if (IsFlagSet(Const::ConvarFlags::MatThreadMask))
 	{
-		if (Interfaces::CVar && !Interfaces::CVar->IsMaterialThreadSetAllowed())
+		if (interfaces::CVar && !interfaces::CVar->IsMaterialThreadSetAllowed())
 		{
-			Interfaces::CVar->QueueMaterialThreadSetValue(this, nValue);
+			interfaces::CVar->QueueMaterialThreadSetValue(this, nValue);
 			return;
 		}
 	}
@@ -354,7 +354,7 @@ void ConVar::ChangeStringValue(const char* tempVal, float flOldValue)
 		if (ChangeCallback)
 			ChangeCallback(this, oldVal.get(), flOldValue);
 
-		Interfaces::CVar->CallGlobalChangeCallbacks(this, oldVal.get(), flOldValue);
+		interfaces::CVar->CallGlobalChangeCallbacks(this, oldVal.get(), flOldValue);
 	}
 }
 

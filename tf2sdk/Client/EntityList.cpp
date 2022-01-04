@@ -1,4 +1,4 @@
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 
 #include <tf2/utils/UtlVector.hpp>
 
@@ -6,12 +6,12 @@
 
 TF2_NAMESPACE_BEGIN();
 
-static Utils::UtlVector<IClientEntityListener*>* FindEntityListener()
+static utils::UtlVector<IClientEntityListener*>* FindEntityListener()
 {
 	static auto pEntListener = 
-		IntPtr(Interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
-			Interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "EntListeners").value_or(0)
-		).get<Utils::UtlVector<IClientEntityListener*>>();
+		IntPtr(interfaces::SDKManager::Get()->ReadSignature("pCEntityListPtr") + 
+			interfaces::SDKManager::Get()->ReadOffset({ "CEntityList", "offsets" }, "EntListeners").value_or(0)
+		).get<utils::UtlVector<IClientEntityListener*>>();
 	assert(pEntListener);
 	return pEntListener;
 }

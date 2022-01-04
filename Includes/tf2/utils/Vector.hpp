@@ -4,7 +4,7 @@
 #include <tf2/config.hpp>
 #include "tf2/math/Matrix.hpp"
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 template<typename _FTy, typename = std::enable_if_t<std::is_floating_point_v<_FTy>>>
 constexpr _FTy DegToRad(_FTy n)
@@ -27,43 +27,43 @@ constexpr Vector3D_F CrossProduct(const Vector3D_F& v1, const Vector3D_F& v2)
 	};
 }
 
-SG_SDK_TF2 void 
+PX_SDK_TF2 void 
 VectorVectors(const Vector3D_F& fwd, Vector3D_F& origin, Vector3D_F& up);
 
-SG_SDK_TF2 void
+PX_SDK_TF2 void
 VectorAngles(const Vector3D_F& forward, Angle_F& angles);
 
-SG_SDK_TF2 void
+PX_SDK_TF2 void
 AngleVectors(const Angle_F& angles, Vector3D_F* forward = nullptr, Vector3D_F* right = nullptr, Vector3D_F* up = nullptr);
 
-SG_SDK_TF2 void
+PX_SDK_TF2 void
 AngleMatrix(const Angle_F& angles, Matrix3x4_F& matrix);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 VecToYaw(const Vector3D_F& vec);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 VecToPitch(const Vector3D_F& vec);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 VecToYaw(const Matrix3x4_F& matrix, const Vector3D_F& vec);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 VecToPitch(const Matrix3x4_F& matrix, const Vector3D_F& vec);
 
-SG_SDK_TF2 Vector3D_F
+PX_SDK_TF2 Vector3D_F
 YawToVector(float yaw);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 ApproachAngle(float target, float value, float speed);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 AngleDiff(float destAngle, float srcAngle);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 AngleDistance(float next, float cur);
 
-SG_SDK_TF2 float
+PX_SDK_TF2 float
 GetFOV(const Vector3D_F& start, const Vector3D_F& end, const Angle_F& angle);
 
 inline float AngMod(float a)

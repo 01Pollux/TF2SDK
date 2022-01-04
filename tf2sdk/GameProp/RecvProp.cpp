@@ -46,7 +46,7 @@ bool PropFinder::FindRecvProp(ClientClass* pClass, const char* prop_name, RecvPr
 
 bool PropFinder::FindRecvProp(const char* class_name, const char* prop_name, RecvProp** pProp, uint32_t* pOffset)
 {
-	for (ClientClass* cc = Interfaces::ClientDLL->GetAllClasses(); cc != nullptr; cc = cc->NextClass)
+	for (ClientClass* cc = interfaces::ClientDLL->GetAllClasses(); cc != nullptr; cc = cc->NextClass)
 	{
 		if (!strcmp(cc->NetworkName, class_name))
 			return FindInRecvTable(cc->RecvTable, prop_name, pProp, pOffset);
@@ -56,7 +56,7 @@ bool PropFinder::FindRecvProp(const char* class_name, const char* prop_name, Rec
 
 bool PropFinder::FindRecvProp(Const::EntClassID class_id, const char* prop_name, RecvProp** pProp, uint32_t* pOffset)
 {
-	for (ClientClass* cc = Interfaces::ClientDLL->GetAllClasses(); cc != nullptr; cc = cc->NextClass)
+	for (ClientClass* cc = interfaces::ClientDLL->GetAllClasses(); cc != nullptr; cc = cc->NextClass)
 	{
 		if (cc->ClassID == class_id)
 			return FindInRecvTable(cc->RecvTable, prop_name, pProp, pOffset);

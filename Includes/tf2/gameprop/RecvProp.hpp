@@ -145,7 +145,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2 bool 
+	PX_SDK_TF2 bool 
 		FindRecvProp(ClientClass* pClass, const char* prop_name, RecvProp** pProp, uint32_t* pOffset);
 
 	/// <summary>
@@ -154,7 +154,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2 bool 
+	PX_SDK_TF2 bool 
 		FindRecvProp(const char* class_name, const char* prop_name, RecvProp** pProp, uint32_t* pOffset);
 
 	/// <summary>
@@ -163,7 +163,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2 bool 
+	PX_SDK_TF2 bool 
 		FindRecvProp(Const::EntClassID class_id, const char* prop_name, RecvProp** pProp, uint32_t* pOffset);
 }
 

@@ -1,7 +1,7 @@
 
 #include <tf2/utils/Checksum.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 constexpr CRC32_t pulCRCTable[]{
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,

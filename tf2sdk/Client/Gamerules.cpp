@@ -1,4 +1,4 @@
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 
 #include <tf2/client/GameRules.hpp>
 

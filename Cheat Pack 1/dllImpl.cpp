@@ -2,55 +2,67 @@
 #include "Defines.hpp"
 
 extern "C" BOOST_SYMBOL_EXPORT
-SG::IPlugin* Tella_GetPlugin()
+px::IPlugin* Tella_GetPlugin()
 {
-	return SG::ThisPlugin;
+	return px::ThisPlugin;
 }
 
-SG::IPluginImpl::IPluginImpl() noexcept : IPlugin(SG::ThisPluginInfo) { }
-
-#if defined SG_USING_PROFILER && !defined SG_USING_LIBRARY
-#include <shadowgarden/interfaces/LibrarySys.hpp>
-#endif
-
-bool SG::IPluginImpl::OnPluginLoad(SG::IPluginManager* ifacemgr)
+static constexpr px::PluginInfo Tella_GetPluginInfo()
 {
-#ifdef SG_USING_PL_MANAGER
-	SG::PluginManager = ifacemgr;
+	return px::PluginInfo{
+		PX_PLUGIN_NAME,
+		PX_PLUGIN_AUTHOR,
+		PX_PLUGIN_DESC,
+		__DATE__,
+		px::version(PX_PLUGIN_VERSION)
+	};
+}
+
+px::IPluginImpl::IPluginImpl() noexcept : IPlugin(Tella_GetPluginInfo())
+{ }
+
+#if defined PX_USING_PROFILER && !defined PX_USING_LIBRARY
+#include <px/interfaces/LibrarySys.hpp>
 #endif
-#ifdef SG_USING_LIBRARY
-	SG::GetInterface_NoFail(SG::Interface_ILibrary, ifacemgr, SG::LibManager);
+
+bool px::IPluginImpl::OnPluginLoad(px::IPluginManager* ifacemgr)
+{
+#ifdef PX_USING_PL_MANAGER
+	px::PluginManager = ifacemgr;
 #endif
-#ifdef SG_USING_LOGGER
-	SG::GetInterface_NoFail(SG::Interface_ILogger, ifacemgr, SG::Logger);
+#ifdef PX_USING_LIBRARY
+	px::GetInterface_NoFail(px::Interface_ILibrary, ifacemgr, px::LibManager);
 #endif
-#ifdef SG_USING_EVENT_MANAGER
-	SG::GetInterface_NoFail(SG::Interface_EventManager, ifacemgr, SG::EventManager);
+#ifdef PX_USING_LOGGER
+	px::GetInterface_NoFail(px::Interface_ILogger, ifacemgr, px::Logger);
 #endif
-#ifdef SG_USING_DETOUR_MANAGER
-	SG::GetInterface_NoFail(SG::Interface_DetoursManager, ifacemgr, SG::DetourManager);
+#ifdef PX_USING_EVENT_MANAGER
+	px::GetInterface_NoFail(px::Interface_EventManager, ifacemgr, px::EventManager);
 #endif
-#ifdef SG_USING_IMGUI
-	if (!SG::GetInterface(Interface_ImGuiLoader, ifacemgr, ImGuiLoader))
+#ifdef PX_USING_DETOUR_MANAGER
+	px::GetInterface_NoFail(px::Interface_DetoursManager, ifacemgr, px::DetourManager);
+#endif
+#ifdef PX_USING_IMGUI
+	if (!px::GetInterface(Interface_ImGuiLoader, ifacemgr, ImGuiLoader))
 		return false;
 #endif
-#ifdef SG_USING_PROFILER
+#ifdef PX_USING_PROFILER
 	{
-		SG::Profiler::Manager* pProfiler;
-#ifndef SG_USING_LIBRARY
+		px::profiler::manager* pProfiler;
+#ifndef PX_USING_LIBRARY
 		ILibraryManager* lib_manager;
-		SG::GetInterface_NoFail(SG::Interface_ILibrary, ifacemgr, lib_manager);
+		px::GetInterface_NoFail(px::Interface_ILibrary, ifacemgr, lib_manager);
 		pProfiler = lib_manager->GetProfiler();
 #else
-		pProfiler = SG::LibManager->GetProfiler();
+		pProfiler = px::LibManager->GetProfiler();
 #endif
-		SG::Profiler::Manager::Set(pProfiler);
+		px::profiler::manager::Set(pProfiler);
 	}
 #endif
-#ifdef SG_USING_CONCOMMANDS
-	if (!SG::GetInterface(Interface_ConsoleManager, ifacemgr, ConsoleManager))
+#ifdef PX_USING_CONCOMMANDS
+	if (!px::GetInterface(Interface_ConsoleManager, ifacemgr, ConsoleManager))
 		return false;
 #endif
-	SG::ConCommand::Init(SG::ThisPlugin, ConsoleManager);
+	px::ConCommand::Init(px::ThisPlugin, ConsoleManager);
 	return this->OnPluginLoad2(ifacemgr);
 }

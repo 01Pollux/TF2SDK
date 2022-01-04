@@ -38,7 +38,7 @@ namespace Const
 
 class IMaterialSystemHardwareConfig;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IMaterialSystemHardwareConfig, MatSysCfg, "MaterialSystemHardwareConfig012");
 }

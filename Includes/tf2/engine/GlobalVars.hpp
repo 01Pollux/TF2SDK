@@ -6,7 +6,7 @@ TF2_NAMESPACE_BEGIN();
 
 class IValveGlobalVars;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE_S(IValveGlobalVars, GlobalVars, "GlobalVarBasePtr");
 }

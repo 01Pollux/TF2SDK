@@ -9,7 +9,7 @@ class IGameEventManager;
 #define GAMEEVENT_CLIENT_SIDE false
 #define GAMEEVENT_SERVER_SIDE true
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IGameEventManager, GameEventMgr, "GAMEEVENTSMANAGER002");
 }

@@ -46,7 +46,7 @@ bool PropFinder::FindSendProp(ServerClass* pClass, const char* prop_name, SendPr
 
 bool PropFinder::FindSendProp(const char* class_name, const char* prop_name, SendProp** pProp, uint32_t* pOffset)
 {
-	for (ServerClass* sc = Interfaces::ServerDLL->GetAllServerClasses(); sc != nullptr; sc = sc->NextClass)
+	for (ServerClass* sc = interfaces::ServerDLL->GetAllServerClasses(); sc != nullptr; sc = sc->NextClass)
 	{
 		if (!strcmp(sc->NetworkName, class_name))
 			return FindInSendProp(sc->SendTable, prop_name, pProp, pOffset);
@@ -56,7 +56,7 @@ bool PropFinder::FindSendProp(const char* class_name, const char* prop_name, Sen
 
 bool PropFinder::FindSendProp(Const::EntClassID class_id, const char* prop_name, SendProp** pProp, uint32_t* pOffset)
 {
-	for (ServerClass* sc = Interfaces::ServerDLL->GetAllServerClasses(); sc != nullptr; sc = sc->NextClass)
+	for (ServerClass* sc = interfaces::ServerDLL->GetAllServerClasses(); sc != nullptr; sc = sc->NextClass)
 	{
 		if (sc->ClassID == class_id)
 			return FindInSendProp(sc->SendTable, prop_name, pProp, pOffset);

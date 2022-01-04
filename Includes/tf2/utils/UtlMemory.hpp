@@ -4,7 +4,7 @@
 #include <tf2/config.hpp>
 #include "UtlAlloc.hpp"
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 //-----------------------------------------------------------------------------
 // The UtlMemory class:

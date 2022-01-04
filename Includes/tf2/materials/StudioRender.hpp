@@ -8,12 +8,12 @@
 TF2_NAMESPACE_BEGIN();
 
 class IStudioRender;
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IStudioRender, StudioRender, "VStudioRender025");
 }
 
-namespace Utils { class UtlBuffer; }
+namespace utils { class UtlBuffer; }
 
 class IMaterialSystem;
 class ITexture;
@@ -139,7 +139,7 @@ namespace Const
 		int LODUsed;
 		int LODMetric;
 		uint64_t RenderTime;
-		Utils::UtlVector<IMaterial*, Utils::UtlMemoryFixed<IMaterial*, 8>> Materials;
+		utils::UtlVector<IMaterial*, utils::UtlMemoryFixed<IMaterial*, 8>> Materials;
 	};
 
 	struct ColorTexelsInfo
@@ -195,13 +195,13 @@ namespace Const
 	struct GetTriangles_MaterialBatch
 	{
 		IMaterial*								Material;
-		Utils::UtlVector<GetTriangles_Vertex>	Verts;
-		Utils::UtlVector<int>					TriListIndices;
+		utils::UtlVector<GetTriangles_Vertex>	Verts;
+		utils::UtlVector<int>					TriListIndices;
 	};
 
 	struct GetTriangles_Output
 	{
-		Utils::UtlVector<GetTriangles_MaterialBatch>	MaterialBatches;
+		utils::UtlVector<GetTriangles_MaterialBatch>	MaterialBatches;
 		Matrix3x4_F										PoseToWorld[Const::MaxStudio_Bones];
 	};
 }
@@ -357,7 +357,7 @@ public:
 	virtual void GetPerfStats(
 		Const::DrawModelResults* pResults, 
 		const Const::DrawModelInfo& info,
-		Utils::UtlBuffer* pSpewBuf = nullptr
+		utils::UtlBuffer* pSpewBuf = nullptr
 	) const abstract;
 
 	virtual void GetTriangles(

@@ -7,7 +7,7 @@ TF2_NAMESPACE_BEGIN();
 class INetworkStringTableContainer;
 class INetworkStringTable;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(INetworkStringTableContainer, NSTContainer, "VEngineClientStringTable001");
 }

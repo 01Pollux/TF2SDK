@@ -10,7 +10,7 @@ namespace VGui
 	class IEngineVGui;
 }
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(VGui::IEngineVGui, EngineVGUI, "VEngineVGui001");
 }

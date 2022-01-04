@@ -43,7 +43,7 @@ struct VModeS;
 struct VRect;
 struct AudioState;
 
-namespace Utils
+namespace utils
 {
 	template<typename, typename _Idx>
 	class UtlMemory;
@@ -55,7 +55,7 @@ enum class ClientFrameStage;
 enum class SkyboxVisibility;
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVEngineClient, EngineClient,	"VEngineClient014");
 	TF2_EXPORT_INTERFACE(IBaseClientDLL, ClientDLL,		"VClient017");
@@ -472,7 +472,7 @@ public:
 	// Display a hud text message
 	virtual void			HudText(const char* message) abstract;
 
-	// Mouse Input Interfaces
+	// Mouse Input interfaces
 	// Activate the mouse (hides the cursor and locks it to the center of the screen)
 	virtual void			IN_ActivateMouse() abstract;
 	// Deactivates the mouse (shows the cursor and unlocks it)
@@ -583,8 +583,8 @@ public:
 
 	// Matchmaking
 	virtual void			SetupGameProperties(
-		Utils::UtlVector<char[8], Utils::UtlMemory<char[8], int>>& contexts,
-		Utils::UtlVector<char[16], Utils::UtlMemory<char[16], int>>& properties
+		utils::UtlVector<char[8], utils::UtlMemory<char[8], int>>& contexts,
+		utils::UtlVector<char[16], utils::UtlMemory<char[16], int>>& properties
 	) abstract;
 	virtual uint32_t		GetPresenceID(const char* pIDName) abstract;
 	virtual const char* GetPropertyIdString(const uint32_t id) abstract;

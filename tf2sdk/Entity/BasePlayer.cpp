@@ -96,7 +96,7 @@ void ITFPlayerInternal::RemoveCond(const Const::TFCondFlags& conds)
 	TFCondProxy.Change(this, conds, false);
 }
 
-namespace Utils
+namespace utils
 {
 	Angle_F GetAimAngle(const Vector3D_F& start, const Vector3D_F& end, bool useLocalPunchAng)
 	{

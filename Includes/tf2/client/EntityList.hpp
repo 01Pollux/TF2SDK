@@ -13,7 +13,7 @@ class IBaseEntityInternal;
 class IClientEntityList;
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IClientEntityList, ClientList, "VClientEntityList003");
 }
@@ -50,8 +50,8 @@ public:
 	virtual void OnEntityDeleted(IBaseEntityInternal* pEnt) { };
 
 public:
-	SG_SDK_TF2 void AddEntityListener() noexcept;
-	SG_SDK_TF2 void RemoveEntityListener() noexcept;
+	PX_SDK_TF2 void AddEntityListener() noexcept;
+	PX_SDK_TF2 void RemoveEntityListener() noexcept;
 };
 
 TF2_NAMESPACE_END();

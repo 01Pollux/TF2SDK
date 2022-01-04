@@ -23,7 +23,7 @@ IMaterialReference::~IMaterialReference()
 //-----------------------------------------------------------------------------
 void IMaterialReference::init(char const* pMaterialName, const char* pTextureGroupName, bool bComplain)
 {
-	IMaterial* pMaterial = Interfaces::MatSys->FindMaterial(pMaterialName, pTextureGroupName, bComplain);
+	IMaterial* pMaterial = interfaces::MatSys->FindMaterial(pMaterialName, pTextureGroupName, bComplain);
 	if (IMaterial::IsError(pMaterial))
 		return;
 
@@ -34,12 +34,12 @@ void IMaterialReference::init(const char* pMaterialName, KeyValues* pVMTKeyValue
 {
 	// CreateMaterial has a refcount of 1
 	shutdown();
-	m_Material = Interfaces::MatSys->CreateMaterial(pMaterialName, pVMTKeyValues);
+	m_Material = interfaces::MatSys->CreateMaterial(pMaterialName, pVMTKeyValues);
 }
 
 void IMaterialReference::init(const char* pMaterialName, const char* pTextureGroupName, KeyValues* pVMTKeyValues)
 {
-	IMaterial* pMaterial = Interfaces::MatSys->FindProceduralMaterial(pMaterialName, pTextureGroupName, pVMTKeyValues);
+	IMaterial* pMaterial = interfaces::MatSys->FindProceduralMaterial(pMaterialName, pTextureGroupName, pVMTKeyValues);
 	init(pMaterial);
 }
 
@@ -114,7 +114,7 @@ ITextureReference::~ITextureReference()
 void ITextureReference::init(char const* pTextureName, const char* pTextureGroupName, bool bComplain)
 {
 	shutdown();
-	m_Texture = Interfaces::MatSys->FindTexture(pTextureName, pTextureGroupName, bComplain);
+	m_Texture = interfaces::MatSys->FindTexture(pTextureName, pTextureGroupName, bComplain);
 	if (m_Texture)
 	{
 		m_Texture->IncrementReferenceCount();
@@ -136,7 +136,7 @@ void ITextureReference::initProceduralTexture(const char* pTextureName, const ch
 {
 	shutdown();
 
-	m_Texture = Interfaces::MatSys->CreateProceduralTexture(pTextureName, pTextureGroupName, w, h, fmt, nFlags);
+	m_Texture = interfaces::MatSys->CreateProceduralTexture(pTextureName, pTextureGroupName, w, h, fmt, nFlags);
 
 	// NOTE: The texture reference is already incremented internally above!
 	/*
@@ -158,7 +158,7 @@ void ITextureReference::initRenderTarget(int w, int h, Const::RenderTargetSizeMo
 	int renderTargetFlags = bHDR ? 0x1 : 0;
 
 	// NOTE: Refcount returned by CreateRenderTargetTexture is 1
-	m_Texture = Interfaces::MatSys->CreateNamedRenderTargetTextureEx(pStrOptionalName, w, h, sizeMode, fmt,
+	m_Texture = interfaces::MatSys->CreateNamedRenderTargetTextureEx(pStrOptionalName, w, h, sizeMode, fmt,
 		depth, textureFlags, renderTargetFlags);
 }
 

@@ -1,12 +1,12 @@
 
-#include <shadowgarden/interfaces/ImGui.hpp>
+#include <px/interfaces/ImGui.hpp>
 #include "SpectatorList.hpp"
 
 #include <atomic>
 
 bool DisplaySpecList::OnRender()
 {
-	SG::ConfigState state;
+	px::ConfigState state;
 
 	if (ImGui::Checkbox("Enable", m_Enabled.data()))
 		state.set();
@@ -23,7 +23,7 @@ bool DisplaySpecList::OnRender()
 	ImGui::SameLineHelp(m_Locked);
 
 	ImGui::SameLine();
-	if (ImGui::DragInt("Count", m_DisplayCount.data(), 0.35f, 0, TF2::Const::MaxPlayers))
+	if (ImGui::DragInt("Count", m_DisplayCount.data(), 0.35f, 0, tf2::Const::MaxPlayers))
 		state.set();
 	ImGui::SameLineHelp(m_DisplayCount);
 
@@ -46,9 +46,9 @@ bool DisplaySpecList::OnRender()
 	return state;
 }
 
-void DisplaySpecList::OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const
+void DisplaySpecList::OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const
 {
-	SG::IPlugin::FileConfigs spec_list;
+	px::IPlugin::FileConfigs spec_list;
 	
 	spec_list.insert(m_Enabled);
 	spec_list.insert(m_DisplayMode);

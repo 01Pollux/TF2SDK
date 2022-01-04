@@ -6,9 +6,9 @@
 
 #include "ESP.hpp"
 
-void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index)
+void GlobalESP::RenderBuildingESP(const tf2::IBaseObject pEnt, tf2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index)
 {
-	using namespace TF2;
+	using namespace tf2;
 
 	ILocalPlayer pMe;
 	ESPInfo::Building* esp_info;
@@ -159,7 +159,7 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 					{
 						if (teleporter->RechargeTime)
 						{
-							float recharge_elapsed = teleporter->RechargeTime - Interfaces::GlobalVars->CurTime;
+							float recharge_elapsed = teleporter->RechargeTime - interfaces::GlobalVars->CurTime;
 							sprintf_s(fmt, "Charging: %.1f", recharge_elapsed);
 							renderer.AddText(fmt);
 						}
@@ -178,7 +178,7 @@ void GlobalESP::RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntCl
 				if (ITFPlayer player{ pEnt->Builder })
 				{
 					PlayerInfo info;
-					if (Interfaces::EngineClient->GetPlayerInfo(player->GetEntIndex(), &info))
+					if (interfaces::EngineClient->GetPlayerInfo(player->GetEntIndex(), &info))
 					{
 						sprintf_s(fmt, "Owner: %s", info.Name);
 						renderer.AddText(fmt);

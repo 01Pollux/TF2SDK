@@ -1,5 +1,5 @@
 
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 #include <tf2/config.hpp>
 #include <tf2/utils/Thunks.hpp>
 
@@ -61,12 +61,12 @@
 // IPhysicsSurfaceProps
 #include <tf2/physics/VPhysics.hpp>
 
-TF2_NAMESPACE_BEGIN(::Interfaces)
+TF2_NAMESPACE_BEGIN(::interfaces)
 
 
 #define TF2_INTERFACE(CONFIG, NAME)		std::tuple{ NAME##_Key, config.CONFIG.NAME, std::bit_cast<void**>(&NAME), static_cast<size_t>(IFaceType::CONFIG), #CONFIG##"::CreateInterface", NAME##_Sig }
 
-__declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Config& config, std::initializer_list<const char*> sig_list)
+bool SDKManager::init(px::IGameData* game_data, const Config& config, const std::initializer_list<std::string>& sig_list)
 {
 	set_gamedata(game_data);
 	SDKManager::Manager = this;
@@ -86,7 +86,7 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 			Count
 		};
 
-		using CreateInterfaceFn = Utils::IFuncThunk<void*, const char*, int*>;
+		using CreateInterfaceFn = utils::FuncThunk<void*, const char*, int*>;
 		CreateInterfaceFn iface_factory[static_cast<size_t>(IFaceType::Count)]{ };
 		
 		std::array ifaces{
@@ -136,7 +136,7 @@ __declspec(noinline) bool SDKManager::init(SG::IGameData* game_data, const Confi
 
 #undef TF2_INTERFACE
 
-		m_GameData->PushFiles({ "/GameData/Interfaces" });
+		m_GameData->PushFiles({ "/GameData/interfaces" });
 		for (auto& [name, is_on, res, type, iface_name, is_sig] : ifaces)
 		{
 			if (!is_on)

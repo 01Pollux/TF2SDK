@@ -19,7 +19,7 @@ TF2_NAMESPACE_BEGIN();
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Box(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, int r, int g, int b, int a, float flDuration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 	BoxAngles(origin, mins, maxs, { }, r, g, b, a, flDuration);
 }
 
@@ -28,9 +28,9 @@ void NDebugOverlay::Box(const Vector3D_F& origin, const Vector3D_F& mins, const 
 //-----------------------------------------------------------------------------
 void NDebugOverlay::BoxDirection(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Vector3D_F& orientation, int r, int g, int b, int a, float duration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 	// convert forward Vector3D_F to angles
-	Angle_F f_angles{ 0.f, 0.f, Utils::VecToYaw(orientation) };
+	Angle_F f_angles{ 0.f, 0.f, utils::VecToYaw(orientation) };
 
 	BoxAngles(origin, mins, maxs, f_angles, r, g, b, a, duration);
 }
@@ -40,8 +40,8 @@ void NDebugOverlay::BoxDirection(const Vector3D_F& origin, const Vector3D_F& min
 //-----------------------------------------------------------------------------
 void NDebugOverlay::BoxAngles(const Vector3D_F& origin, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float duration)
 {
-	assert(Interfaces::DebugOverlay);
-	Interfaces::DebugOverlay->AddBoxOverlay(origin, mins, maxs, angles, r, g, b, a, duration);
+	assert(interfaces::DebugOverlay);
+	interfaces::DebugOverlay->AddBoxOverlay(origin, mins, maxs, angles, r, g, b, a, duration);
 }
 
 //-----------------------------------------------------------------------------
@@ -49,8 +49,8 @@ void NDebugOverlay::BoxAngles(const Vector3D_F& origin, const Vector3D_F& mins, 
 //-----------------------------------------------------------------------------
 void NDebugOverlay::SweptBox(const Vector3D_F& start, const Vector3D_F& end, const Vector3D_F& mins, const Vector3D_F& maxs, const Angle_F& angles, int r, int g, int b, int a, float flDuration)
 {
-	assert(Interfaces::DebugOverlay);
-	Interfaces::DebugOverlay->AddSweptBoxOverlay(start, end, mins, maxs, angles, r, g, b, a, flDuration);
+	assert(interfaces::DebugOverlay);
+	interfaces::DebugOverlay->AddSweptBoxOverlay(start, end, mins, maxs, angles, r, g, b, a, flDuration);
 }
 
 //-----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ void NDebugOverlay::SweptBox(const Vector3D_F& start, const Vector3D_F& end, con
 //-----------------------------------------------------------------------------
 void NDebugOverlay::EntityBounds(IBaseEntityInternal* pEntity, int r, int g, int b, int a, float flDuration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 
 	const ICollideable* pCollide = pEntity->CollisionProp.data();
 	BoxAngles(pCollide->GetCollisionOrigin(), pCollide->OBBMins(), pCollide->OBBMaxs(), pCollide->GetCollisionAngles(), r, g, b, a, flDuration);
@@ -69,7 +69,7 @@ void NDebugOverlay::EntityBounds(IBaseEntityInternal* pEntity, int r, int g, int
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Line(const Vector3D_F& origin, const Vector3D_F& target, int r, int g, int b, bool noDepthTest, float duration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 
 	// --------------------------------------------------------------
 	// Clip the line before sending so we 
@@ -96,7 +96,7 @@ void NDebugOverlay::Line(const Vector3D_F& origin, const Vector3D_F& target, int
 	if (clientForward.dot(toOrigin) < .0 && clientForward.dot(toTarget) < .0)
 		return;
 
-	Interfaces::DebugOverlay->AddLineOverlay(origin, target, r, g, b, noDepthTest, duration);
+	interfaces::DebugOverlay->AddLineOverlay(origin, target, r, g, b, noDepthTest, duration);
 }
 
 
@@ -105,7 +105,7 @@ void NDebugOverlay::Line(const Vector3D_F& origin, const Vector3D_F& target, int
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const Vector3D_F& p3, int r, int g, int b, int a, bool noDepthTest, float duration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 
 	ILocalPlayer player;
 	if (!player)
@@ -132,7 +132,7 @@ void NDebugOverlay::Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const V
 		clientForward.dot(to3) < .0)
 		return;
 
-	Interfaces::DebugOverlay->AddTriangleOverlay(p1, p2, p3, r, g, b, a, noDepthTest, duration);
+	interfaces::DebugOverlay->AddTriangleOverlay(p1, p2, p3, r, g, b, a, noDepthTest, duration);
 }
 
 //-----------------------------------------------------------------------------
@@ -140,9 +140,9 @@ void NDebugOverlay::Triangle(const Vector3D_F& p1, const Vector3D_F& p2, const V
 //-----------------------------------------------------------------------------
 void NDebugOverlay::EntityText(int entityID, int text_offset, const char* text, float duration, int r, int g, int b, int a)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 
-	Interfaces::DebugOverlay->AddEntityTextOverlay(
+	interfaces::DebugOverlay->AddEntityTextOverlay(
 		entityID,
 		text_offset,
 		duration,
@@ -159,8 +159,8 @@ void NDebugOverlay::EntityText(int entityID, int text_offset, const char* text, 
 //-----------------------------------------------------------------------------
 void NDebugOverlay::EntityTextAtPosition(const Vector3D_F& origin, int text_offset, const char* text, float duration, int r, int g, int b, int a)
 {
-	assert(Interfaces::DebugOverlay);
-	Interfaces::DebugOverlay->AddTextOverlayRGB(origin, text_offset, duration, r, g, b, a, "%s", text);
+	assert(interfaces::DebugOverlay);
+	interfaces::DebugOverlay->AddTextOverlayRGB(origin, text_offset, duration, r, g, b, a, "%s", text);
 }
 
 //-----------------------------------------------------------------------------
@@ -168,8 +168,8 @@ void NDebugOverlay::EntityTextAtPosition(const Vector3D_F& origin, int text_offs
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Grid(const Vector3D_F& vPosition)
 {
-	assert(Interfaces::DebugOverlay);
-	Interfaces::DebugOverlay->AddGridOverlay(vPosition);
+	assert(interfaces::DebugOverlay);
+	interfaces::DebugOverlay->AddGridOverlay(vPosition);
 }
 
 //-----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void NDebugOverlay::Grid(const Vector3D_F& vPosition)
 //-----------------------------------------------------------------------------
 void NDebugOverlay::Text(const Vector3D_F& origin, const char* text, float duration)
 {
-	assert(Interfaces::DebugOverlay);
+	assert(interfaces::DebugOverlay);
 
 	ILocalPlayer player;
 	if (!player)
@@ -196,7 +196,7 @@ void NDebugOverlay::Text(const Vector3D_F& origin, const char* text, float durat
 	if (clientForward.dot(toText) < .0)
 		return;
 
-	Interfaces::DebugOverlay->AddTextOverlay(origin, duration, "%s", text);
+	interfaces::DebugOverlay->AddTextOverlay(origin, duration, "%s", text);
 }
 
 //-----------------------------------------------------------------------------
@@ -204,8 +204,8 @@ void NDebugOverlay::Text(const Vector3D_F& origin, const char* text, float durat
 //-----------------------------------------------------------------------------
 void NDebugOverlay::ScreenText(float flXpos, float flYpos, const char* text, int r, int g, int b, int a, float duration)
 {
-	assert(Interfaces::DebugOverlay);
-	Interfaces::DebugOverlay->AddScreenTextOverlay(flXpos, flYpos, duration, r, g, b, a, text);
+	assert(interfaces::DebugOverlay);
+	interfaces::DebugOverlay->AddScreenTextOverlay(flXpos, flYpos, duration, r, g, b, a, text);
 }
 
 //-----------------------------------------------------------------------------
@@ -246,7 +246,7 @@ void NDebugOverlay::Cross3D(const Vector3D_F& position, float size, int r, int g
 void NDebugOverlay::Cross3DOriented(const Vector3D_F& position, const Angle_F& angles, float size, int r, int g, int b, bool noDepthTest, float flDuration)
 {
 	Vector3D_F forward, right, up;
-	Utils::AngleVectors(angles, &forward, &right, &up);
+	utils::AngleVectors(angles, &forward, &right, &up);
 
 	forward *= size;
 	right *= size;
@@ -272,7 +272,7 @@ void NDebugOverlay::DrawTickMarkedLine(const Vector3D_F& startPos, const Vector3
 	int		numTicks = static_cast<int>(lineDist / tickDist);
 	Vector3D_F	vBodyDir;
 
-	Utils::AngleVectors(player->EyeAngles, &vBodyDir);
+	utils::AngleVectors(player->EyeAngles, &vBodyDir);
 
 	Vector3D_F  upVec = vBodyDir * 4;
 	Vector3D_F	tickPos = startPos;
@@ -331,9 +331,9 @@ void NDebugOverlay::DrawGroundCrossHairOverlay()
 	player->EyeVectors(&vForward);
 
 	GameTrace tr;
-	Utils::FilterSimple filter(player.get());
+	utils::FilterSimple filter(player.get());
 
-	Utils::TraceLine(vSource, vSource + vForward * 2048, Const::TraceMask::Solid, tr, filter);
+	utils::TraceLine(vSource, vSource + vForward * 2048, Const::TraceMask::Solid, tr, filter);
 	float dotPr = static_cast<float>(tr.Plane.Normal.dot({ 0, 0, 1 }));
 
 	if (tr.Fraction != 1.0 && dotPr > 0.5)
@@ -360,7 +360,7 @@ void NDebugOverlay::HorzArrow(const Vector3D_F& startPos, const Vector3D_F& endP
 	Vector3D_F upVec{ 0.f, 0.f, 1.f };
 	float radius = width / 2.0f;
 
-	VectorXD sideDir = Utils::CrossProduct(lineDir, upVec);
+	VectorXD sideDir = utils::CrossProduct(lineDir, upVec);
 
 	Vector3D_F p1 = startPos - sideDir * radius;
 	Vector3D_F p2 = endPos - lineDir * width - sideDir * radius;
@@ -397,7 +397,7 @@ void NDebugOverlay::HorzArrow(const Vector3D_F& startPos, const Vector3D_F& endP
 //-----------------------------------------------------------------------------
 void NDebugOverlay::YawArrow(const Vector3D_F& startPos, float yaw, float length, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration)
 {
-	Vector3D_F forward = Utils::YawToVector(yaw);
+	Vector3D_F forward = utils::YawToVector(yaw);
 
 	HorzArrow(startPos, startPos + forward * length, width, r, g, b, a, noDepthTest, flDuration);
 }
@@ -413,7 +413,7 @@ void NDebugOverlay::VertArrow(const Vector3D_F& startPos, const Vector3D_F& endP
 	Vector3D_F	sideDir;
 	float   radius = width / 2.0f;
 
-	Utils::VectorVectors(lineDir, sideDir, upVec);
+	utils::VectorVectors(lineDir, sideDir, upVec);
 
 	Vector3D_F p1 = startPos - upVec * radius;
 	Vector3D_F p2 = endPos - lineDir * width - upVec * radius;
@@ -451,7 +451,7 @@ void NDebugOverlay::VertArrow(const Vector3D_F& startPos, const Vector3D_F& endP
 void NDebugOverlay::Axis(const Vector3D_F& position, const Angle_F& angles, float size, bool noDepthTest, float flDuration)
 {
 	Vector3D_F xvec, yvec, zvec;
-	Utils::AngleVectors(angles, &xvec, &yvec, &zvec);
+	utils::AngleVectors(angles, &xvec, &yvec, &zvec);
 
 	xvec = position + (xvec * size);
 	yvec = position - (yvec * size); // Left is positive
@@ -524,7 +524,7 @@ void NDebugOverlay::Circle(const Vector3D_F& position, float radius, int r, int 
 	player->EyeVectors(&clientForward);
 
 	Angle_F vecAngles;
-	Utils::VectorAngles(clientForward, vecAngles);
+	utils::VectorAngles(clientForward, vecAngles);
 
 	Circle(position, vecAngles, radius, r, g, b, a, bNoDepthTest, flDuration);
 }
@@ -537,7 +537,7 @@ void NDebugOverlay::Circle(const Vector3D_F& position, const Angle_F& angles, fl
 {
 	// Setup our transform matrix
 	Matrix3x4_F xform;
-	Utils::AngleMatrix(angles, xform);
+	utils::AngleMatrix(angles, xform);
 	xform.set_column(3, position);
 	// default draws circle in the y/z plane
 	VectorXD xAxis = xform.get_column(2);
@@ -570,7 +570,7 @@ void NDebugOverlay::Circle(const Vector3D_F& position, const Vector3D_F& xAxis, 
 		// Draw the line
 		Line(vecLastPosition, vecPosition, r, g, b, bNoDepthTest, flDuration);
 
-		Interfaces::DebugOverlay->AddTriangleOverlay(vecStart, vecLastPosition, vecPosition, r, g, b, a, bNoDepthTest, flDuration);
+		interfaces::DebugOverlay->AddTriangleOverlay(vecStart, vecLastPosition, vecPosition, r, g, b, a, bNoDepthTest, flDuration);
 	}
 }
 
@@ -578,7 +578,7 @@ void NDebugOverlay::Sphere(const Vector3D_F& position, const Angle_F& angles, fl
 {
 	// Setup our transform matrix
 	Matrix3x4_F xform;
-	Utils::AngleMatrix(angles, xform);
+	utils::AngleMatrix(angles, xform);
 	xform.set_column(3, position);
 	// default draws circle in the y/z plane
 	VectorXD xAxis = xform.get_column(0);

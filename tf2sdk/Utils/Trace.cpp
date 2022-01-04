@@ -6,20 +6,20 @@
 #include <tf2/utils/Vector.hpp>
 #include <tf2/utils/Trace.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 
 bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 {
-	assert(Interfaces::ModelInfo);
-	assert(Interfaces::GameRules);
+	assert(interfaces::ModelInfo);
+	assert(interfaces::GameRules);
 
 	IBaseEntity pEnt(pUnk->GetBaseEntity());
 	if (!pEnt)
 		return false;
 
 	const ModelInfo* mdl = pEnt->GetModel();
-	if ((Interfaces::ModelInfo->GetModelType(mdl) != Const::ModelType::Brush) || (pEnt->SolidType != Const::EntSolidType::BSP && pEnt->SolidType != Const::EntSolidType::VPhysics))
+	if ((interfaces::ModelInfo->GetModelType(mdl) != Const::ModelType::Brush) || (pEnt->SolidType != Const::EntSolidType::BSP && pEnt->SolidType != Const::EntSolidType::VPhysics))
 	{
 		if (!(mask & Const::ContentsFlags::Monster))
 			return false;
@@ -50,7 +50,7 @@ bool FilterSimple::ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask)
 
 float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore)
 {
-	assert(Interfaces::ClientTrace);
+	assert(interfaces::ClientTrace);
 
 	Vector3D_F bottom;
 	AngleVectors({ 90.f, 0.f, 0.f }, &bottom);
@@ -69,7 +69,7 @@ float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore)
 	};
 
 	position[2] += 10.f;
-	Utils::TraceLine(position, bottom, Const::TraceMask::PlayerSolid, results, filter_only_world);
+	utils::TraceLine(position, bottom, Const::TraceMask::PlayerSolid, results, filter_only_world);
 	if (results.DidHit())
 	{
 		position[2] -= 10.f;
@@ -80,7 +80,7 @@ float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore)
 
 float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector3D_F& maxs, IBaseEntityInternal* pIgnore)
 {
-	assert(Interfaces::ClientTrace);
+	assert(interfaces::ClientTrace);
 
 	Vector3D_F bottom;
 	AngleVectors({ 90.f, 0.f, 0.f }, &bottom);
@@ -99,7 +99,7 @@ float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector
 	};
 
 	position[2] += 10.f;
-	Utils::TraceHull(position, bottom, mins, maxs, Const::TraceMask::PlayerSolid, results, filter_only_world);
+	utils::TraceHull(position, bottom, mins, maxs, Const::TraceMask::PlayerSolid, results, filter_only_world);
 	if (results.DidHit())
 	{
 		position[2] -= 10.f;

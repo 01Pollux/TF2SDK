@@ -6,7 +6,7 @@ TF2_NAMESPACE_BEGIN();
 TFPlayerResourceEntity* TFPlayerResourceEntity::Get()
 {
 	static TFPlayerResourceEntity* resource_ptr = 
-		Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "PlayerResource").get<TFPlayerResourceEntity>();
+		interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "PlayerResource").get<TFPlayerResourceEntity>();
 	assert(resource_ptr);
 	return resource_ptr;
 }
@@ -15,7 +15,7 @@ TFPlayerResourceEntity* TFPlayerResourceEntity::Get()
 TFMonsterResourceEntity* TFMonsterResourceEntity::Get()
 {
 	static TFMonsterResourceEntity* resource_ptr =
-		Interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "MonsterResource").get<TFMonsterResourceEntity>();
+		interfaces::SDKManager::Get()->ReadSignature({ "CBaseEntity" }, "MonsterResource").get<TFMonsterResourceEntity>();
 	assert(resource_ptr);
 	return resource_ptr;
 }

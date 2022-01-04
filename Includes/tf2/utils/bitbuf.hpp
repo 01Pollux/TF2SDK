@@ -2,7 +2,7 @@
 
 #include <tf2/config.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 class bf_write
 {
@@ -17,7 +17,7 @@ public:
 	// Start writing to the specified buffer.
 	// nMaxBits can be used as the number of bits in the buffer. 
 	// It must be <= nBytes*8. If you leave it at -1, then it's set to nBytes * 8.
-	SG_SDK_TF2 void 
+	PX_SDK_TF2 void 
 		start_writing(void* pData, int nBytes, int iStartBit = 0, int nMaxBits = -1);
 
 	void reset() noexcept { CurBit = IsOverflow = 0; }
@@ -34,52 +34,52 @@ public:
 		if (!check_for_overflow(1))
 			write_bit_nocheck(bit);
 	}
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_bit_nocheck(int nValue);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_bit_at(int iBit, int nValue);
 
 	// Write signed or unsigned. Range is only checked in debug.
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_ubit(unsigned int data, int numbits);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_sbit(int data, int numbits);
 
 	// Write a list of bits in.
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		write_bits(const void* in_data, int numbits);
 
 	// writes a varint encoded integer
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_uint32(uint32_t data);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_uint64(uint64_t data);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_sint32(int32_t data);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_sint64(int64_t data);
 
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_angle(float fAngle, int numbits);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_coord(const float f);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_vec3(const float fa[3]);
 
 	// Byte functions.
 public:
 
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_char(int8_t val);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_byte(uint8_t val);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_short(int16_t val);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_word(uint16_t val);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_long(int32_t val);
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		write_longlong(int64_t val);
 	void write_float(float val)
 	{
@@ -91,7 +91,7 @@ public:
 	}
 
 	// Returns false if it overflows the buffer.
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		write_string(const char* str);
 
 	// Status.
@@ -161,40 +161,40 @@ public:
 	}
 	bool seek_relative(int bitPos) { return seek(CurBit + bitPos); }
 
-	SG_SDK_TF2 int
+	PX_SDK_TF2 int
 		read_bit();
 
 public:
 	// Read a list of bits in.
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		read_bits(void* pOut, int nBits);
 
 	// Read a list of bits in, but don't overrun the destination buffer.
 	// Returns the number of bits read into the buffer. The remaining
 	// bits are skipped over.
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		read_angle(int numbits);
 
-	SG_SDK_TF2 uint32_t
+	PX_SDK_TF2 uint32_t
 		peek_ubit(int numbits);
-	SG_SDK_TF2 uint32_t
+	PX_SDK_TF2 uint32_t
 		read_ubit(int numbits);
-	SG_SDK_TF2 int
+	PX_SDK_TF2 int
 		read_sbit(int numbits);
 
 	// reads a varint encoded integer
-	SG_SDK_TF2 uint32_t
+	PX_SDK_TF2 uint32_t
 		read_uint32();
-	SG_SDK_TF2 uint64_t
+	PX_SDK_TF2 uint64_t
 		read_uint64();
-	SG_SDK_TF2 int32_t
+	PX_SDK_TF2 int32_t
 		read_int32();
-	SG_SDK_TF2 int64_t
+	PX_SDK_TF2 int64_t
 		read_int64();
 
-	SG_SDK_TF2 float 
+	PX_SDK_TF2 float 
 		read_coord();
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		read_vec3(float fa[3]);
 
 	// Byte functions (these still read data in bit-by-bit).
@@ -205,7 +205,7 @@ public:
 	inline int16_t	read_short() { return static_cast<int16_t>(read_ubit(16)); }
 	inline uint16_t read_word() { return static_cast<uint16_t>(read_ubit(16)); }
 	inline int32_t	read_long() { return static_cast<int32_t>(read_ubit(32)); }
-	SG_SDK_TF2 int64_t read_longlong();
+	PX_SDK_TF2 int64_t read_longlong();
 	float			read_float()
 	{
 		float ret;

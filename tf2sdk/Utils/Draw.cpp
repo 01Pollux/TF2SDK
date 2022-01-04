@@ -3,13 +3,13 @@
 #include <tf2/engine/ClientDll.hpp>
 #include <tf2/utils/Draw.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 bool GetVectorInHudSpace(const Vector3D_F& origin, const Vector2D_F& screen_size, Vector2D_F& cord)
 {
-	assert(Interfaces::EngineClient);
+	assert(interfaces::EngineClient);
 
-	const Matrix4x4_F& worldToScreen = Interfaces::EngineClient->WorldToScreenMatrix();
+	const Matrix4x4_F& worldToScreen = interfaces::EngineClient->WorldToScreenMatrix();
 	const float w = worldToScreen[3][0] * origin[0] + worldToScreen[3][1] * origin[1] + worldToScreen[3][2] * origin[2] + worldToScreen[3][3];
 
 	if (w > 0.001f)
@@ -29,9 +29,9 @@ bool GetVectorInHudSpace(const Vector3D_F& origin, const Vector2D_F& screen_size
 
 bool IsVectorInHudSpace(const Vector3D_F& pos)
 {
-	assert(Interfaces::EngineClient);
+	assert(interfaces::EngineClient);
 
-	const Matrix4x4_F& worldToScreen = Interfaces::EngineClient->WorldToScreenMatrix();
+	const Matrix4x4_F& worldToScreen = interfaces::EngineClient->WorldToScreenMatrix();
 	const float w = worldToScreen[3][0] * pos[0] + worldToScreen[3][1] * pos[1] + worldToScreen[3][2] * pos[2] + worldToScreen[3][3];
 	return w > 0.001f;
 }

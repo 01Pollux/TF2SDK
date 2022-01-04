@@ -469,13 +469,13 @@ public:
 
 	void EyeVectors(Vector3D_F* fwd = nullptr, Vector3D_F* right = nullptr, Vector3D_F* up = nullptr) const
 	{
-		Utils::AngleVectors(EyeAngles, fwd, right, up);
+		utils::AngleVectors(EyeAngles, fwd, right, up);
 	}
 
 	/// <summary>
 	/// Test if the player has those conditions
 	/// </summary>
-	SG_SDK_TF2 bool 
+	PX_SDK_TF2 bool 
 		InCond(const Const::TFCondFlags& conds) const;
 
 	/// <summary>
@@ -558,7 +558,7 @@ public:
 	/// <summary>
 	/// Add those conditions to the player
 	/// </summary>
-	SG_SDK_TF2 void 
+	PX_SDK_TF2 void 
 		AddCond(const Const::TFCondFlags& cond);
 
 	/// <summary>
@@ -574,7 +574,7 @@ public:
 	/// <summary>
 	/// remove those conditions from the player
 	/// </summary>
-	SG_SDK_TF2 void 
+	PX_SDK_TF2 void 
 		RemoveCond(const Const::TFCondFlags& cond);
 
 	/// <summary>
@@ -588,44 +588,44 @@ public:
 	}
 
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		Const::EntClassID::CTFPlayer, "m_Shared",				PlayerShared, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			Const::EntClassID::CTFPlayer, "m_PlayerClass",			PlayerClass, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerShared,		Const::EntClassID::CTFPlayer, "m_Shared",				PlayerShared, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, ITFPlayerClass,			Const::EntClassID::CTFPlayer, "m_PlayerClass",			PlayerClass, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseTeam",		DisguiseTeam, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseClass",		DisguiseClass, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseTargetIndex",	DisguiseTargetIndex, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseHealth",		DisguiseHealth, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IHandleEntity,			Const::EntClassID::CTFPlayer, "m_hDisguiseWeapon",		DisguiseWeaponb, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseTeam",		DisguiseTeam, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_nDisguiseClass",		DisguiseClass, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseTargetIndex",	DisguiseTargetIndex, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, int,					Const::EntClassID::CTFPlayer, "m_iDisguiseHealth",		DisguiseHealth, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, IHandleEntity,			Const::EntClassID::CTFPlayer, "m_hDisguiseWeapon",		DisguiseWeaponb, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flMaxspeed",			MaxSpeed, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flCloakMeter",			CloakMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flChargeMeter",		ChargeMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flRageMeter",			RageMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flHypeMeter",			HypeMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flEnergyDrinkMeter",	EnergyDrinkMeter, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bRageDraining",		RageDraining, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bFeignDeathReady",		FeignDeathReady, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_bShieldEquipped",		IsShieldEquipped, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flMaxspeed",			MaxSpeed, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flCloakMeter",			CloakMeter, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flChargeMeter",		ChargeMeter, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flRageMeter",			RageMeter, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flHypeMeter",			HypeMeter, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_flEnergyDrinkMeter",	EnergyDrinkMeter, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bRageDraining",		RageDraining, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, bool,					Const::EntClassID::CTFPlayer, "m_bFeignDeathReady",		FeignDeathReady, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,					Const::EntClassID::CTFPlayer, "m_bShieldEquipped",		IsShieldEquipped, 0);
 
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_angEyeAngles[0]",		EyeAngles, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_vecPunchAngle",		PunchAngle, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecViewOffset[0]",		ViewOffset, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecVelocity[0]",		Velocity, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_angEyeAngles[0]",		EyeAngles, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Angle_F,						Const::EntClassID::CTFPlayer, "m_vecPunchAngle",		PunchAngle, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecViewOffset[0]",		ViewOffset, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Vector3D_F,						Const::EntClassID::CTFPlayer, "m_vecVelocity[0]",		Velocity, 0);
 
-	SG_DECL_RECVPROP_A(ITFPlayerInternal, IBaseHandle, Const::MaxPlayers,			Const::EntClassID::CTFPlayer, "m_hMyWeapons", MyWeapons, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hActiveWeapon",		ActiveWeapon, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hObserverTarget",		ObserverTarget, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,					Const::EntClassID::CTFPlayer, "m_iObserverMode",		ObserverMode, 0);
+	PX_DECL_RECVPROP_A(ITFPlayerInternal, IBaseHandle, Const::MaxPlayers,			Const::EntClassID::CTFPlayer, "m_hMyWeapons", MyWeapons, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hActiveWeapon",		ActiveWeapon, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, IBaseHandle,								Const::EntClassID::CTFPlayer, "m_hObserverTarget",		ObserverTarget, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerObserverMode,					Const::EntClassID::CTFPlayer, "m_iObserverMode",		ObserverMode, 0);
 
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,						Const::EntClassID::CTFPlayer, "m_lifeState",			LifeState, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,								Const::EntClassID::CTFPlayer, "m_iClass",				Class, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,								Const::EntClassID::CTFPlayer, "m_nStreaks",				Streaks, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, int,										Const::EntClassID::CTFPlayer, "m_iHealth",				CurrentHealth, 0);
-	SG_DECL_RECVPROP(ITFPlayerInternal, float,										Const::EntClassID::CTFPlayer, "m_flDeathTime",			DeathTime, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Const::PlayerLifeState,						Const::EntClassID::CTFPlayer, "m_lifeState",			LifeState, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, Const::TFClass,								Const::EntClassID::CTFPlayer, "m_iClass",				Class, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, TFPlayerStreak,								Const::EntClassID::CTFPlayer, "m_nStreaks",				Streaks, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, int,										Const::EntClassID::CTFPlayer, "m_iHealth",				CurrentHealth, 0);
+	PX_DECL_RECVPROP(ITFPlayerInternal, float,										Const::EntClassID::CTFPlayer, "m_flDeathTime",			DeathTime, 0);
 
-	SG_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
-	SG_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominated",		PlayerDominated, 0);
+	PX_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominatingMe",	PlayerDominatingMe, 0);
+	PX_DECL_RECVPROP_A(ITFPlayerInternal, bool, Const::MaxPlayers,					Const::EntClassID::CTFPlayer, "m_bPlayerDominated",		PlayerDominated, 0);
 
 };
 
@@ -647,9 +647,9 @@ using ITFPlayer = IPlayerWrapper<false>;
 using ILocalPlayer = IPlayerWrapper<true>;
 
 
-namespace Utils
+namespace utils
 {
-	SG_SDK_TF2 Angle_F 
+	PX_SDK_TF2 Angle_F 
 		GetAimAngle(const Vector3D_F& start, const Vector3D_F& end, bool useLocalPunchAng = false);
 }
 

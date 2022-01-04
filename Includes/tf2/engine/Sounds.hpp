@@ -10,7 +10,7 @@ TF2_NAMESPACE_BEGIN();
 
 class IEngineSound;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IEngineSound, ClientSound, "IEngineSoundClient003");
 }
@@ -37,15 +37,15 @@ public:
 	// player (client-side only)
 	virtual void EmitSound(IRecipientFilter& filter, int iEntIndex, int iChannel, const char* pSample,
 		float flVolume, float flAttenuation, int iFlags = 0, int iPitch = Const::SoundPitch::Normal, int iSpecialDSP = 0,
-		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, Utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
+		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
 
 	virtual void EmitSound(IRecipientFilter& filter, int iEntIndex, int iChannel, const char* pSample,
 		float flVolume, Const::SoundLevel iSoundlevel, int iFlags = 0, int iPitch = Const::SoundPitch::Normal, int iSpecialDSP = 0,
-		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, Utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
+		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
 
 	virtual void EmitSentenceByIndex(IRecipientFilter& filter, int iEntIndex, int iChannel, int iSentenceIndex,
 		float flVolume, Const::SoundLevel iSoundlevel, int iFlags = 0, int iPitch = Const::SoundPitch::Normal, int iSpecialDSP = 0,
-		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, Utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
+		const Vector3D_F* pOrigin = nullptr, const Vector3D_F* pDirection = nullptr, utils::UtlVector<Vector3D_F>* pUtlVecOrigins = nullptr, bool bUpdatePositions = true, float soundtime = .0f, int speakerentity = -1) abstract;
 
 	virtual void StopSound(int iEntIndex, int iChannel, const char* pSample) abstract;
 
@@ -75,7 +75,7 @@ public:
 	virtual void	SetVolumeByGuid(int guid, float fvol) abstract;
 
 	// Retrieves list of all active sounds
-	virtual void	GetActiveSounds(Utils::UtlVector<Const::SoundInfo>& sndlist) abstract;
+	virtual void	GetActiveSounds(utils::UtlVector<Const::SoundInfo>& sndlist) abstract;
 
 	virtual void	PrecacheSentenceGroup(const char* pGroupName) abstract;
 	virtual void	NotifyBeginMoviePlayback() abstract;

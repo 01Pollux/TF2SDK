@@ -3,13 +3,13 @@
 #include <type_traits>
 #include <tf2/config.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 using CRC32_t = uint32_t;
 
-SG_SDK_TF2 void CRC32_Init(CRC32_t*);
-SG_SDK_TF2 void CRC32_ProcessBuffer(CRC32_t*, const void* p, int len);
-SG_SDK_TF2 void CRC32_Final(CRC32_t*);
+PX_SDK_TF2 void CRC32_Init(CRC32_t*);
+PX_SDK_TF2 void CRC32_ProcessBuffer(CRC32_t*, const void* p, int len);
+PX_SDK_TF2 void CRC32_Final(CRC32_t*);
 
 inline CRC32_t CRC32_ProcessSingleBuffer(const void* p, int len)
 {
@@ -49,9 +49,9 @@ struct MD5Context
 	uint8_t		In[64]{ };
 };
 
-SG_SDK_TF2 void MD5Init(MD5Context* context);
-SG_SDK_TF2 void MD5Update(MD5Context* context, const uint8_t* buf, uint32_t len);
-SG_SDK_TF2 void MD5Final(uint8_t digest[MD5_DIGEST_LENGTH], MD5Context* context);
+PX_SDK_TF2 void MD5Init(MD5Context* context);
+PX_SDK_TF2 void MD5Update(MD5Context* context, const uint8_t* buf, uint32_t len);
+PX_SDK_TF2 void MD5Final(uint8_t digest[MD5_DIGEST_LENGTH], MD5Context* context);
 
 inline void MD5_ProcessSingleBuffer(const void* p, int len, MD5Value& md5Result)
 {

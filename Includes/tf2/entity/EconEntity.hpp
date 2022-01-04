@@ -23,23 +23,23 @@ class IAttributeList
 {
 public:
 	uint32_t*							VTable;
-	Utils::UtlVector<EconItemAttribute>	Attributes;
+	utils::UtlVector<EconItemAttribute>	Attributes;
 
 	/// <summary>
 	/// set an existing attribute's value of index
 	/// </summary>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		SetAttribute(int index, float value) noexcept;
 
 	/// <summary>
 	/// get an attribute by index
 	/// </summary>
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		GetAttribute(int index) noexcept;
 	/// <summary>
 	/// remove an attribute by index
 	/// </summary>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		RemoveAttribute(int index) noexcept;
 
 	/// <summary>
@@ -51,15 +51,15 @@ public:
 	/// Get attribute value by name of an entity
 	/// </summary>
 	/// <param name="fail_value">default value to use if the attribute wasn't found</param>
-	SG_SDK_TF2 static int
-		AttributeHookValue(int fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, Utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
+	PX_SDK_TF2 static int
+		AttributeHookValue(int fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
 
 	/// <summary>
 	/// Get attribute value by name of an entity
 	/// </summary>
 	/// <param name="fail_value">default value to use if the attribute wasn't found</param>
-	SG_SDK_TF2 static float
-		AttributeHookValue(float fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, Utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
+	PX_SDK_TF2 static float
+		AttributeHookValue(float fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
 };
 
 namespace Const
@@ -88,9 +88,9 @@ namespace Const
 class IEconEntityInternal : public IBaseEntityInternal
 {
 public:
-	SG_DECL_RECVPROP(IEconEntityInternal, int,				Const::EntClassID::CEconEntity, "m_iItemDefinitionIndex",				ItemDefinitionIndex,		0);
-	SG_DECL_RECVPROP(IEconEntityInternal, IAttributeList,	Const::EntClassID::CEconEntity, "m_AttributeList",						AttributeList,				0);
-	SG_DECL_RECVPROP(IEconEntityInternal, IAttributeList,	Const::EntClassID::CEconEntity, "m_NetworkedDynamicAttributesForDemos",	DynamicAttributeForDemos,	0);
+	PX_DECL_RECVPROP(IEconEntityInternal, int,				Const::EntClassID::CEconEntity, "m_iItemDefinitionIndex",				ItemDefinitionIndex,		0);
+	PX_DECL_RECVPROP(IEconEntityInternal, IAttributeList,	Const::EntClassID::CEconEntity, "m_AttributeList",						AttributeList,				0);
+	PX_DECL_RECVPROP(IEconEntityInternal, IAttributeList,	Const::EntClassID::CEconEntity, "m_NetworkedDynamicAttributesForDemos",	DynamicAttributeForDemos,	0);
 };
 
 
@@ -101,7 +101,7 @@ public:
 	/// Get game's Econ schema
 	/// </summary>
 	/// <returns></returns>
-	SG_SDK_TF2 static IEconItemSchema* 
+	PX_SDK_TF2 static IEconItemSchema* 
 		Get();
 };
 

@@ -172,7 +172,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2
+	PX_SDK_TF2
 	bool FindSendProp(ServerClass* pClass, const char* prop_name, SendProp** pProp, uint32_t* pOffset);
 
 	/// <summary>
@@ -181,7 +181,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2
+	PX_SDK_TF2
 	bool FindSendProp(const char* class_name, const char* prop_name, SendProp** pProp, uint32_t* pOffset);
 
 	/// <summary>
@@ -190,7 +190,7 @@ namespace PropFinder
 	/// <param name="pProp">[out] pointer to RecvProp*</param>
 	/// <param name="pOffset">[out] pointer to offset</param>
 	/// <returns>true if the prop exists, false otherwise</returns>
-	SG_SDK_TF2
+	PX_SDK_TF2
 	bool FindSendProp(Const::EntClassID class_id, const char* prop_name, SendProp** pProp, uint32_t* pOffset);
 }
 

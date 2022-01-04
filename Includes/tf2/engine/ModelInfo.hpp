@@ -10,7 +10,7 @@ TF2_NAMESPACE_BEGIN();
 class IVModelInfo;
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVModelInfo, ModelInfo, "VModelInfoClient006");
 }

@@ -12,7 +12,7 @@ TF2_NAMESPACE_BEGIN();
 
 class IEngineTrace;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IEngineTrace, ClientTrace, "EngineTraceClient003");
 }
@@ -76,13 +76,13 @@ public:
 
 
 	//finds brushes in an AABB, prone to some false positives
-	virtual void GetBrushesInAABB(const Vector3D_F& vMins, const Vector3D_F& vMaxs, Utils::UtlVector<int>* pOutput, int iContentsMask = 0xFFFFFFFF) abstract;
+	virtual void GetBrushesInAABB(const Vector3D_F& vMins, const Vector3D_F& vMaxs, utils::UtlVector<int>* pOutput, int iContentsMask = 0xFFFFFFFF) abstract;
 
 	//Creates a CPhysCollide out of all displacements wholly or partially contained in the specified AABB
 	virtual IPhysCollide* GetCollidableFromDisplacementsInAABB(const Vector3D_F& vMins, const Vector3D_F& vMaxs) abstract;
 
 	//retrieve brush planes and contents, returns true if data is being returned in the output pointers, false if the brush doesn't exist
-	virtual bool GetBrushInfo(int iBrush, Utils::UtlVector<Vector4D_F>* pPlanesOut, int* pContentsOut) abstract;
+	virtual bool GetBrushInfo(int iBrush, utils::UtlVector<Vector4D_F>* pPlanesOut, int* pContentsOut) abstract;
 
 	virtual bool PointOutsideWorld(const Vector3D_F& ptTest) abstract; //Tests a point to see if it's outside any playable area
 

@@ -1,30 +1,30 @@
-#include <shadowgarden/interfaces/InterfacesSys.hpp>
+#include <px/interfaces/InterfacesSys.hpp>
 #include <imgui/imgui_internal.h>
 
 #include "Defines.hpp"
 #include "ICheatIFace.hpp"
 
-class IGlobalCheatIFace : public SG::IPluginImpl
+class IGlobalCheatIFace : public px::IPluginImpl
 {
 public:
-	void OnPluginPreLoad(SG::IPluginManager* ifacemgr) override
+	void OnPluginPreLoad(px::IPluginManager* ifacemgr) override
 	{
 		for (auto& iface : ICheatIFace::GetEntries())
 			iface->OnPluginPreLoad(ifacemgr);
 	}
 
-	bool OnPluginLoad2(SG::IPluginManager* ifacemgr) override
+	bool OnPluginLoad2(px::IPluginManager* ifacemgr) override
 	{ 
-		ImGui::SetCurrentContext(SG::ImGuiLoader->GetContext());
+		ImGui::SetCurrentContext(px::ImGuiLoader->GetContext());
 
-		TF2::Interfaces::SDKManager::Config tf2_config;
+		tf2::interfaces::SDKManager::Config tf2_config;
 		for (auto iface : ICheatIFace::GetEntries())
 		{
 			if (!iface->OnAskPluginLoad(tf2_config))
 				return false;
 		}
 
-		if (!m_TF2Sdk.init(SG::LibManager->OpenGameData(this), tf2_config))
+		if (!m_TF2Sdk.init(px::LibManager->OpenGameData(this), tf2_config))
 			return false;
 
 		for (auto iface : ICheatIFace::GetEntries())
@@ -51,15 +51,15 @@ public:
 			iface->OnPluginPauseChange(pausing);
 	}
 
-	void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const override
+	void OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const override
 	{
 		for (auto iface : ICheatIFace::GetEntries())
 			iface->OnSaveConfig(cfg);
 	}
 
 private:
-	TF2::Interfaces::SDKManager m_TF2Sdk;
+	tf2::interfaces::SDKManager m_TF2Sdk;
 };
 
 // Important for exporting plugin
-SG_DLL_EXPORT(IGlobalCheatIFace);
+PX_DLL_EXPORT(IGlobalCheatIFace);

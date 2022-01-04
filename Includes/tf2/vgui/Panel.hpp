@@ -17,7 +17,7 @@ namespace VGui
 }
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(VGui::IPanel, Panel, "VGUI_Panel009");
 }
@@ -57,7 +57,7 @@ namespace VGui
 		virtual void SetParent(Const::VGui::VPANEL vguiPanel, Const::VGui::VPANEL newParent) abstract;
 		virtual int GetChildCount(Const::VGui::VPANEL vguiPanel) abstract;
 		virtual Const::VGui::VPANEL GetChild(Const::VGui::VPANEL vguiPanel, int index) abstract;
-		virtual Utils::UtlVector<Const::VGui::VPANEL>& GetChildren(Const::VGui::VPANEL vguiPanel) abstract;
+		virtual utils::UtlVector<Const::VGui::VPANEL>& GetChildren(Const::VGui::VPANEL vguiPanel) abstract;
 		virtual Const::VGui::VPANEL GetParent(Const::VGui::VPANEL vguiPanel) abstract;
 		virtual void MoveToFront(Const::VGui::VPANEL vguiPanel) abstract;
 		virtual void MoveToBack(Const::VGui::VPANEL vguiPanel) abstract;

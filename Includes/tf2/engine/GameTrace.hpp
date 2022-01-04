@@ -155,10 +155,10 @@ public:
 public:
 
 	uint32_t					LeafCount{ };
-	Utils::UtlVector<int>		LeafList;
+	utils::UtlVector<int>		LeafList;
 
 	uint32_t								EntityCount{ };
-	Utils::UtlVector<IBaseEntityInternal*>	EntityList;
+	utils::UtlVector<IBaseEntityInternal*>	EntityList;
 };
 
 

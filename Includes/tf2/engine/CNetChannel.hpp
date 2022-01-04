@@ -1,8 +1,8 @@
 #pragma once
 
 #include "NetChannel.hpp"
-#include "Utils/UtlVector.hpp"
-#include "Utils/bitbuf.hpp"
+#include "utils/UtlVector.hpp"
+#include "utils/bitbuf.hpp"
 
 TF2_NAMESPACE_BEGIN();
 
@@ -84,16 +84,16 @@ public:
 
 
 	// Reliable data buffer, send which each packet (or put in waiting list)
-	Utils::bf_write				StreamReliable;
+	utils::bf_write				StreamReliable;
 	uint8_t						ReliableDataBuffer[8 * 1024];	// In SP, we don't need much reliable buffer, so save the memory (this is mostly for xbox).
-	Utils::UtlVector<uint8_t>	ReliableDataBufferMP;
+	utils::UtlVector<uint8_t>	ReliableDataBufferMP;
 
-	Utils::bf_write	StreamUnreliable;
+	utils::bf_write	StreamUnreliable;
 	uint8_t			UnreliableDataBuffer[1400];
 
 	// unreliable message buffer, cleared wich each packet
-	Utils::bf_write	StreamVoice;
-	Utils::UtlMemory<uint8_t> VoiceDataBuffer;
+	utils::bf_write	StreamVoice;
+	utils::UtlMemory<uint8_t> VoiceDataBuffer;
 };
 
 TF2_NAMESPACE_END();

@@ -12,20 +12,17 @@
 #include <tf2/utils/Trace.hpp>
 #include <tf2/utils/Vector.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
-static TF2::ConVar* cvar_sv_cheats();
-static TF2::ConVar* cvar_cl_interp();
-
+static tf2::ConVar* cvar_sv_cheats();
+static tf2::ConVar* cvar_cl_interp();
 
 Vector3D_F Prediction_SimpleLatency(const Vector3D_F& position, const Vector3D_F& velocity)
 {
-	INetChannel* pNet = Interfaces::EngineClient->GetNetChannelInfo();
+	INetChannel* pNet = interfaces::EngineClient->GetNetChannelInfo();
 	float latency = pNet->GetLatency(Const::NetMsgFlowType::Outgoing) + pNet->GetLatency(Const::NetMsgFlowType::Incoming);
 	return latency ? Vector3D_F{ } : Vector3D_F{ position + velocity * latency };
 }
-
-
 
 static Vector3D_F Prediction_NextStep(
     const Vector3D_F& pos, 
@@ -35,18 +32,18 @@ static Vector3D_F Prediction_NextStep(
     const Vector3D_F(&minmax)[2], 
     bool on_ground, 
     GameTrace& trace_results,
-    Utils::FilterSimple& trace_filter
+    utils::FilterSimple& trace_filter
 )
 {
     Vector3D_F target_pos = pos + ((acceleration / 2.f) * step_size * step_size + velocity * step_size) + acceleration * step_size;
-    float dist_to_ground = Utils::DistanceToGround(target_pos, minmax[0], minmax[1]);
+    float dist_to_ground = utils::DistanceToGround(target_pos, minmax[0], minmax[1]);
     
     if (dist_to_ground && (target_pos[2] + dist_to_ground) < pos[2])
         target_pos[2] = pos[2] - dist_to_ground;
 
     // Check if we hit a wall, if so, snap to it and distance ourselves a bit from it
     {
-        Utils::TraceHull(pos, target_pos, minmax[0], minmax[1], Const::TraceMask::PlayerSolid, trace_results, trace_filter);
+        utils::TraceHull(pos, target_pos, minmax[0], minmax[1], Const::TraceMask::PlayerSolid, trace_results, trace_filter);
 
         // Hit a wall, scratch along it
         if (trace_results.DidHit())
@@ -140,10 +137,10 @@ Vector3D_F Prediction_Projectile(
 
     constexpr int max_times = 60;
     constexpr float step_size = ((1.5f * 2.f) / max_times);
-    const float latency_delay = Interfaces::EngineClient->GetNetChannelInfo()->GetLatency(Const::NetMsgFlowType::Outgoing) + cvar_cl_interp()->FloatValue;
+    const float latency_delay = interfaces::EngineClient->GetNetChannelInfo()->GetLatency(Const::NetMsgFlowType::Outgoing) + cvar_cl_interp()->FloatValue;
 
     GameTrace trace_results;
-    Utils::FilterSimple filter_no_players{
+    utils::FilterSimple filter_no_players{
         nullptr,
         Const::EntCollisionGroup::None,
         [](IBaseEntityInternal* pEnt, uint32_t)
@@ -171,15 +168,15 @@ Vector3D_F Prediction_Projectile(
 }
 
 
-static TF2::ConVar* cvar_sv_cheats()
+static tf2::ConVar* cvar_sv_cheats()
 {
-	static ConVar* sv_cheats = Interfaces::CVar->FindVar("sv_cheats");
+	static ConVar* sv_cheats = interfaces::CVar->FindVar("sv_cheats");
 	return sv_cheats;
 }
 
-static TF2::ConVar* cvar_cl_interp()
+static tf2::ConVar* cvar_cl_interp()
 {
-	static ConVar* sv_cheats = Interfaces::CVar->FindVar("cl_interp");
+	static ConVar* sv_cheats = interfaces::CVar->FindVar("cl_interp");
 	return sv_cheats;
 }
 

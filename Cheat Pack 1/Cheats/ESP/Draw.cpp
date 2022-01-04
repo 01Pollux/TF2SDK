@@ -11,13 +11,13 @@
 
 #include "ESP.hpp"
 
-bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinfo)
+bool GlobalESP::GetBoxInfo(const tf2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinfo)
 {
-	using namespace TF2;
+	using namespace tf2;
 	const Vector3D_F& origin = pEnt->VecOrigin;
 
 	const bool is_zero = pEnt->Mins->is_zero();
-	auto get_min_max = [] (const TF2::IBaseEntity pEnt, bool is_min) -> Vector3D_F
+	auto get_min_max = [] (const tf2::IBaseEntity pEnt, bool is_min) -> Vector3D_F
 	{
 		const ModelInfo* model = pEnt->GetModel();
 		if (!model)
@@ -44,7 +44,7 @@ bool GlobalESP::GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinf
 	static_assert(std::ssize(corners) == 8);
 
 	for (size_t i = 0; i < 8; i++)
-		if (!TF2::Utils::GetVectorInHudSpace(corners[i], { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, boxinfo.m_Corners[i]))
+		if (!tf2::utils::GetVectorInHudSpace(corners[i], { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, boxinfo.m_Corners[i]))
 			return false;
 
 	return true;
@@ -57,7 +57,7 @@ void GlobalESP::DrawSharedInfo(
 	const ESPInfo::DrawTextCallback& callback
 )
 {
-	using namespace TF2;
+	using namespace tf2;
 	using PosType = ESPInfo::BoxInfo::PosType;
 	ImDrawList* pDraw = ImGui::GetBackgroundDrawList();
 	
@@ -156,7 +156,7 @@ void GlobalESP::DrawSharedInfo(
 
 void GlobalESP::DrawSharedHealth(const ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player)
 {
-	using namespace TF2;
+	using namespace tf2;
 
 	ImDrawList* pDraw = ImGui::GetBackgroundDrawList();
 	const float health_percentage = std::min(static_cast<float>(cur_health) / max_health, 1.f);
@@ -263,7 +263,7 @@ void GlobalESP::DrawSharedHealth(const ESPInfo::BoxInfo& boxinfo, ESPInfo::Share
 }
 
 
-TF2::Color4_F GlobalESP::GetHealthColor(int cur, int max)
+tf2::Color4_F GlobalESP::GetHealthColor(int cur, int max)
 {
 	const float ratio = static_cast<float>(cur) / static_cast<float>(max);
 	if (ratio > 1.f)
@@ -292,16 +292,16 @@ TF2::Color4_F GlobalESP::GetHealthColor(int cur, int max)
 
 void GlobalESP::RenderESP()
 {
-	using namespace TF2;
+	using namespace tf2;
 
 	ESPInfo::BoxInfo box_info;
 	ILocalPlayer pMe;
 	Const::TFTeam my_team = pMe->TeamNum;
 
 
-	for (auto pEnt : Utils::IBaseEntityIterator{})
+	for (auto pEnt : utils::IBaseEntityIterator{})
 	{
-		if (pEnt->IsDormantEx() || !Utils::IsVectorInHudSpace(pEnt->VecOrigin))
+		if (pEnt->IsDormantEx() || !utils::IsVectorInHudSpace(pEnt->VecOrigin))
 			continue;
 		
 		Const::EntClassID cls_id = pEnt->GetClientClass()->ClassID;

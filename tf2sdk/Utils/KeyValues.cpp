@@ -1,13 +1,12 @@
 #include <map>
 
-#include <shadowgarden/interfaces/GameData.hpp>
-#include <shadowgarden/users/String.hpp>
+#include <px/interfaces/GameData.hpp>
+#include <px/string.hpp>
 
 #include <tf2/utils/KeyValues.hpp>
 #include <tf2/utils/Thunks.hpp>
 
 TF2_NAMESPACE_BEGIN();
-
 
 class KeyValues_SetLookupTable
 {
@@ -18,10 +17,10 @@ public:
 		{
 			is_init = true;
 			KeyValues::GetSymbolForStringFn = static_cast<decltype(KeyValues::GetSymbolForStringFn)>(
-				Interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "GetSymbolForString").get()
+				interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "GetSymbolForString").get()
 			);
 			KeyValues::GetStringForSymbolFn = static_cast<decltype(KeyValues::GetStringForSymbolFn)>(
-				Interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "GetStringForSymbol").get()
+				interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "GetStringForSymbol").get()
 			);
 		}
 	}
@@ -93,8 +92,8 @@ void KeyValues::Init()
 
 bool KeyValues::LoadFromFile(const char* fileName, const char* pathID, bool refreshCache)
 {
-	static Utils::IMemberFuncThunk<bool, const char*, const char*, bool> load_frombuffer{
-		Interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "LoadFromBuffer").get()
+	static utils::MemberFuncThunk<bool, const char*, const char*, bool> load_frombuffer{
+		interfaces::SDKManager::Get()->ReadSignature({ "KeyValues" }, "LoadFromBuffer").get()
 	};
 	return load_frombuffer(this, fileName, pathID, refreshCache);
 }

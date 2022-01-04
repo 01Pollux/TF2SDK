@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include <tf2/config.hpp>
-#include <shadowgarden/config/args.hpp>
+#include <px/console/args.hpp>
 
 TF2_NAMESPACE_BEGIN();
 
@@ -214,7 +214,6 @@ public:
 			++pval;
 		}
 	}
-
 
 	// Multiply, add, and assign to this (ie: *this = a + b * scalar). This
 	void mult_add(const VectorXD& a, const VectorXD& b, float scalar) noexcept
@@ -443,90 +442,17 @@ using Color4_F		= VectorXD<float, 4>;
 
 TF2_NAMESPACE_END();
 
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector2D_I, px::tf2::Vector2D_I::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector3D_I, px::tf2::Vector2D_I::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector4D_I, px::tf2::Vector2D_I::array_type);
 
-template<>                                                                 
-struct ShadowGarden::CommandParser<TF2::Vector2D_I>::typeinfo
-{                                                                          
-    using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_I::array_type>::typeinfo;
-    static constexpr const char* type_name = parent_type::type_name;	   
-    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
-};                                                                          
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector2D_F, px::tf2::Vector2D_F::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector3D_F, px::tf2::Vector3D_F::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector4D_F, px::tf2::Vector4D_F::array_type);
 
-template<>                                                                 
-struct ShadowGarden::CommandParser<TF2::Vector3D_I>::typeinfo
-{                                                                          
-    using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_I::array_type>::typeinfo;
-    static constexpr const char* type_name = parent_type::type_name;	   
-    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
-};                                                                          
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector2D_D, px::tf2::Vector2D_D::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector3D_D, px::tf2::Vector3D_D::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Vector4D_D, px::tf2::Vector4D_D::array_type);
 
-template<>                                                                 
-struct ShadowGarden::CommandParser<TF2::Vector4D_I>::typeinfo
-{                                                                          
-    using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_I::array_type>::typeinfo;
-    static constexpr const char* type_name = parent_type::type_name;	   
-    static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;  
-};                                                                          
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector2D_F>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_F::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector3D_F>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_F::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector4D_F>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_F::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector2D_D>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector2D_D::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector3D_D>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector3D_D::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-template<>
-struct ShadowGarden::CommandParser<TF2::Vector4D_D>::typeinfo
-{
-	using parent_type = ShadowGarden::CommandParser<TF2::Vector4D_D::array_type>::typeinfo;
-	static constexpr const char* type_name = parent_type::type_name;
-	static constexpr bool has_lexial_cast = parent_type::has_lexial_cast;
-};
-
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_I, TF2::Vector2D_I::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_I, TF2::Vector3D_I::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_I, TF2::Vector4D_I::array_type);
-//
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_F, TF2::Vector2D_F::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_F, TF2::Vector3D_F::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_F, TF2::Vector4D_F::array_type);
-//
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector2D_D, TF2::Vector2D_D::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector3D_D, TF2::Vector3D_D::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Vector4D_D, TF2::Vector4D_D::array_type);
-//
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Color3_8,	TF2::Color3_8::array_type);
-//SG_CONVAR_TYPEINFO_INHERIT(TF2::Color4_8,	TF2::Color4_8::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Color3_8, px::tf2::Color3_8::array_type);
+PX_CONVAR_TYPEINFO_INHERIT(px::tf2::Color4_8, px::tf2::Color4_8::array_type);

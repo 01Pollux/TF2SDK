@@ -145,12 +145,12 @@ values:
 	
 	struct Shared
 	{
-		SG::ConVar<bool> Enable;
+		px::ConVar<bool> Enable;
 		
 		struct _Rainbow_t
 		{
-			TF2::Color4_F				Color	{ 1.f, 1.f, 1.f, 1.f };
-			SG::ConVar<float>			Speed;
+			tf2::Color4_F				Color	{ 1.f, 1.f, 1.f, 1.f };
+			px::ConVar<float>			Speed;
 
 			_Rainbow_t(
 				const char* rainbow_speed_color
@@ -161,8 +161,8 @@ values:
 
 		struct _3DBox_t
 		{
-			SG::ConVar<TF2::Color4_F>	DrawColor;
-			SG::ConVar<float>			LineThickness;
+			px::ConVar<tf2::Color4_F>	DrawColor;
+			px::ConVar<float>			LineThickness;
 
 			_3DBox_t(
 				const char* draw_color,
@@ -175,9 +175,9 @@ values:
 
 		struct _Outline3DBox_t
 		{
-			SG::ConVar<TF2::Color4_F>	DrawColor;
-			SG::ConVar<TF2::Color4_F>	OutlineColor;
-			SG::ConVar<float>			LineThickness;
+			px::ConVar<tf2::Color4_F>	DrawColor;
+			px::ConVar<tf2::Color4_F>	OutlineColor;
+			px::ConVar<float>			LineThickness;
 
 			_Outline3DBox_t(
 				const char* draw_color,
@@ -192,10 +192,10 @@ values:
 
 		struct _Text_t
 		{
-			SG::ConVar<TF2::Color4_F>	Color;
-			SG::ConVar<TF2::Vector2D_F>	Offset;
-			SG::ConVar<float>			Height;
-			SG::ConVar<float>			Size;
+			px::ConVar<tf2::Color4_F>	Color;
+			px::ConVar<tf2::Vector2D_F>	Offset;
+			px::ConVar<float>			Height;
+			px::ConVar<float>			Size;
 
 			_Text_t(
 				const char* draw_color,
@@ -210,12 +210,12 @@ values:
 			{ }
 		} Text;
 
-		SG::ConVar<int> MaxDistance;
+		px::ConVar<int> MaxDistance;
 
-		SG::ConVar<ESPMode> DrawMode;
+		px::ConVar<ESPMode> DrawMode;
 
-		SG::ConVar<bool> DrawName;
-		SG::ConVar<bool> DrawDistance;
+		px::ConVar<bool> DrawName;
+		px::ConVar<bool> DrawDistance;
 
 		Shared(
 			const char* enable,
@@ -255,14 +255,14 @@ values:
 
 	struct Player : public Shared
 	{
-		SG::ConVar<bool> DrawClass; 
-		SG::ConVar<bool> DrawClassIcon;
-		SG::ConVar<bool> DrawCond;
-		SG::ConVar<bool> DrawUberPerc;
-		SG::ConVar<bool> IgnoreCloak;
-		SG::ConVar<bool> DrawTeam;
+		px::ConVar<bool> DrawClass; 
+		px::ConVar<bool> DrawClassIcon;
+		px::ConVar<bool> DrawCond;
+		px::ConVar<bool> DrawUberPerc;
+		px::ConVar<bool> IgnoreCloak;
+		px::ConVar<bool> DrawTeam;
 
-		SG::ConVar<HealthBarMode> HealthbarMode;
+		px::ConVar<HealthBarMode> HealthbarMode;
 
 		Player(
 			bool is_red
@@ -302,14 +302,14 @@ values:
 
 	struct Building : public Shared
 	{
-		SG::ConVar<bool> DrawOwner;
-		SG::ConVar<bool> DrawAmmo;
-		SG::ConVar<bool> DrawLevel;
-		SG::ConVar<bool> DrawBState;
-		SG::ConVar<bool> DrawTeam;
-		SG::ConVar<bool> DrawHealth;
+		px::ConVar<bool> DrawOwner;
+		px::ConVar<bool> DrawAmmo;
+		px::ConVar<bool> DrawLevel;
+		px::ConVar<bool> DrawBState;
+		px::ConVar<bool> DrawTeam;
+		px::ConVar<bool> DrawHealth;
 
-		SG::ConVar<HealthBarMode> HealthbarMode;
+		px::ConVar<HealthBarMode> HealthbarMode;
 
 		Building(
 			bool is_red
@@ -349,11 +349,11 @@ values:
 
 	struct Object : public Shared
 	{
-		SG::ConVar<bool> DrawPacks;
-		SG::ConVar<bool> DrawRockets;
-		SG::ConVar<bool> DrawPipes;
-		SG::ConVar<bool> DrawStickies;
-		SG::ConVar<bool> DrawNPC;
+		px::ConVar<bool> DrawPacks;
+		px::ConVar<bool> DrawRockets;
+		px::ConVar<bool> DrawPipes;
+		px::ConVar<bool> DrawStickies;
+		px::ConVar<bool> DrawNPC;
 
 		Object(
 		) :
@@ -401,7 +401,7 @@ values:
 		};
 
 		template<PosType type>
-		const TF2::Vector2D_F& GetPosition(size_t offset) const noexcept
+		const tf2::Vector2D_F& GetPosition(size_t offset) const noexcept
 		{
 			if constexpr (type == PosType::Bottom)
 				return m_Corners[offset];
@@ -409,10 +409,10 @@ values:
 				return m_Corners[offset + 4];
 		}
 
-		std::pair<TF2::Vector2D_F, TF2::Vector2D_F >
+		std::pair<tf2::Vector2D_F, tf2::Vector2D_F >
 			GetMinMax() const noexcept
 		{
-			TF2::Vector2D_F max{ -1, -1 }, min{ 65536, 65536 };
+			tf2::Vector2D_F max{ -1, -1 }, min{ 65536, 65536 };
 			
 			for (const auto& vec : m_Corners)
 			{
@@ -428,7 +428,7 @@ values:
 			return { min, max };
 		}
 
-		TF2::Vector2D_F m_Corners[8];
+		tf2::Vector2D_F m_Corners[8];
 	};
 
 	struct TextInfo
@@ -476,10 +476,10 @@ public:
 	
 	struct ESPOverride
 	{
-		const TF2::IBaseEntity Entity;
+		const tf2::IBaseEntity Entity;
 
 		float RainbowSpeed;
-		TF2::Color4_F Color;
+		tf2::Color4_F Color;
 
 		ESPInfo::ESPMode DrawMode;
 		ESPType Type;
@@ -487,30 +487,30 @@ public:
 
 	static ESPOverride& PushESPOverride(int ent_index, const ESPOverride& esp_override);
 
-	static void PopESPOverride(const TF2::IBaseEntity pEnt);
+	static void PopESPOverride(const tf2::IBaseEntity pEnt);
 
 	static void PopESPOverride(int entindex);
 
 private:
-	bool OnAskPluginLoad(TF2::Interfaces::SDKManager::Config& config) override;
+	bool OnAskPluginLoad(tf2::interfaces::SDKManager::Config& config) override;
 	void OnPluginLoad() override;
 
 	void OnPluginUnload() override;
 
 	static void OnDrawESP(ImGuiContext* imgui, ImGuiContextHook* ctx);
 
-	void OnSaveConfig(std::vector<SG::IPlugin::FileConfigs>& cfg) const override;
+	void OnSaveConfig(std::vector<px::IPlugin::FileConfigs>& cfg) const override;
 
 	bool OnRender();
 
 private:
-	bool GetBoxInfo(const TF2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinfo);
+	bool GetBoxInfo(const tf2::IBaseEntity pEnt, ESPInfo::BoxInfo& boxinfo);
 
 	void DrawSharedInfo(const ESPInfo::BoxInfo& boxinfo, const ESPInfo::Shared* esp_info, const ESPOverride* esp_override, const ESPInfo::DrawTextCallback& callback);
 
 	void DrawSharedHealth(const ESPInfo::BoxInfo& boxinfo, ESPInfo::Shared* esp_info, int cur_health, int max_health, bool is_player);
 
-	TF2::Color4_F GetHealthColor(int cur, int max);
+	tf2::Color4_F GetHealthColor(int cur, int max);
 
 private:
 	/// <summary>
@@ -521,12 +521,12 @@ private:
 	/// <summary>
 	/// Handles player's esp
 	/// </summary>
-	void RenderPlayerESP(const TF2::ITFPlayer pPlayer, ESPInfo::BoxInfo& box_info);
+	void RenderPlayerESP(const tf2::ITFPlayer pPlayer, ESPInfo::BoxInfo& box_info);
 
 	/// <summary>
 	/// Handles building's esp, ie sentry...
 	/// </summary>
-	void RenderBuildingESP(const TF2::IBaseObject pEnt, TF2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index);
+	void RenderBuildingESP(const tf2::IBaseObject pEnt, tf2::Const::EntClassID class_id, ESPInfo::BoxInfo& box_info, int ent_index);
 
 private:
 	ESPInfo::Player		m_PlayerESPInfo[ESPInfo::MaxTeams]{ true, false };

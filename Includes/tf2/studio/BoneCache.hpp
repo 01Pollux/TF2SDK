@@ -12,26 +12,26 @@ public:
 	/// <summary>
 	/// Update bone cache
 	/// </summary>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		UpdateBones(const Matrix3x4_F* pBoneToWorld, int numbones, float curtime);
 
 	/// <summary>
 	/// Get pointer to bone matrix
 	/// </summary>
 	/// <returns>a valid pointer to the cache, nullptr if it doesn't exists</returns>
-	SG_SDK_TF2 const Matrix3x4_F*
+	PX_SDK_TF2 const Matrix3x4_F*
 		GetCachedBone(int studioIndex) const;
 
 	/// <summary>
 	/// Copy bone matrix to 'bones'
 	/// </summary>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		ReadCachedBones(std::vector<Matrix3x4_F>& bones) const;
 	
 	/// <summary>
 	/// Copy pointer to bone matrix to 'pbones'
 	/// </summary>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		ReadCachedBonePointers(std::vector<const Matrix3x4_F*>& pbones) const;
 
 	/// <summary>

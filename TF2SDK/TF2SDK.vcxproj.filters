@@ -69,28 +69,28 @@
     <ClCompile Include="Studio\BoneCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\bitbuf.cpp">
+    <ClCompile Include="utils\bitbuf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Checksum.cpp">
+    <ClCompile Include="utils\Checksum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Draw.cpp">
+    <ClCompile Include="utils\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\KeyValues.cpp">
+    <ClCompile Include="utils\KeyValues.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Prediction.cpp">
+    <ClCompile Include="utils\Prediction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Trace.cpp">
+    <ClCompile Include="utils\Trace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Vector.cpp">
+    <ClCompile Include="utils\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Interfaces.cpp">
+    <ClCompile Include="interfaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

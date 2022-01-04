@@ -4,7 +4,7 @@
 #include <tf2/config.hpp>
 #include <tf2/engine/Trace.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 using TraceFilterCallback = std::function<bool(IBaseEntityInternal*, uint32_t)>;
 
@@ -82,7 +82,7 @@ public:
 		const TraceFilterCallback& extra = nullptr
 	) noexcept : m_IgnoreEntity(ignore), m_CollisionGroup(collision_group), m_Callback(extra) { };
 
-	SG_SDK_TF2 bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override;
+	PX_SDK_TF2 bool ShouldHitEntity(IClientUnknown* pUnk, uint32_t mask) override;
 
 protected:
 	const IBaseEntityInternal* m_IgnoreEntity;
@@ -211,10 +211,10 @@ inline void TraceLine(
 	ITraceFilter& trace
 )
 {
-	assert(Interfaces::ClientTrace);
+	assert(interfaces::ClientTrace);
 
 	GameRay ray{ vec1, vec2 };
-	Interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
+	interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
 }
 
 inline void TraceHull(
@@ -227,10 +227,10 @@ inline void TraceHull(
 	ITraceFilter& trace
 )
 {
-	assert(Interfaces::ClientTrace);
+	assert(interfaces::ClientTrace);
 
 	GameRay ray{ vec1, vec2, mins, maxs };
-	Interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
+	interfaces::ClientTrace->TraceRay(ray, mask, &trace, &results);
 }
 
 inline bool VecIsVisible(
@@ -248,7 +248,7 @@ inline bool VecIsVisible(
 	return res.Entity == pEnt;
 }
 
-SG_SDK_TF2 float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore = nullptr);
-SG_SDK_TF2 float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector3D_F& maxs, IBaseEntityInternal* pIgnore = nullptr);
+PX_SDK_TF2 float DistanceToGround(Vector3D_F position, IBaseEntityInternal* pIgnore = nullptr);
+PX_SDK_TF2 float DistanceToGround(Vector3D_F position, const Vector3D_F& mins, const Vector3D_F& maxs, IBaseEntityInternal* pIgnore = nullptr);
 
 TF2_NAMESPACE_END();

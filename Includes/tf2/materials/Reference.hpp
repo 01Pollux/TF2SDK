@@ -15,18 +15,18 @@ class IMaterialReference
 {
 public:
 	// constructor, destructor
-	SG_SDK_TF2 IMaterialReference(char const* pMaterialName = nullptr, const char* pTextureGroupName = nullptr, bool complain = true);
-	SG_SDK_TF2 ~IMaterialReference();
+	PX_SDK_TF2 IMaterialReference(char const* pMaterialName = nullptr, const char* pTextureGroupName = nullptr, bool complain = true);
+	PX_SDK_TF2 ~IMaterialReference();
 
 	// Attach to a material
-	SG_SDK_TF2 void init(const char* pMaterialName, const char* pTextureGroupName, bool bComplain = true);
-	SG_SDK_TF2 void init(const char* pMaterialName, KeyValues* pVMTKeyValues);
-	SG_SDK_TF2 void init(IMaterial* pMaterial);
-	SG_SDK_TF2 void init(IMaterialReference& ref);
-	SG_SDK_TF2 void init(const char* pMaterialName, const char* pTextureGroupName, KeyValues* pVMTKeyValues);
+	PX_SDK_TF2 void init(const char* pMaterialName, const char* pTextureGroupName, bool bComplain = true);
+	PX_SDK_TF2 void init(const char* pMaterialName, KeyValues* pVMTKeyValues);
+	PX_SDK_TF2 void init(IMaterial* pMaterial);
+	PX_SDK_TF2 void init(IMaterialReference& ref);
+	PX_SDK_TF2 void init(const char* pMaterialName, const char* pTextureGroupName, KeyValues* pVMTKeyValues);
 
 	// Detach from a material
-	SG_SDK_TF2 void shutdown();
+	PX_SDK_TF2 void shutdown();
 	bool valid() { return m_Material != nullptr; }
 
 	// Automatic casts to IMaterial
@@ -48,17 +48,17 @@ class ITextureReference
 public:
 	// constructor, destructor
 	ITextureReference() = default;
-	SG_SDK_TF2 ITextureReference(const ITextureReference& ref);
-	SG_SDK_TF2 ~ITextureReference();
+	PX_SDK_TF2 ITextureReference(const ITextureReference& ref);
+	PX_SDK_TF2 ~ITextureReference();
 
 	// Attach to a texture
-	SG_SDK_TF2 void init(char const* pTexture, const char* pTextureGroupName, bool bComplain = true);
-	SG_SDK_TF2 void initProceduralTexture(const char* pTextureName, const char* pTextureGroupName, int w, int h, Const::ImageFormat fmt, int nFlags);
-	SG_SDK_TF2 void initRenderTarget(int w, int h, Const::RenderTargetSizeMode sizeMode, Const::ImageFormat fmt, Const::MaterialRenderTargetDepth depth, bool bHDR, char* pStrOptionalName = nullptr);
-	SG_SDK_TF2 void init(ITexture* pTexture);
+	PX_SDK_TF2 void init(char const* pTexture, const char* pTextureGroupName, bool bComplain = true);
+	PX_SDK_TF2 void initProceduralTexture(const char* pTextureName, const char* pTextureGroupName, int w, int h, Const::ImageFormat fmt, int nFlags);
+	PX_SDK_TF2 void initRenderTarget(int w, int h, Const::RenderTargetSizeMode sizeMode, Const::ImageFormat fmt, Const::MaterialRenderTargetDepth depth, bool bHDR, char* pStrOptionalName = nullptr);
+	PX_SDK_TF2 void init(ITexture* pTexture);
 
 	// Detach from a texture
-	SG_SDK_TF2 void shutdown(bool bDeleteIfUnReferenced = false);
+	PX_SDK_TF2 void shutdown(bool bDeleteIfUnReferenced = false);
 	bool valid() const noexcept { return m_Texture != nullptr; }
 
 	// Automatic casts to ITexture
@@ -67,7 +67,7 @@ public:
 	ITexture* operator->() noexcept { return m_Texture; }
 
 	// Assignment operator
-	SG_SDK_TF2 void operator=(ITextureReference& ref);
+	PX_SDK_TF2 void operator=(ITextureReference& ref);
 
 private:
 	ITexture* m_Texture{ };

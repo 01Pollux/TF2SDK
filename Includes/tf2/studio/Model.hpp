@@ -308,7 +308,7 @@ struct spritedata_t
 struct ModelInfo
 {
 	void*				FileHandle;
-	Utils::UtlString	Name;
+	utils::UtlString	Name;
 
 	int					LoadFlags;		// mark loaded/not loaded
 	int					ServerCount;	// marked at load

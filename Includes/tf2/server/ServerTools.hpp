@@ -19,7 +19,7 @@ class IEntityFindFilter;
 
 struct FlashlightState_t;
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IServerTools, ServerTools, "VSERVERTOOLS003");
 }

@@ -3,7 +3,7 @@
 #include <tf2/config.hpp>
 #include "UtlMemory.hpp"
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 // UtlVector derives from this so we can do the type check above
 struct UtlBaseVector
@@ -409,7 +409,7 @@ uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem)
 {
 	grow_by();
 	shift_to_right(elem);
-	Utils::VAlloc::Construct(&at(elem));
+	utils::VAlloc::Construct(&at(elem));
 	return elem;
 }
 
@@ -440,7 +440,7 @@ uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem, const _Ty& src)
 {
 	grow_by();
 	shift_to_right(elem);
-	Utils::VAlloc::CopyConstruct(&at(elem), src);
+	utils::VAlloc::CopyConstruct(&at(elem), src);
 	return elem;
 }
 
@@ -520,7 +520,7 @@ uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail(const UtlVector& src)
 	m_Size += nSrcCount;
 	for (uint32_t i = 0; i < nSrcCount; i++)
 	{
-		Utils::VAlloc::CopyConstruct(&at(base + i), src[i]);
+		utils::VAlloc::CopyConstruct(&at(base + i), src[i]);
 	}
 	return base;
 }
@@ -537,7 +537,7 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, ui
 	// Invoke default constructors
 	for (uint32_t i = 0; i < num; ++i)
 	{
-		Utils::VAlloc::Construct(&at(elem + i));
+		utils::VAlloc::Construct(&at(elem + i));
 	}
 
 	return elem;
@@ -557,14 +557,14 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, ui
 	{
 		for (uint32_t i = 0; i < num; ++i)
 		{
-			Utils::VAlloc::Construct(&at(elem + i));
+			utils::VAlloc::Construct(&at(elem + i));
 		}
 	}
 	else
 	{
 		for (uint32_t i = 0; i < num; i++)
 		{
-			Utils::VAlloc::CopyConstruct(&at(elem + i), pToInsert[i]);
+			utils::VAlloc::CopyConstruct(&at(elem + i), pToInsert[i]);
 		}
 	}
 

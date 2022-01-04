@@ -2,7 +2,7 @@
 #include <numbers>
 
 
-TF2_NAMESPACE_BEGIN(::Utils)
+TF2_NAMESPACE_BEGIN(::utils)
 
 void VectorVectors(const Vector3D_F& forward, Vector3D_F& right, Vector3D_F& up)
 {

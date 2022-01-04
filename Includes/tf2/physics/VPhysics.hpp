@@ -31,7 +31,7 @@ struct virtualmeshparams_t;
 struct vcollide_t;
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(IVPhysics, VPhysics, "VPhysics031");
 	TF2_EXPORT_INTERFACE(IPhysicsCollision, PhysicsCollision, "VPhysicsCollision007");

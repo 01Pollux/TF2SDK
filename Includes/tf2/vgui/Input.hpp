@@ -17,7 +17,7 @@ namespace VGui
 }
 
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(VGui::IInput, InputSys, "VGUI_Input005");
 }

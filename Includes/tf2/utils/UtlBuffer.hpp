@@ -4,7 +4,7 @@
 #include "Byteswap.hpp"
 #include <ctype.h>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 //-----------------------------------------------------------------------------
 // Description of character conversions for string output

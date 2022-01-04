@@ -4,7 +4,7 @@
 #include <memory>
 #include <tf2/config.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 template<typename _Ty>
 class IAutoList

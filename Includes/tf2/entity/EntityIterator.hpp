@@ -4,7 +4,7 @@
 
 #include <tf2/entity/BaseEntity.hpp>
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 namespace Impl::EntityIterator
 {
@@ -20,13 +20,13 @@ namespace Impl::EntityIterator
 		const_iterator(unsigned short first_idx = static_cast<unsigned short>(-1)) noexcept :
 			m_CurrentIndex(first_idx) { }
 
-		SG_SDK_TF2 _NODISCARD reference operator*() const;
+		PX_SDK_TF2 _NODISCARD reference operator*() const;
 		_NODISCARD pointer operator->() const
 		{
 			return &(**this);
 		}
 
-		SG_SDK_TF2 const_iterator& operator++();
+		PX_SDK_TF2 const_iterator& operator++();
 		const_iterator operator++(int)
 		{
 			const_iterator tmp = *this;
@@ -34,7 +34,7 @@ namespace Impl::EntityIterator
 			return tmp;
 		}
 
-		SG_SDK_TF2 const_iterator& operator--();
+		PX_SDK_TF2 const_iterator& operator--();
 		const_iterator operator--(int)
 		{
 			const_iterator tmp = *this;
@@ -68,13 +68,13 @@ namespace Impl::EntityIterator
 		iterator(unsigned short first_idx = static_cast<unsigned short>(-1)) noexcept :
 			m_CurrentIndex(first_idx) { }
 
-		SG_SDK_TF2 _NODISCARD reference operator*() const;
+		PX_SDK_TF2 _NODISCARD reference operator*() const;
 		_NODISCARD pointer operator->() const
 		{
 			return &(**this);
 		}
 
-		SG_SDK_TF2 iterator& operator++();
+		PX_SDK_TF2 iterator& operator++();
 		iterator operator++(int)
 		{
 			iterator tmp = *this;
@@ -82,7 +82,7 @@ namespace Impl::EntityIterator
 			return tmp;
 		}
 
-		SG_SDK_TF2 iterator& operator--();
+		PX_SDK_TF2 iterator& operator--();
 		iterator operator--(int)
 		{
 			iterator tmp = *this;
@@ -116,7 +116,7 @@ public:
 	using reverse_iterator = Impl::EntityIterator::reverse_iterator;
 	using const_reverse_iterator = Impl::EntityIterator::const_reverse_iterator;
 
-	SG_SDK_TF2 const_iterator begin() const;
+	PX_SDK_TF2 const_iterator begin() const;
 	const_iterator end() const
 	{
 		return const_iterator();
@@ -131,13 +131,13 @@ public:
 		return end();
 	}
 
-	SG_SDK_TF2 iterator begin();
+	PX_SDK_TF2 iterator begin();
 	iterator end()
 	{
 		return iterator();
 	}
 
-	SG_SDK_TF2 const_reverse_iterator rbegin() const;
+	PX_SDK_TF2 const_reverse_iterator rbegin() const;
 	const_reverse_iterator rend() const
 	{
 		return const_reverse_iterator(begin());
@@ -153,7 +153,7 @@ public:
 		return rend();
 	}
 
-	SG_SDK_TF2 reverse_iterator rbegin();
+	PX_SDK_TF2 reverse_iterator rbegin();
 	reverse_iterator rend()
 	{
 		return reverse_iterator(begin());
@@ -163,4 +163,4 @@ public:
 TF2_NAMESPACE_END();
 
 template<>
-inline constexpr bool std::ranges::enable_borrowed_range<TF2::Utils::IBaseEntityIterator> = true;
+inline constexpr bool std::ranges::enable_borrowed_range<tf2::utils::IBaseEntityIterator> = true;

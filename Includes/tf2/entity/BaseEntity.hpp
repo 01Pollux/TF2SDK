@@ -1,6 +1,6 @@
 #pragma once
 
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 
 #include <tf2/gameprop/GameProp.hpp>
 #include <tf2/consts.hpp>
@@ -26,14 +26,14 @@ public:
 	/// Get entity from current index
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	SG_SDK_TF2 static IBaseEntityInternal*
+	PX_SDK_TF2 static IBaseEntityInternal*
 		GetEntity(int ent_index);
 
 	/// <summary>
 	/// Get entity from it's handle
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	SG_SDK_TF2 static IBaseEntityInternal*
+	PX_SDK_TF2 static IBaseEntityInternal*
 		GetEntity(IBaseHandle ent_handle);
 
 	/// <summary>
@@ -41,14 +41,14 @@ public:
 	/// Must be used in-game, otherwise it's UB
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	SG_SDK_TF2 static IBaseEntityInternal*
+	PX_SDK_TF2 static IBaseEntityInternal*
 		GetLocalPlayer();
 
 	/// <summary>
 	/// Get highest entity index slot
 	/// Must be used in-game, otherwise it's UB
 	/// </summary>
-	SG_SDK_TF2 static int
+	PX_SDK_TF2 static int
 		GetHighestEntityIndex();
 
 	/// <summary>
@@ -62,65 +62,65 @@ public:
 	/// <summary>
 	/// Test if the local client is valid (in game and not a bad entity)
 	/// </summary>
-	SG_SDK_TF2 static bool
+	PX_SDK_TF2 static bool
 		BadLocal();
 
 	/// <summary>
 	/// Tests whether the entity is derived from CBaseCombatWeapon or not
 	/// </summary>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		IsBaseCombatWeapon() const noexcept;
 
 	/// <summary>
 	/// </summary>
 	/// <param name="is_pred">true to call GetPredDescMap, false to call GetDataDescMap</param>
-	SG_SDK_TF2 EntityDataMap*
+	PX_SDK_TF2 EntityDataMap*
 		GetDataMap(bool is_pred) const noexcept;
 
 	/// <summary>
 	/// Get entity's bone cache by calling 'CBaseEntity::GetBoneCache'
 	/// </summary>
 	/// <returns></returns>
-	SG_SDK_TF2 const IBoneCache*
+	PX_SDK_TF2 const IBoneCache*
 		GetBoneCache() const;
 
 	/// <summary>
 	/// Get entity bone info { bone cache, studio hitbox, studio hdr }
 	/// </summary>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		QueryBoneInfo(IBoneInfo&) const;
 
 	/// <summary>
 	/// Get entity's bone position from cache and output it to results on success
 	/// </summary>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		GetBonePosition(int bone_position, BoneResult& results) const;
 
 	/// <summary>
 	/// Sets entity's model by index by calling 'CBaseEntity::SetModelIndex'
 	/// </summary>
 	/// <param name="modelidx"></param>
-	SG_SDK_TF2 void
+	PX_SDK_TF2 void
 		SetModel(int modelidx);
 
 	/// <summary>
 	/// Tests whether the entity is health kit
 	/// </summary>
 	/// <returns></returns>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		IsHealthKit() const noexcept;
 
 	/// <summary>
 	/// Tests whether the entity is a ghost
 	/// </summary>
 	/// <returns></returns>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		IsGhost() const noexcept;
 
 	/// <summary>
 	/// Get either local velocity or predicted velocity
 	/// </summary>
-	SG_SDK_TF2 void 
+	PX_SDK_TF2 void 
 		EstimateAbsVelocity(Vector3D_F& vel) const;
 
 	/// <summary>
@@ -135,7 +135,7 @@ public:
 	/// Get attachement's index by name
 	/// </summary>
 	/// <returns>-1 if the attachement doesn't exists</returns>
-	SG_SDK_TF2 int
+	PX_SDK_TF2 int
 		LookupAttachment(const char* name);
 
 	/// <summary>
@@ -151,13 +151,13 @@ public:
 	/// Get attachement's original and angle by index
 	/// </summary>
 	/// <returns>false if the attachement doesn't exists</returns>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles);
 	
 	/// <summary>
 	/// Test if the entity should collide with current collision properties
 	/// </summary>
-	SG_SDK_TF2 bool
+	PX_SDK_TF2 bool
 		ShouldCollide(Const::EntCollisionGroup groups, uint32_t mask);
 
 	/// <summary>
@@ -179,7 +179,7 @@ public:
 		return GetEntIndex() != -1 ? m_IsDormant : false;
 	}
 
-#define DECL_RECVPROP(Type, Prop_Name, Custom_Name, Extra_Offset)	SG_DECL_RECVPROP(IBaseEntityInternal, Type, Const::EntClassID::CBaseAnimating, Prop_Name, Custom_Name, Extra_Offset)
+#define DECL_RECVPROP(Type, Prop_Name, Custom_Name, Extra_Offset)	PX_DECL_RECVPROP(IBaseEntityInternal, Type, Const::EntClassID::CBaseAnimating, Prop_Name, Custom_Name, Extra_Offset)
 
 	DECL_RECVPROP(int,					"m_nModelIndex",		ModelIndex, 0);
 	DECL_RECVPROP(Vector3D_F,			"m_vecOrigin",			VecOrigin, 0);
@@ -213,31 +213,31 @@ public:
 	DECL_RECVPROP(ITFParticleFactory,	"m_flElasticity",		ParticleProp, 
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
+			return interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_flElasticity__To__m_ParticleProp").value_or(0);
 		}()
 	);
 	DECL_RECVPROP(IPhysicsObject,		"m_iTeamNum",			PhysicsObject,
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iTeamNum__To__m_pPhysicsObject").value_or(0);
+			return interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iTeamNum__To__m_pPhysicsObject").value_or(0);
 		}()
 	);
-	SG_DECL_RECVPROP(IBaseEntityInternal,	uint32_t,			Const::EntClassID::CBaseAnimating, "m_fFlags", EntFlags, 0);
+	PX_DECL_RECVPROP(IBaseEntityInternal,	uint32_t,			Const::EntClassID::CBaseAnimating, "m_fFlags", EntFlags, 0);
 
-	SG_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
+	PX_DECL_DATAMAP(IBaseEntityInternal,	Const::EntMoveType,	true,		"m_MoveType",	MoveType, 0);
 	
 private:
 	DECL_RECVPROP(int,					"m_nRenderFX",			m_EntIndex,
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_nRenderFX__To__m_iEntityIndex").value_or(0);
+			return interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_nRenderFX__To__m_iEntityIndex").value_or(0);
 		}()
 	);
 	
 	DECL_RECVPROP(bool,					"m_iParentAttachment",	m_IsDormant,
 		[]() -> int
 		{
-			return Interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iParentAttachment__To__m_bDormant").value_or(0);
+			return interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "offsets" }, "m_iParentAttachment__To__m_bDormant").value_or(0);
 		}()
 	);
 #undef DECL_RECVPROP

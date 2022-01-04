@@ -139,12 +139,12 @@ public:
 
 	virtual bool IsRegistered() const noexcept { return Is_Registered; }
 
-	SG_SDK_TF2 virtual 
+	PX_SDK_TF2 virtual 
 		VCVarDLLIdentifier GetDLLIdentifier() const;
 
-	SG_SDK_TF2 static void 
+	PX_SDK_TF2 static void 
 		Register(uint32_t nCVarFlag = 0, IConCommandBaseAccessor* pAccessor = nullptr);
-	SG_SDK_TF2 static void
+	PX_SDK_TF2 static void
 		Unregister();
 
 	ConCommandBase(const ConCommandBase&) = default;
@@ -153,7 +153,7 @@ public:
 	ConCommandBase& operator=(ConCommandBase&&) = default;
 
 protected:
-	SG_SDK_TF2 virtual void 
+	PX_SDK_TF2 virtual void 
 		CreateBase(const char* pName, const char* pHelpString = nullptr, uint32_t flags = Const::ConvarFlags::None);
 
 	// Used internally by OneTimeInit to initialize/shutdown

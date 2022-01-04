@@ -3,7 +3,7 @@
 #include <bit>
 #include "TF2Config.hpp"
 
-TF2_NAMESPACE_BEGIN(::Utils);
+TF2_NAMESPACE_BEGIN(::utils);
 
 
 class ByteSwap

@@ -7,7 +7,7 @@
 
 TF2_NAMESPACE_BEGIN();
 
-namespace Interfaces
+namespace interfaces
 {
 	TF2_EXPORT_INTERFACE(ICVar, CVar, "VEngineCvar004");
 }
@@ -25,21 +25,21 @@ class ConCommand : public ConCommandBase
 	friend class ICVar;
 
 public:
-	SG_SDK_TF2 ConCommand(const char* pName, ConCommandCallbackV callback,
+	PX_SDK_TF2 ConCommand(const char* pName, ConCommandCallbackV callback,
 		const char* pHelpString = nullptr, uint32_t flags = Const::ConvarFlags::None, ConCommandCompletionCallback completionFunc = nullptr);
-	SG_SDK_TF2 ConCommand(const char* pName, ConCommandCallback callback,
+	PX_SDK_TF2 ConCommand(const char* pName, ConCommandCallback callback,
 		const char* pHelpString = nullptr, uint32_t flags = Const::ConvarFlags::None, ConCommandCompletionCallback completionFunc = nullptr);
 
 	virtual ~ConCommand() = default;
 
 	bool IsCommand() const noexcept override { return true; }
 
-	SG_SDK_TF2 virtual int 
-		AutoCompleteSuggest(const char* partial, Utils::UtlVector<const char*>& commands);
+	PX_SDK_TF2 virtual int 
+		AutoCompleteSuggest(const char* partial, utils::UtlVector<const char*>& commands);
 
 	virtual bool CanAutoComplete() { return HasCompletionCallback; }
 
-	SG_SDK_TF2 virtual void 
+	PX_SDK_TF2 virtual void 
 		Dispatch(const CCommand& command);
 
 	ConCommand(const ConCommand&) = default;
@@ -196,20 +196,20 @@ public:
 
 private:
 	// Called by CCvar when the value of a var is changing.
-	SG_SDK_TF2 virtual void 
+	PX_SDK_TF2 virtual void 
 		InternalSetValue(const char* value);
 	// For CVARs marked FCVAR_NEVER_AS_STRING
-	SG_SDK_TF2 virtual void
+	PX_SDK_TF2 virtual void
 		InternalSetFloatValue(float fNewValue, bool bForce = false);
-	SG_SDK_TF2 virtual void
+	PX_SDK_TF2 virtual void
 		InternalSetIntValue(int nValue);
 
-	SG_SDK_TF2 virtual bool
+	PX_SDK_TF2 virtual bool
 		ClampValue(float& value);
-	SG_SDK_TF2 virtual void 
+	PX_SDK_TF2 virtual void 
 		ChangeStringValue(const char* tempVal, float flOldValue);
 
-	SG_SDK_TF2 void 
+	PX_SDK_TF2 void 
 		Create(
 		const char* pName, const char* pDefaultValue, uint32_t flags = Const::ConvarFlags::None,
 		const char* pHelpString = nullptr, bool bMin = false, float fMin = 0.f,

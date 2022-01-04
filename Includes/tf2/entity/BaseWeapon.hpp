@@ -1,6 +1,6 @@
 #pragma once 
 
-#include <shadowgarden/interfaces/GameData.hpp>
+#include <px/interfaces/GameData.hpp>
 #include "EconEntity.hpp"
 
 TF2_NAMESPACE_BEGIN();
@@ -156,68 +156,68 @@ public:
 	/// <summary>
 	/// Get weapon slot
 	/// </summary>
-	SG_SDK_TF2 Const::WeaponSlot
+	PX_SDK_TF2 Const::WeaponSlot
 		GetWeaponSlot() const noexcept;
 
 	/// <summary>
 	/// Traces a swing trace of melee
 	/// </summary>
-	SG_SDK_TF2 bool 
+	PX_SDK_TF2 bool 
 		DoSwingTrace(GameTrace& trace) noexcept;
 
 	/// <summary>
 	/// Get melee's swing range
 	/// </summary>
-	SG_SDK_TF2 int
+	PX_SDK_TF2 int
 		GetSwingRange() const noexcept;
 
 	/// <summary>
 	/// Get weapon's id
 	/// </summary>
-	SG_SDK_TF2 Const::WeaponType
+	PX_SDK_TF2 Const::WeaponType
 		GetWeaponId() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's speed
 	/// </summary>
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		GetProjectileSpeed() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's gravity
 	/// </summary>
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		GetProjectileGravity() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's spread
 	/// </summary>
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		GetProjectileSpread() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's damage
 	/// </summary>
-	SG_SDK_TF2 float
+	PX_SDK_TF2 float
 		GetProjectileDamage() const noexcept;
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iViewModelIndex",	ViewModelIndex, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iWorldModelIndex",	WorldModelIndex, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flLastFireTime",		LastFireTime, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flObservedCritChance", ObservedCritChance, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iViewModelIndex",	ViewModelIndex, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iWorldModelIndex",	WorldModelIndex, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flLastFireTime",		LastFireTime, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_flObservedCritChance", ObservedCritChance, 0);
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFSniperRifle,	"m_flChargedDamage",	SniperChargeDamage, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFSniperRifle,	"m_flChargedDamage",	SniperChargeDamage, 0);
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_flChargeLevel",		ChargeLevel, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_hHealingTarget",		HealingTarget, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CWeaponMedigun,	"m_bAttacking",			IsAttacking, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CWeaponMedigun,	"m_bChargeRelease",		IsReleasingCharge, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CWeaponMedigun,	"m_nChargeResistType",	ChargeResistType, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_flChargeLevel",		ChargeLevel, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CWeaponMedigun,	"m_hHealingTarget",		HealingTarget, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CWeaponMedigun,	"m_bAttacking",			IsAttacking, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CWeaponMedigun,	"m_bChargeRelease",		IsReleasingCharge, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CWeaponMedigun,	"m_nChargeResistType",	ChargeResistType, 0);
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	ReadyToBackstab, 0);
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	IBaseHandle,		Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	BackstabVictim, -4);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	bool,				Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	ReadyToBackstab, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	IBaseHandle,		Const::EntClassID::CTFKnife,	"m_bReadyToBackstab",	BackstabVictim, -4);
 
-	SG_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CTFPipebombLauncher,	"m_flChargeBeginTime",	PipeChargeBeginTime, 0);
+	PX_DECL_RECVPROP(IBaseWeaponInternal,	float,				Const::EntClassID::CTFPipebombLauncher,	"m_flChargeBeginTime",	PipeChargeBeginTime, 0);
 };
 using IBaseWeapon = IBaseEntityWrapper<IBaseWeaponInternal>;
 

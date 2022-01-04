@@ -25,14 +25,14 @@ enum class KeyValuesType : char
 class KeyValues
 {
 public:
-	SG_SDK_TF2 KeyValues(const char* setName);
+	PX_SDK_TF2 KeyValues(const char* setName);
 
 	// Quick setup constructors
-	SG_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const char* firstValue);
-	SG_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const wchar_t* firstValue);
-	SG_SDK_TF2 KeyValues(const char* setName, const char* firstKey, int firstValue);
-	SG_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const char* firstValue, const char* secondKey, const char* secondValue);
-	SG_SDK_TF2 KeyValues(const char* setName, const char* firstKey, int firstValue, const char* secondKey, int secondValue);
+	PX_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const char* firstValue);
+	PX_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const wchar_t* firstValue);
+	PX_SDK_TF2 KeyValues(const char* setName, const char* firstKey, int firstValue);
+	PX_SDK_TF2 KeyValues(const char* setName, const char* firstKey, const char* firstValue, const char* secondKey, const char* secondValue);
+	PX_SDK_TF2 KeyValues(const char* setName, const char* firstKey, int firstValue, const char* secondKey, int secondValue);
 
 	// Section name
 	const char* GetName() const noexcept
@@ -45,18 +45,18 @@ public:
 		KeyName = GetSymbolForStringFn(setName, true);
 	}
 
-	SG_SDK_TF2 bool LoadFromFile(const char* fileName, const char* pathID = nullptr, bool refreshCache = false);
+	PX_SDK_TF2 bool LoadFromFile(const char* fileName, const char* pathID = nullptr, bool refreshCache = false);
 
 	// Find a keyValue, create it if it is not found.
 	// Set bCreate to true to create the key if it doesn't already exist (which ensures a valid pointer will be returned)
-	SG_SDK_TF2 KeyValues* FindKey(const char* keyName, bool bCreate = false);
-	SG_SDK_TF2 const KeyValues* FindKey(const char* keyName) const;
-	SG_SDK_TF2 KeyValues* FindKey(int keySymbol) noexcept;
-	SG_SDK_TF2 const KeyValues* FindKey(int keySymbol) const noexcept;
+	PX_SDK_TF2 KeyValues* FindKey(const char* keyName, bool bCreate = false);
+	PX_SDK_TF2 const KeyValues* FindKey(const char* keyName) const;
+	PX_SDK_TF2 KeyValues* FindKey(int keySymbol) noexcept;
+	PX_SDK_TF2 const KeyValues* FindKey(int keySymbol) const noexcept;
 	// Adds a subkey. Make sure the subkey isn't a child of some other keyvalues
-	SG_SDK_TF2 void AddSubKey(KeyValues* pSubkey) noexcept;	
+	PX_SDK_TF2 void AddSubKey(KeyValues* pSubkey) noexcept;	
 	// removes a subkey from the list, DOES NOT DELETE IT
-	SG_SDK_TF2 void RemoveSubKey(KeyValues* subKey) noexcept;
+	PX_SDK_TF2 void RemoveSubKey(KeyValues* subKey) noexcept;
 
 	// Key iteration.
 	//
@@ -85,16 +85,16 @@ public:
 	//     {
 	//         Msg( "Int value: %d\n", pValue->GetInt() );  // Assuming pValue->GetDataType() == TYPE_INT...
 	//     }
-	SG_SDK_TF2 const KeyValues* GetFirstTrueSubKey() const noexcept;
-	SG_SDK_TF2 KeyValues* GetFirstTrueSubKey() noexcept;
-	SG_SDK_TF2 const KeyValues* GetNextTrueSubKey() const noexcept;
-	SG_SDK_TF2 KeyValues* GetNextTrueSubKey() noexcept;
+	PX_SDK_TF2 const KeyValues* GetFirstTrueSubKey() const noexcept;
+	PX_SDK_TF2 KeyValues* GetFirstTrueSubKey() noexcept;
+	PX_SDK_TF2 const KeyValues* GetNextTrueSubKey() const noexcept;
+	PX_SDK_TF2 KeyValues* GetNextTrueSubKey() noexcept;
 
 	// When you get a value back, you can use GetX and pass in NULL to get the value.
-	SG_SDK_TF2 const KeyValues* GetFirstValue() const noexcept;
-	SG_SDK_TF2 KeyValues* GetFirstValue() noexcept;
-	SG_SDK_TF2 const KeyValues* GetNextValue() const noexcept;
-	SG_SDK_TF2 KeyValues* GetNextValue() noexcept;
+	PX_SDK_TF2 const KeyValues* GetFirstValue() const noexcept;
+	PX_SDK_TF2 KeyValues* GetFirstValue() noexcept;
+	PX_SDK_TF2 const KeyValues* GetNextValue() const noexcept;
+	PX_SDK_TF2 KeyValues* GetNextValue() noexcept;
 
 	// Data access
 	int				GetInt(const char* keyName = nullptr, int defaultValue = 0) const noexcept;
@@ -117,36 +117,36 @@ public:
 	bool			IsEmpty(int keySymbol) const noexcept;
 
 	// Key writing
-	SG_SDK_TF2 void SetWString(const char* keyName, const wchar_t* value);
-	SG_SDK_TF2 void SetString(const char* keyName, const char* value);
-	SG_SDK_TF2 void SetInt(const char* keyName, int value);
-	SG_SDK_TF2 void SetUint64(const char* keyName, uint64_t value);
-	SG_SDK_TF2 void SetFloat(const char* keyName, float value);
-	SG_SDK_TF2 void SetPtr(const char* keyName, void* value);
-	SG_SDK_TF2 void SetColor(const char* keyName, const Color4_8& value);
+	PX_SDK_TF2 void SetWString(const char* keyName, const wchar_t* value);
+	PX_SDK_TF2 void SetString(const char* keyName, const char* value);
+	PX_SDK_TF2 void SetInt(const char* keyName, int value);
+	PX_SDK_TF2 void SetUint64(const char* keyName, uint64_t value);
+	PX_SDK_TF2 void SetFloat(const char* keyName, float value);
+	PX_SDK_TF2 void SetPtr(const char* keyName, void* value);
+	PX_SDK_TF2 void SetColor(const char* keyName, const Color4_8& value);
 	void SetBool(const char* keyName, bool value) { SetInt(keyName, value ? 1 : 0); }
 
 	// Allocate & create a new copy of the keys
-	SG_SDK_TF2 KeyValues* MakeCopy() const;
-	SG_SDK_TF2 void CopySubkeys(KeyValues* pParent) const;
+	PX_SDK_TF2 KeyValues* MakeCopy() const;
+	PX_SDK_TF2 void CopySubkeys(KeyValues* pParent) const;
 
 	// Allocate & create a new copy of the keys, including the next keys. This is useful for top level files
 	// that don't use the usual convention of a root key with lots of children (like soundscape files).
-	SG_SDK_TF2 KeyValues* MakeCopy(bool copySiblings) const;
+	PX_SDK_TF2 KeyValues* MakeCopy(bool copySiblings) const;
 	// Make a new copy of all subkeys, add them all to the passed-in keyvalues
 	// Clear out all subkeys, and the current value
-	SG_SDK_TF2 void Clear();
+	PX_SDK_TF2 void Clear();
 
-	SG_SDK_TF2 KeyValuesType GetDataType(const char* keyName = nullptr) const noexcept;
+	PX_SDK_TF2 KeyValuesType GetDataType(const char* keyName = nullptr) const noexcept;
 
 	// Virtual deletion function - ensures that KeyValues object is deleted from correct heap
 	void DeleteThis() { delete this; }
 
-	SG_SDK_TF2 void SetStringValue(char const* strValue);
+	PX_SDK_TF2 void SetStringValue(char const* strValue);
 
-	SG_SDK_TF2 bool Dump(IKeyValuesDumpContext* pDump, int nIndentLevel = 0, bool bSorted = false) const;
+	PX_SDK_TF2 bool Dump(IKeyValuesDumpContext* pDump, int nIndentLevel = 0, bool bSorted = false) const;
 
-	SG_SDK_TF2 void Init();
+	PX_SDK_TF2 void Init();
 
 	int		KeyName;	// keyname is a symbol defined in KeyValuesSystem
 

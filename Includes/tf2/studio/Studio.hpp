@@ -1229,13 +1229,13 @@ public:
 	// tool dependant.  In engine this is a ModelInfo, in tool it's a direct pointer
 	void* cache;
 
-	Utils::UtlVector<int> BoneMap;				// maps global bone to local bone
-	Utils::UtlVector<int> MasterBone;			// maps local bone to global bone
-	Utils::UtlVector<int> MasterSeq;			// maps local sequence to master sequence
-	Utils::UtlVector<int> MasterAnim;			// maps local animation to master animation
-	Utils::UtlVector<int> MasterAttachment;	// maps local attachment to global
-	Utils::UtlVector<int> MasterPose;			// maps local pose parameter to global
-	Utils::UtlVector<int> MasterNode;			// maps local transition nodes to global
+	utils::UtlVector<int> BoneMap;				// maps global bone to local bone
+	utils::UtlVector<int> MasterBone;			// maps local bone to global bone
+	utils::UtlVector<int> MasterSeq;			// maps local sequence to master sequence
+	utils::UtlVector<int> MasterAnim;			// maps local animation to master animation
+	utils::UtlVector<int> MasterAttachment;	// maps local attachment to global
+	utils::UtlVector<int> MasterPose;			// maps local pose parameter to global
+	utils::UtlVector<int> MasterNode;			// maps local transition nodes to global
 };
 
 struct virtualsequence_t
@@ -1267,14 +1267,14 @@ struct virtualmdl_t
 		int Depth;
 	} Lock;
 
-	Utils::UtlVector<virtualsequence_t>Seq;
-	Utils::UtlVector<virtualgeneric_t> Anim;
-	Utils::UtlVector<virtualgeneric_t> Attachment;
-	Utils::UtlVector<virtualgeneric_t> Pose;
-	Utils::UtlVector<virtualgroup_t>	Group;
-	Utils::UtlVector<virtualgeneric_t> Node;
-	Utils::UtlVector<virtualgeneric_t> IKLock;
-	Utils::UtlVector<unsigned short>	AutoplaySequences;
+	utils::UtlVector<virtualsequence_t>Seq;
+	utils::UtlVector<virtualgeneric_t> Anim;
+	utils::UtlVector<virtualgeneric_t> Attachment;
+	utils::UtlVector<virtualgeneric_t> Pose;
+	utils::UtlVector<virtualgroup_t>	Group;
+	utils::UtlVector<virtualgeneric_t> Node;
+	utils::UtlVector<virtualgeneric_t> IKLock;
+	utils::UtlVector<unsigned short>	AutoplaySequences;
 };
 
 // apply sequentially to lod sorted vertex and tangent pools to re-establish mesh order
