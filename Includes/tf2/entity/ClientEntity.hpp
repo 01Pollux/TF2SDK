@@ -11,14 +11,14 @@ public:
 	virtual void			Release() abstract;
 
 	// Network origin + angles
-	virtual const Vector3D_F&	GetAbsOrigin() const abstract;
-	virtual const Angle_F&	GetAbsAngles() const abstract;
+	[[nodiscard]] virtual const Vector3D_F&	GetAbsOrigin() const abstract;
+	[[nodiscard]] virtual const Angle_F&	GetAbsAngles() const abstract;
 
-	virtual CMouthInfo*		GetMouth() abstract;
+	[[nodiscard]] virtual CMouthInfo* GetMouth() abstract;
 
 	// Retrieve sound spatialization info for the specified sound on this entity
 	// Return false to indicate sound is not audible
-	virtual bool			GetSoundSpatialization(SpatializationInfo& info) abstract;
+	[[nodiscard]] virtual bool GetSoundSpatialization(SpatializationInfo& info) abstract;
 };
 
 TF2_NAMESPACE_END();

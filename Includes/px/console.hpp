@@ -32,17 +32,17 @@ public:
 	/// <summary>
 	/// find console command by name
 	/// </summary>
-	virtual ConCommand* FindCommand(const std::string_view& name) abstract;
+	[[nodiscard]] virtual ConCommand* FindCommand(const std::string_view& name) abstract;
 
 	/// <summary>
 	/// find console commands by plugin
 	/// </summary>
-	virtual std::vector<ConCommand*> FindCommands(IPlugin* plugin) abstract;
+	[[nodiscard]] virtual std::vector<ConCommand*> FindCommands(IPlugin* plugin) abstract;
 
 	/// <summary>
 	/// find console commands by plugin
 	/// </summary>
-	virtual std::vector<ConCommand*> FindCommands(const std::string_view& name) abstract;
+	[[nodiscard]] virtual std::vector<ConCommand*> FindCommands(const std::string_view& name) abstract;
 
 	/// <summary>
 	/// execute console command

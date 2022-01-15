@@ -2,6 +2,8 @@
 
 #include "args.hpp"
 
+class ConsoleManager;
+
 PX_NAMESPACE_BEGIN();
 
 class IPlugin;
@@ -10,7 +12,6 @@ class IConsoleManager;
 class ConCommand
 {
 	friend class ConsoleManager;
-
 public:
 	template<typename _Ty>
 	struct typeinfo;
@@ -41,32 +42,32 @@ public:
 	ConCommand(ConCommand&&) = delete;		 ConCommand& operator=(ConCommand&&) = delete;
 	ConCommand(const ConCommand&) = delete;  ConCommand& operator=(const ConCommand&) = delete;
 
-	_NODISCARD IPlugin* plugin() const noexcept
+	[[nodiscard]] IPlugin* plugin() const noexcept
 	{
 		return m_Plugin;
 	}
 
-	_NODISCARD const std::string_view& name() const noexcept
+	[[nodiscard]] const std::string_view& name() const noexcept
 	{
 		return m_CmdName;
 	}
 
-	_NODISCARD bool is_command() const noexcept
+	[[nodiscard]] bool is_command() const noexcept
 	{
 		return m_IsCommand;
 	}
 
-	_NODISCARD constexpr bool has_description() const noexcept 
+	[[nodiscard]] constexpr bool has_description() const noexcept 
 	{
 		return description().size() > 0;
 	}
 
-	_NODISCARD constexpr const std::string_view& description() const noexcept
+	[[nodiscard]] constexpr const std::string_view& description() const noexcept
 	{
 		return m_HelpString;
 	}
 
-	_NODISCARD ExecuteCallback_t exec_callback() const noexcept
+	[[nodiscard]] ExecuteCallback_t exec_callback() const noexcept
 	{
 		return m_ExecCallback;
 	}
@@ -114,7 +115,7 @@ public:
 		const char* description = "",
 
 		ConCommand::ExecuteCallback_t callback = &ConVar::DefaultCommandExecute
-	) :
+	) noexcept(std::is_nothrow_constructible_v<value_type>) :
 		ConCommand(
 			convar_name,
 			callback,
@@ -123,30 +124,30 @@ public:
 		m_Value(defval)
 	{ ConCommand::m_IsCommand = false; }
 
-	_NODISCARD constexpr const char* type() const noexcept	{ return ConCommand::typeinfo<value_type>::type_name; }
+	[[nodiscard]] constexpr const char* type() const noexcept	{ return ConCommand::typeinfo<value_type>::type_name; }
 
-	_NODISCARD constexpr const_reference get() const noexcept	{ return m_Value; }
-	_NODISCARD reference get() noexcept							{ return m_Value; }
+	[[nodiscard]] constexpr const_reference get() const noexcept	{ return m_Value; }
+	[[nodiscard]] reference get() noexcept							{ return m_Value; }
 
-	_NODISCARD constexpr operator const_reference() const noexcept { return get(); }
-	_NODISCARD operator reference() noexcept { return get(); }
+	[[nodiscard]] constexpr operator const_reference() const noexcept { return get(); }
+	[[nodiscard]] operator reference() noexcept { return get(); }
 
 	template<typename _OTy = value_type> const_reference operator=(const ConVar<_OTy>& o)	{ return (m_Value = static_cast<const_reference>(o.m_Value)); }
 	template<typename _OTy = value_type> const_reference operator=(const _OTy& o)			{ return (m_Value = static_cast<const_reference>(o)); }
 
-	template<typename _OTy = value_type> _NODISCARD auto operator<=>(const _OTy& o) const noexcept	{ return m_Value <=> static_cast<const_reference>(o); }
-	template<typename _OTy = value_type> _NODISCARD bool operator!=(const _OTy& o) const noexcept	{ return m_Value != static_cast<const_reference>(o); }
+	template<typename _OTy = value_type> [[nodiscard]] auto operator<=>(const _OTy& o) const noexcept	{ return m_Value <=> static_cast<const_reference>(o); }
+	template<typename _OTy = value_type> [[nodiscard]] bool operator!=(const _OTy& o) const noexcept	{ return m_Value != static_cast<const_reference>(o); }
 
-	template<typename _OTy = value_type> _NODISCARD auto operator<=>(const ConVar<_OTy>& prop) const noexcept	{ return m_Value <=> static_cast<const_reference>(prop.m_Value); }
-	template<typename _OTy = value_type> _NODISCARD bool operator!=(const ConVar<_OTy>& prop) const noexcept	{ return m_Value != static_cast<const_reference>(prop.m_Value); }
+	template<typename _OTy = value_type> [[nodiscard]] auto operator<=>(const ConVar<_OTy>& prop) const noexcept	{ return m_Value <=> static_cast<const_reference>(prop.m_Value); }
+	template<typename _OTy = value_type> [[nodiscard]] bool operator!=(const ConVar<_OTy>& prop) const noexcept	{ return m_Value != static_cast<const_reference>(prop.m_Value); }
 
 	ConVar& operator++() noexcept					{ ++m_Value; return *this; }
 	ConVar& operator--() noexcept					{ --m_Value; return *this; }
 	constexpr value_type operator++(int) noexcept	{ return m_Value++; }
 	constexpr value_type operator--(int) noexcept	{ return m_Value--; }
 
-	_NODISCARD constexpr value_type operator-() const noexcept { return -m_Value; }
-	_NODISCARD constexpr value_type operator~() const noexcept { return ~m_Value; }
+	[[nodiscard]] constexpr value_type operator-() const noexcept { return -m_Value; }
+	[[nodiscard]] constexpr value_type operator~() const noexcept { return ~m_Value; }
 
 public:
 
@@ -162,12 +163,12 @@ public:
 		m_Value SYMBOL##= static_cast<const_reference>(o);										\
 		return *this;																			\
 	}																							\
-	_NODISCARD constexpr auto operator##SYMBOL(const ConVar& prop) const noexcept				\
+	[[nodiscard]] constexpr auto operator##SYMBOL(const ConVar& prop) const noexcept			\
 	{																							\
 		return m_Value SYMBOL prop.m_Value;														\
 	}																							\
 	template<typename _OTy>																		\
-	_NODISCARD constexpr auto operator##SYMBOL(const _OTy& o) const noexcept					\
+	[[nodiscard]] constexpr auto operator##SYMBOL(const _OTy& o) const noexcept					\
 	{																							\
 		return m_Value SYMBOL static_cast<const_reference>(o);									\
 	}
@@ -186,7 +187,7 @@ public:
 #undef PX_CONFIG_OPEARTOR
 
 public:
-	_NODISCARD auto data() const noexcept
+	[[nodiscard]] auto data() const noexcept
 	{
 		if constexpr (requires(const_reference v) { v.data(); })
 			return m_Value.data();
@@ -194,7 +195,7 @@ public:
 			return &m_Value;
 	}
 
-	_NODISCARD auto data() noexcept
+	[[nodiscard]] auto data() noexcept
 	{
 		if constexpr (requires(reference v) { v.data(); })
 			return m_Value.data();
@@ -202,7 +203,7 @@ public:
 			return &m_Value;
 	}
 
-	_NODISCARD auto begin() const noexcept
+	[[nodiscard]] auto begin() const noexcept
 	{
 		if constexpr (requires(const_reference v) { std::begin(v); })
 			return std::begin(m_Value);
@@ -210,7 +211,7 @@ public:
 			return &m_Value;
 	}
 
-	_NODISCARD auto begin() noexcept
+	[[nodiscard]] auto begin() noexcept
 	{
 		if constexpr (requires(reference v) { std::begin(v); })
 			return std::begin(m_Value);
@@ -218,7 +219,7 @@ public:
 			return &m_Value;
 	}
 
-	_NODISCARD auto end() const noexcept
+	[[nodiscard]] auto end() const noexcept
 	{
 		if constexpr (requires(const_reference v) { std::end(v); })
 			return std::end(m_Value);
@@ -226,23 +227,23 @@ public:
 			return begin() + sizeof(value_type);
 	}
 
-	_NODISCARD std::string str() const
+	[[nodiscard]] std::string str() const
 	{
 		return CommandParser<value_type>::to_string(get());
 	}
 
 public:
-	pointer operator->() noexcept { return &m_Value; }
-	constexpr const_pointer operator->() const noexcept { return &m_Value; }
+	[[nodiscard]] pointer operator->() noexcept { return &m_Value; }
+	[[nodiscard]] constexpr const_pointer operator->() const noexcept { return &m_Value; }
 
 	template<typename _IdxType = ptrdiff_t>
-	_NODISCARD const auto& operator[](const _IdxType& _idx) const noexcept
+	[[nodiscard]] const auto& operator[](const _IdxType& _idx) const noexcept
 	{
 		return m_Value[_idx];
 	}
 
 	template<typename _IdxType = ptrdiff_t>
-	_NODISCARD auto& operator[](const _IdxType& _idx) noexcept
+	[[nodiscard]] auto& operator[](const _IdxType& _idx) noexcept
 	{
 		return m_Value[_idx];
 	}

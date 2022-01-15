@@ -7,18 +7,18 @@
 TF2_NAMESPACE_BEGIN(::utils);
 
 template<typename _FTy, typename = std::enable_if_t<std::is_floating_point_v<_FTy>>>
-constexpr _FTy DegToRad(_FTy n)
+[[nodiscard]] constexpr _FTy DegToRad(_FTy n) noexcept
 {
 	return n * static_cast<_FTy>(std::numbers::pi_v<_FTy> / 180.0);
 }
 
 template<typename _FTy, typename = std::enable_if_t<std::is_floating_point_v<_FTy>>>
-constexpr _FTy RadToDeg(const _FTy& n)
+[[nodiscard]] constexpr _FTy RadToDeg(const _FTy& n) noexcept
 {
 	return n * static_cast<_FTy>(180.0 / std::numbers::pi_v<_FTy>);
 }
 
-constexpr Vector3D_F CrossProduct(const Vector3D_F& v1, const Vector3D_F& v2)
+[[nodiscard]] constexpr Vector3D_F CrossProduct(const Vector3D_F& v1, const Vector3D_F& v2) noexcept
 {
 	return {
 		v1[1] * v2[2] - v1[2] * v2[1],
@@ -39,41 +39,41 @@ AngleVectors(const Angle_F& angles, Vector3D_F* forward = nullptr, Vector3D_F* r
 PX_SDK_TF2 void
 AngleMatrix(const Angle_F& angles, Matrix3x4_F& matrix);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 VecToYaw(const Vector3D_F& vec);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 VecToPitch(const Vector3D_F& vec);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 VecToYaw(const Matrix3x4_F& matrix, const Vector3D_F& vec);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 VecToPitch(const Matrix3x4_F& matrix, const Vector3D_F& vec);
 
-PX_SDK_TF2 Vector3D_F
+[[nodiscard]] PX_SDK_TF2 Vector3D_F
 YawToVector(float yaw);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 ApproachAngle(float target, float value, float speed);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 AngleDiff(float destAngle, float srcAngle);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 AngleDistance(float next, float cur);
 
-PX_SDK_TF2 float
+[[nodiscard]] PX_SDK_TF2 float
 GetFOV(const Vector3D_F& start, const Vector3D_F& end, const Angle_F& angle);
 
-inline float AngMod(float a)
+[[nodiscard]] constexpr float AngMod(float a) noexcept
 {
-	return (360.f / 65536) * ((int)(a * (65536.f / 360.0f)) & 65535);
+	return (360.f / 65536) * (static_cast<int>((a * (65536.f / 360.0f))) & 65535);
 }
 
-inline float AngleNormalize(float angle)
+[[nodiscard]] inline float AngleNormalize(float angle)
 {
-	angle = fmodf(angle, 360.0f);
+	angle = fmodf(angle, 360.f);
 	if (angle > 180)
 		angle -= 360;
 	else if (angle < -180)
@@ -88,14 +88,14 @@ inline void ClampAngle(Angle_F& ang)
 	ang[2] = 0.f;
 }
 
-inline void SmoothAngle(const Angle_F& input, Angle_F& output, const float rate)
+inline void SmoothAngle(const Angle_F& desired, Angle_F& cur_next_angle, const float rate)
 {
-	const Angle_F delta = (input - output) * rate;
+	const Angle_F delta = (desired - cur_next_angle) * rate;
 
-	output[0] = ApproachAngle(output[0], input[0], delta[0]);
-	output[1] = ApproachAngle(output[1], input[1], delta[1]);
+	cur_next_angle[0] = ApproachAngle(cur_next_angle[0], desired[0], delta[0]);
+	cur_next_angle[1] = ApproachAngle(cur_next_angle[1], desired[1], delta[1]);
 
-	ClampAngle(output);
+	ClampAngle(cur_next_angle);
 }
 
 TF2_NAMESPACE_END();

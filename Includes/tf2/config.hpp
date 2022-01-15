@@ -56,7 +56,7 @@ public:
 		m_GameData = new_gamedata;
 	}
 
-	static px::IGameData* Get()
+	static [[nodiscard]] px::IGameData* Get()
 	{
 		return Manager->m_GameData;
 	}
@@ -238,7 +238,5 @@ struct SDKManager::Config
 		bool PhysicsSurfProp : 1{ };
 	} Physics;
 };
-
-
 
 TF2_NAMESPACE_END();

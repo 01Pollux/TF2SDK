@@ -237,7 +237,7 @@ bool CLC_FileCRCCheck::WriteToBuffer(utils::bf_write& buffer)
 bool CLC_FileCRCCheck::ReadFromBuffer(utils::bf_read& buffer)
 {
 	// Reserved for future use.
-	buffer.read_bit();
+	[[maybe_unused]] int reserved_bit = buffer.read_bit();
 
 	// Read the path ID.
 	int iCode = buffer.read_ubit(2);
@@ -296,7 +296,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(utils::bf_read& buffer)
 	}
 	else
 	{
-		/* CRC */ buffer.read_ubit(32);
+		[[maybe_unused]] int unused_crc = buffer.read_ubit(32);
 		CRCIOs = buffer.read_ubit(32);
 		FileHashType = buffer.read_ubit(32);
 	}
@@ -342,7 +342,7 @@ bool CLC_FileMD5Check::WriteToBuffer(utils::bf_write& buffer)
 bool CLC_FileMD5Check::ReadFromBuffer(utils::bf_read& buffer)
 {
 	// Reserved for future use.
-	buffer.read_bit();
+	[[maybe_unused]] int unused_crc = buffer.read_bit();
 
 	// Read the path ID.
 	int iCode = buffer.read_ubit(2);

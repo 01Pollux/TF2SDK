@@ -24,9 +24,9 @@ public:
         Instance = ctx;
     }
 
-    static manager* Alloc() noexcept
+    static manager* Alloc()
     {
-        return (Instance = new manager);
+        return Instance ? Instance : (Instance = new manager);
     }
 
     static void Release() noexcept
@@ -73,7 +73,7 @@ public:
     /// <summary>
     /// Get profiler's sections
     /// </summary>
-    types::section_container& GetSections()
+    types::section_container& GetSections() noexcept
     {
         return m_Sections;
     }

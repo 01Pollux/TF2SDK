@@ -18,7 +18,7 @@ bool DisplaySpecList::OnRender()
 	ImGui::SameLineHelp(m_DisplayMode);
 	
 	ImGui::SameLine();
-	if (ImGui::Checkbox("Moveable", m_Locked.data()))
+	if (ImGui::Checkbox("Locked", m_Locked.data()))
 		state.set();
 	ImGui::SameLineHelp(m_Locked);
 

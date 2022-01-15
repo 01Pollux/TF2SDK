@@ -5,6 +5,8 @@
 #include <px/version.hpp>
 #include <px/console.hpp>
 
+class PluginContext;
+
 PX_NAMESPACE_BEGIN();
 
 struct PluginInfo
@@ -21,6 +23,7 @@ class IPlugin
 	friend class PluginContext;
 public:
 	IPlugin(const PluginInfo& info) noexcept : m_PluginInfo(info) { };
+	virtual ~IPlugin() = default;
 
 	/// <summary>
 	/// Called when plugin is first loaded, use this callback to register interfaces only
@@ -57,7 +60,7 @@ public:
 	/// <summary>
 	/// Get registered plugin info
 	/// </summary>
-	const PluginInfo* GetPluginInfo() const noexcept
+	[[nodiscard]] const PluginInfo* GetPluginInfo() const noexcept
 	{
 		return &m_PluginInfo;
 	}
@@ -73,7 +76,7 @@ public:
 	/// <summary>
 	/// Set plugin state
 	/// </summary>
-	void SetPluginState(bool pause) noexcept
+	void SetPluginState(bool pause)
 	{
 		if (pause)
 		{
@@ -89,7 +92,7 @@ public:
 	/// <summary>
 	/// Get plugin's file name
 	/// </summary>
-	const std::string& GetFileName() const noexcept
+	[[nodiscard]] const std::string& GetFileName() const noexcept
 	{
 		return m_FileName;
 	}

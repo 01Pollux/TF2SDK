@@ -42,38 +42,38 @@ public:
 		}
 	}
 
-	char GetEscapeChar() const
+	[[nodiscard]] char GetEscapeChar() const
 	{
 		return m_EscapeChar;
 	}
 
-	const char* GetDelimiter() const
+	[[nodiscard]] const char* GetDelimiter() const
 	{
 		return m_Delimiter;
 	}
 
-	uint32_t GetDelimiterLength() const
+	[[nodiscard]] uint32_t GetDelimiterLength() const
 	{
 		return m_DelimiterLength;
 	}
 
-	const char* GetConversionString(char c) const
+	[[nodiscard]] const char* GetConversionString(char c) const
 	{
 		return m_Replacements[static_cast<uint8_t>(c)].m_ReplacementString;
 	}
 
-	int GetConversionLength(char c) const
+	[[nodiscard]] int GetConversionLength(char c) const
 	{
 		return m_Replacements[static_cast<uint8_t>(c)].m_Length;
 	}
 
-	int MaxConversionLength() const
+	[[nodiscard]] int MaxConversionLength() const
 	{
 		return m_MaxConversionLength;
 	}
 
 	// Finds a conversion for the passed-in string, returns length
-	virtual char FindConversion(const char* pString, uint32_t* pLength)
+	[[nodiscard]] virtual char FindConversion(const char* pString, uint32_t* pLength)
 	{
 		for (uint32_t i = 0; i < m_Count; ++i)
 		{
@@ -242,7 +242,7 @@ public:
 		add_null_termination();
 	}
 
-	bool			is_external_buffer() const
+	[[nodiscard]] bool is_external_buffer() const
 	{
 		return m_Memory.is_external();
 	}
@@ -340,7 +340,7 @@ public:
 	// Text mode: it'll parse the file, turning text #s into real numbers.
 	//		GetString will read a string until a space is reached
 #define BUFFER_GET_TYPE(name, rettype, fmt)	\
-	rettype get_##name()					\
+	[[nodiscard]] rettype get_##name()		\
 	{										\
 		rettype val; get_type(val, fmt);	\
 		return val;							\
@@ -508,7 +508,7 @@ public:
 		pString[read] = '\0';
 	}
 
-	char			get_delimited_char(UtlCharConversion* pConv)
+	[[nodiscard]] char get_delimited_char(UtlCharConversion* pConv)
 	{
 		if (!is_text() || !pConv)
 			return get_char();
@@ -519,7 +519,7 @@ public:
 	// NOTE: The count will *include* the terminating 0!!
 	// In binary mode, it's the number of characters until the next 0
 	// In text mode, it's the number of characters until the next space.
-	uint32_t			peek_string_length()
+	[[nodiscard]] uint32_t peek_string_length()
 	{
 		if (!is_valid())
 			return 0;
@@ -577,7 +577,7 @@ public:
 	// Specifying false for bActualSize will return the pre-translated number of characters
 	// including the delimiters and the escape characters. So, \n counts as 2 characters when bActualSize == false
 	// and only 1 character when bActualSize == true
-	uint32_t			peek_delimited_string_length(UtlCharConversion* pConv, bool bActualSize = true)
+	[[nodiscard]] uint32_t peek_delimited_string_length(UtlCharConversion* pConv, bool bActualSize = true)
 	{
 		if (!is_text() || !pConv)
 			return peek_string_length();
@@ -755,17 +755,17 @@ public:
 	void			put_delimited_char(UtlCharConversion* pConv, char c);
 
 	// What am I writing (put)/reading (get)?
-	void*			peek_put(uint32_t offset = 0)
+	[[nodiscard]] void* peek_put(uint32_t offset = 0)
 	{
 		return &m_Memory[m_Put + offset - m_nOffset];
 	}
 
-	const void*		peek_get(uint32_t offset = 0) const
+	[[nodiscard]] const void* peek_get(uint32_t offset = 0) const
 	{
 		return &m_Memory[m_Get + offset - m_nOffset];
 	}
 
-	const void*		peek_get(uint32_t size, uint32_t offset)
+	[[nodiscard]] const void* peek_get(uint32_t size, uint32_t offset)
 	{
 		if (!check_peek_get(offset, size))
 			return NULL;
@@ -774,24 +774,24 @@ public:
 	}
 
 	// Where am I writing (put)/reading (get)?
-	uint32_t			tell_put() const
+	[[nodiscard]] uint32_t tell_put() const
 	{
 		return m_Put;
 	}
-	uint32_t			tell_get() const
+	[[nodiscard]] uint32_t tell_get() const
 	{
 		return m_Get;
 	}
 
 	// What's the most I've ever written?
-	uint32_t			tell_put_max() const
+	[[nodiscard]] uint32_t tell_put_max() const
 	{
 		return m_nMaxPut;
 	}
 
 	// How many bytes remain to be read?
 	// NOTE: This is not accurate for streaming text files; it overshoots
-	uint32_t			get_remaining_bytes() const
+	[[nodiscard]] uint32_t get_remaining_bytes() const
 	{
 		return m_nMaxPut - tell_get();
 	}
@@ -856,55 +856,55 @@ public:
 	}
 
 	// Buffer base
-	const void*		data() const
+	[[nodiscard]] const void* data() const
 	{
 		m_Memory.data();
 	}
 
-	void*			data()
+	[[nodiscard]] void* data()
 	{
 		m_Memory.data();
 	}
 
 	// Returns the base as a const char*, only valid in text mode.
-	const char*		string() const
+	[[nodiscard]] const char* string() const
 	{
 		return std::bit_cast<const char*>(data());
 	}
 
 	// memory allocation size, does *not* reflect size written or read,
 	//	use TellPut or TellGet for that
-	int				size() const
+	[[nodiscard]] int size() const
 	{
 		return m_Memory.capacity();
 	}
 
 	// Am I a text buffer?
-	bool			is_text() const
+	[[nodiscard]] bool is_text() const
 	{
 		return (m_Flags & BufferFlags_Text) != 0;
 	}
 
 	// Can I grow if I'm externally allocated?
-	bool			is_growable() const
+	[[nodiscard]] bool is_growable() const
 	{
 		return (m_Flags & BufferFlags_External_Growable) != 0;
 	}
 
 	// Am I valid? (overflow or underflow error), Once invalid it stays invalid
-	bool			is_valid() const
+	[[nodiscard]] bool is_valid() const
 	{
 		return !m_Error;
 	}
 
 	// Do I contain carriage return/linefeeds? 
-	bool			has_crlf() const
+	[[nodiscard]] bool has_crlf() const
 	{
 		return is_text() && ((m_Flags & BufferFlags_Has_CRLF) != 0);
 	}
 
 	// Am I read-only
-	bool			is_read_only() const
+	[[nodiscard]] bool is_read_only() const
 	{
 		return (m_Flags & BufferFlags_ReadOnly) != 0;
 	}
@@ -912,7 +912,7 @@ public:
 	// Converts a buffer from a CRLF buffer to a CR buffer (and back)
 	// Returns false if no conversion was necessary (and outBuf is left untouched)
 	// If the conversion occurs, outBuf will be cleared.
-	bool			convert_to_cr(UtlBuffer& outBuf);
+	[[nodiscard]] bool convert_to_cr(UtlBuffer& outBuf);
 
 	// Push/pop pretty-printing tabs
 	void			push_tab()
@@ -958,7 +958,7 @@ protected:
 
 protected:
 	// Checks if a get/put is ok
-	bool check_put(uint32_t size)
+	[[nodiscard]] bool check_put(uint32_t size)
 	{
 		if ((m_Error & ErrorFlags_Put) || is_read_only())
 			return false;
@@ -974,7 +974,7 @@ protected:
 		return true;
 	}
 
-	bool check_get(uint32_t size)
+	[[nodiscard]] bool check_get(uint32_t size)
 	{
 		if (m_Error & ErrorFlags_Get)
 			return false;
@@ -1021,7 +1021,7 @@ protected:
 	}
 
 	// Methods to help with pretty-printing
-	bool was_last_char_cr()
+	[[nodiscard]] bool was_last_char_cr()
 	{
 		if (!is_text() || !tell_put())
 			return false;
@@ -1035,7 +1035,7 @@ protected:
 	}
 
 	// Help with delimited stuff
-	char get_delimited_char_internal(UtlCharConversion* pConv)
+	[[nodiscard]] char get_delimited_char_internal(UtlCharConversion* pConv)
 	{
 		char c = get_char();
 		if (c == pConv->GetEscapeChar())
@@ -1065,7 +1065,7 @@ protected:
 	}
 
 	// Does the next bytes of the buffer match a pattern?
-	bool peek_string_match(uint32_t offset, const char* pString, uint32_t size)
+	[[nodiscard]] bool peek_string_match(uint32_t offset, const char* pString, uint32_t size)
 	{
 		if (!check_peek_get(offset, size))
 			return false;
@@ -1073,7 +1073,7 @@ protected:
 	}
 
 	// Peek size of line to come, check memory bound
-	uint32_t	peek_line_length()
+	[[nodiscard]] uint32_t peek_line_length()
 	{
 		if (!is_valid())
 			return 0;
@@ -1111,7 +1111,7 @@ protected:
 	}
 
 	// How much whitespace should I skip?
-	uint32_t peek_white_space(uint32_t offset)
+	[[nodiscard]] uint32_t peek_white_space(uint32_t offset)
 	{
 		if (!is_text() || !is_valid())
 			return 0;
@@ -1127,7 +1127,7 @@ protected:
 	}
 
 	// Checks if a peek get is ok
-	bool check_peek_get(uint32_t offset, uint32_t size)
+	[[nodiscard]] bool check_peek_get(uint32_t offset, uint32_t size)
 	{
 		if (m_Error & ErrorFlags_Get)
 			return false;
@@ -1140,7 +1140,7 @@ protected:
 
 	// Call this to peek arbitrarily long into memory. It doesn't fail unless
 	// it can't read *anything* new
-	bool check_arbitrary_peek_get(uint32_t offset, uint32_t& incr)
+	[[nodiscard]] bool check_arbitrary_peek_get(uint32_t offset, uint32_t& incr)
 	{
 		if (tell_get() + offset >= tell_put_max())
 		{

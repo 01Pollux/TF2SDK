@@ -30,36 +30,36 @@ public:
 	/// Expose interface by name.
 	/// </summary>
 	/// <returns>true if the interface does exists, false otherwise</returns>
-	virtual bool ExposeInterface(const std::string& name, IInterface* iface, IPlugin* owner) abstract;
+	[[nodiscard]] virtual bool ExposeInterface(const std::string& name, IInterface* iface, IPlugin* owner) abstract;
 
 	/// <summary>
 	/// Request an interface by name.
 	/// </summary>
 	/// <returns>true if the interface does exists, false otherwise</returns>
-	virtual bool RequestInterface(const std::string& iface_name, IInterface** iface) abstract;
+	[[nodiscard]] virtual bool RequestInterface(const std::string& iface_name, IInterface** iface) abstract;
 
 	/// <summary>
 	/// find plugin by either it's file name
 	/// </summary>
-	virtual IPlugin* FindPlugin(const std::string& name) abstract;
+	[[nodiscard]] virtual IPlugin* FindPlugin(const std::string& name) abstract;
 
 	/// <summary>
 	/// find and add plugin to caller's dependencies
 	/// </summary>
 	/// <param name="is_required">true to immediatly load the plugin if it's not loaded</param>
-	/// <returns>true if the plugin, false otherwise</returns>
+	/// <returns>true if the plugin was bounded, false otherwise</returns>
 	virtual bool BindPlugin(IPlugin* caller, const char* name, bool is_required) abstract;
 
 	/// <summary>
 	/// Update plugin config.
 	/// </summary>
 	/// <param name="plugin">pointer to the plugin, nullptr if you want to update every plugin</param>
-	virtual void UpdatePluginConfig(IPlugin* plugin, PlCfgLoadType loadtype) abstract;
+	[[nodiscard]] virtual void UpdatePluginConfig(IPlugin* plugin, PlCfgLoadType loadtype) abstract;
 
 	/// <summary>
 	/// force unload the plugin.
 	/// </summary>
-	virtual void RequestShutdown(IPlugin* iface) abstract;
+	[[nodiscard]] virtual void RequestShutdown(IPlugin* iface) abstract;
 
 	/// <summary>
 	/// Unload main plugin and all of its subplugins.
@@ -69,7 +69,7 @@ public:
 	/// <summary>
 	/// Get plugin host version.
 	/// </summary>
-	virtual version GetHostVersion() abstract;
+	[[nodiscard]] virtual version GetHostVersion() abstract;
 
 	/// <summary>
 	/// Load and init a plugin outside of its host.

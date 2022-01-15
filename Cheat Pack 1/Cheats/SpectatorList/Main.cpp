@@ -113,10 +113,9 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 	if (spectators.empty())
 		return;
 
-	const ImGuiWindowFlags background_flag = spec_list.m_Locked ? ImGuiWindowFlags_NoMove : ImGuiWindowFlags_None;
+	const ImGuiWindowFlags background_flag = spec_list.m_Locked ? ImGuiWindowFlags_None : ImGuiWindowFlags_NoMove;
 
-	float p = spec_list.m_InnerColor[0];
-	/*ImGui::SetNextWindowSize({ 0.f, 0.f }, ImGuiCond_Always);
+	ImGui::SetNextWindowSize({ 0.f, 0.f }, ImGuiCond_Always);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, { spec_list.m_InnerColor[0] , spec_list.m_InnerColor[1] ,spec_list.m_InnerColor[2], spec_list.m_InnerTransparent ? 0.f : spec_list.m_InnerColor[3] });
 	ImGui::PushStyleColor(ImGuiCol_Border, { spec_list.m_OuterColor[0] , spec_list.m_OuterColor[1] ,spec_list.m_OuterColor[2], spec_list.m_OuterColor[3] });
 	bool is_open = ImGui::Begin("Spectator list", spec_list.m_Enabled.data(), background_flag | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
@@ -130,7 +129,7 @@ void DisplaySpecList::OnDrawSpecList(ImGuiContext* imgui, ImGuiContextHook* ctx)
 			ImGui::Text("%s%s", name_and_mode.Mode, name_and_mode.Name.c_str());
 		}
 		ImGui::PopStyleColor();
-	}*/
+	}
 
 	ImGui::End();
 }

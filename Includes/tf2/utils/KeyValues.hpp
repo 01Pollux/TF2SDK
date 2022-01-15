@@ -49,10 +49,10 @@ public:
 
 	// Find a keyValue, create it if it is not found.
 	// Set bCreate to true to create the key if it doesn't already exist (which ensures a valid pointer will be returned)
-	PX_SDK_TF2 KeyValues* FindKey(const char* keyName, bool bCreate = false);
-	PX_SDK_TF2 const KeyValues* FindKey(const char* keyName) const;
-	PX_SDK_TF2 KeyValues* FindKey(int keySymbol) noexcept;
-	PX_SDK_TF2 const KeyValues* FindKey(int keySymbol) const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* FindKey(const char* keyName, bool bCreate = false);
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* FindKey(const char* keyName) const;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* FindKey(int keySymbol) noexcept;
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* FindKey(int keySymbol) const noexcept;
 	// Adds a subkey. Make sure the subkey isn't a child of some other keyvalues
 	PX_SDK_TF2 void AddSubKey(KeyValues* pSubkey) noexcept;	
 	// removes a subkey from the list, DOES NOT DELETE IT
@@ -64,11 +64,11 @@ public:
 	// below if you want to iterate over just the keys or just the values.
 	//
 	// returns the first subkey in the list
-	KeyValues* GetFirstSubKey()			noexcept { return SubKV; }
-	const KeyValues* GetFirstSubKey()	const noexcept { return SubKV; }
+	[[nodiscard]] KeyValues* GetFirstSubKey()			noexcept { return SubKV; }
+	[[nodiscard]] const KeyValues* GetFirstSubKey()	const noexcept { return SubKV; }
 	// returns the next subkey
-	KeyValues* GetNextKey()				noexcept { return PeerKV; }
-	const KeyValues* GetNextKey()		const noexcept { return PeerKV; }
+	[[nodiscard]] KeyValues* GetNextKey()				noexcept { return PeerKV; }
+	[[nodiscard]] const KeyValues* GetNextKey()		const noexcept { return PeerKV; }
 
 	void SetNextKey(KeyValues* pDat)	noexcept { PeerKV = pDat; }
 
@@ -85,36 +85,36 @@ public:
 	//     {
 	//         Msg( "Int value: %d\n", pValue->GetInt() );  // Assuming pValue->GetDataType() == TYPE_INT...
 	//     }
-	PX_SDK_TF2 const KeyValues* GetFirstTrueSubKey() const noexcept;
-	PX_SDK_TF2 KeyValues* GetFirstTrueSubKey() noexcept;
-	PX_SDK_TF2 const KeyValues* GetNextTrueSubKey() const noexcept;
-	PX_SDK_TF2 KeyValues* GetNextTrueSubKey() noexcept;
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* GetFirstTrueSubKey() const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* GetFirstTrueSubKey() noexcept;
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* GetNextTrueSubKey() const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* GetNextTrueSubKey() noexcept;
 
 	// When you get a value back, you can use GetX and pass in NULL to get the value.
-	PX_SDK_TF2 const KeyValues* GetFirstValue() const noexcept;
-	PX_SDK_TF2 KeyValues* GetFirstValue() noexcept;
-	PX_SDK_TF2 const KeyValues* GetNextValue() const noexcept;
-	PX_SDK_TF2 KeyValues* GetNextValue() noexcept;
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* GetFirstValue() const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* GetFirstValue() noexcept;
+	[[nodiscard]] PX_SDK_TF2 const KeyValues* GetNextValue() const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* GetNextValue() noexcept;
 
 	// Data access
-	int				GetInt(const char* keyName = nullptr, int defaultValue = 0) const noexcept;
-	uint64_t		GetUint64(const char* keyName = nullptr, uint64_t defaultValue = 0) const noexcept;
-	float			GetFloat(const char* keyName = nullptr, float defaultValue = 0.0f) const noexcept;
-	const char* GetString(const char* keyName = nullptr, const char* defaultValue = "") const noexcept;
-	const wchar_t* GetWString(const char* keyName = nullptr, const wchar_t* defaultValue = L"") const noexcept;
-	void* GetPtr(const char* keyName = nullptr, void* defaultValue = nullptr) const noexcept;
-	bool			GetBool(const char* keyName = nullptr, bool defaultValue = false, bool* optGotDefault = nullptr) const noexcept;
-	Color4_8		GetColor(const char* keyName = nullptr) const noexcept;
-	bool			IsEmpty(const char* keyName = nullptr) const noexcept;
+	[[nodiscard]] int			GetInt(const char* keyName = nullptr, int defaultValue = 0) const noexcept;
+	[[nodiscard]] uint64_t		GetUint64(const char* keyName = nullptr, uint64_t defaultValue = 0) const noexcept;
+	[[nodiscard]] float			GetFloat(const char* keyName = nullptr, float defaultValue = 0.0f) const noexcept;
+	[[nodiscard]] const char*	GetString(const char* keyName = nullptr, const char* defaultValue = "") const noexcept;
+	[[nodiscard]] const wchar_t* GetWString(const char* keyName = nullptr, const wchar_t* defaultValue = L"") const noexcept;
+	[[nodiscard]] void*			GetPtr(const char* keyName = nullptr, void* defaultValue = nullptr) const noexcept;
+	[[nodiscard]] bool			GetBool(const char* keyName = nullptr, bool defaultValue = false, bool* optGotDefault = nullptr) const noexcept;
+	[[nodiscard]] Color4_8		GetColor(const char* keyName = nullptr) const noexcept;
+	[[nodiscard]] bool			IsEmpty(const char* keyName = nullptr) const noexcept;
 
 	// Data access
-	int				GetInt(int keySymbol, int defaultValue = 0) const noexcept;
-	float			GetFloat(int keySymbol, float defaultValue = 0.0f) const noexcept;
-	const char*		GetString(int keySymbol, const char* defaultValue = "") const noexcept;
-	const wchar_t*	GetWString(int keySymbol, const wchar_t* defaultValue = L"") const noexcept;
-	void*			GetPtr(int keySymbol, void* defaultValue = nullptr) const noexcept;
-	Color4_8		GetColor(int keySymbol) const noexcept;
-	bool			IsEmpty(int keySymbol) const noexcept;
+	[[nodiscard]] int			GetInt(int keySymbol, int defaultValue = 0) const noexcept;
+	[[nodiscard]] float			GetFloat(int keySymbol, float defaultValue = 0.0f) const noexcept;
+	[[nodiscard]] const char*	GetString(int keySymbol, const char* defaultValue = "") const noexcept;
+	[[nodiscard]] const wchar_t*GetWString(int keySymbol, const wchar_t* defaultValue = L"") const noexcept;
+	[[nodiscard]] void*			GetPtr(int keySymbol, void* defaultValue = nullptr) const noexcept;
+	[[nodiscard]] Color4_8		GetColor(int keySymbol) const noexcept;
+	[[nodiscard]] bool			IsEmpty(int keySymbol) const noexcept;
 
 	// Key writing
 	PX_SDK_TF2 void SetWString(const char* keyName, const wchar_t* value);
@@ -127,24 +127,24 @@ public:
 	void SetBool(const char* keyName, bool value) { SetInt(keyName, value ? 1 : 0); }
 
 	// Allocate & create a new copy of the keys
-	PX_SDK_TF2 KeyValues* MakeCopy() const;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* MakeCopy() const;
 	PX_SDK_TF2 void CopySubkeys(KeyValues* pParent) const;
 
 	// Allocate & create a new copy of the keys, including the next keys. This is useful for top level files
 	// that don't use the usual convention of a root key with lots of children (like soundscape files).
-	PX_SDK_TF2 KeyValues* MakeCopy(bool copySiblings) const;
+	[[nodiscard]] PX_SDK_TF2 KeyValues* MakeCopy(bool copySiblings) const;
 	// Make a new copy of all subkeys, add them all to the passed-in keyvalues
 	// Clear out all subkeys, and the current value
 	PX_SDK_TF2 void Clear();
 
-	PX_SDK_TF2 KeyValuesType GetDataType(const char* keyName = nullptr) const noexcept;
+	[[nodiscard]] PX_SDK_TF2 KeyValuesType GetDataType(const char* keyName = nullptr) const noexcept;
 
 	// Virtual deletion function - ensures that KeyValues object is deleted from correct heap
 	void DeleteThis() { delete this; }
 
 	PX_SDK_TF2 void SetStringValue(char const* strValue);
 
-	PX_SDK_TF2 bool Dump(IKeyValuesDumpContext* pDump, int nIndentLevel = 0, bool bSorted = false) const;
+	[[nodiscard]] PX_SDK_TF2 bool Dump(IKeyValuesDumpContext* pDump, int nIndentLevel = 0, bool bSorted = false) const;
 
 	PX_SDK_TF2 void Init();
 

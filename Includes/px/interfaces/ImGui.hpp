@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <type_traits>
 #include <imgui/imgui.h>
 
 #include <px/console.hpp>
@@ -11,12 +12,29 @@ PX_NAMESPACE_BEGIN();
 class ConfigState
 {
 public:
-	bool has_changed() const noexcept { return m_Changed; }
-	operator bool() const noexcept { return has_changed(); }
+	[[nodiscard]] bool has_changed() const noexcept { return m_Changed; }
+	[[nodiscard]] operator bool() const noexcept { return has_changed(); }
 
 	void set() noexcept { m_Changed = true; }
 	void add(bool state) noexcept { m_Changed |= state; }
 	void reset() noexcept { m_Changed = false; }
+
+	template<typename _FnTy, typename... _Args>
+		requires requires {
+		requires std::is_invocable_v<_FnTy>;
+		requires std::disjunction_v<
+			std::is_same<bool, std::invoke_result_t<_FnTy>>,
+			std::is_same<void, std::invoke_result_t<_FnTy>>
+		>;
+	}
+	void invoke(const _FnTy& fn, _Args&&... args)
+	{
+		using result_type = std::invoke_result_t<_FnTy>;
+		if constexpr (std::is_same_v<bool, result_type>)
+			add(std::invoke(fn, std::forward<_Args>(args)...));
+		else
+			std::invoke(fn, std::forward<_Args>(args)...);
+	}
 
 private:
 	bool m_Changed{ };
@@ -34,7 +52,7 @@ public:
 	/// Initialize ImGuiContext in Dll's codespace.
 	/// Must be called in 
 	/// </summary>
-	virtual ImGuiContext* GetContext() noexcept abstract;
+	[[nodiscard]] virtual ImGuiContext* GetContext() noexcept abstract;
 
 	/// <summary>
 	/// Register callback for ImGui drawing.
@@ -55,13 +73,13 @@ public:
 	/// <summary>
 	/// Tests whether or not the main menu is on
 	/// </summary>
-	virtual bool IsMenuOn() abstract;
+	[[nodiscard]] virtual bool IsMenuOn() abstract;
 
 	/// <summary>
 	/// Find a font from 'Pleiades/Fonts/*.ttf' 
 	/// </summary>
 	/// <returns>a pointer to ImFont texture, nullptr if the font wasn't loaded</returns>
-	virtual ImFont* FindFont(const char* font_name) abstract;
+	[[nodiscard]] virtual ImFont* FindFont(const char* font_name) abstract;
 };
 
 PX_NAMESPACE_END();

@@ -43,12 +43,12 @@ public:
 		return *this;
 	}
 
-	size_t length() const
+	[[nodiscard]] size_t length() const
 	{
 		return m_Data ? strlen(m_Data) : 0;
 	}
 
-	bool empty() const noexcept
+	[[nodiscard]] bool empty() const noexcept
 	{
 		return m_Data ? !m_Data[0] : true;
 	}
@@ -63,32 +63,32 @@ public:
 		return m_Data;
 	}
 
-	char operator[](int i) const noexcept
+	[[nodiscard]] char operator[](int i) const noexcept
 	{
 		return m_Data[i];
 	}
 
-	char& operator[](int i) noexcept
+	[[nodiscard]] char& operator[](int i) noexcept
 	{
 		return m_Data[i];
 	}
 
-	const char* c_str() const noexcept
+	[[nodiscard]] const char* c_str() const noexcept
 	{
 		return m_Data;
 	}
 
-	std::string str() const noexcept
+	[[nodiscard]] std::string str() const noexcept
 	{
 		return m_Data;
 	}
 
-	const char* data() const noexcept
+	[[nodiscard]] const char* data() const noexcept
 	{
 		return m_Data;
 	}
 
-	char* data() noexcept
+	[[nodiscard]] char* data() noexcept
 	{
 		return m_Data;
 	}

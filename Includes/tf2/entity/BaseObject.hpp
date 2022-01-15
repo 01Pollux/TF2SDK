@@ -62,11 +62,11 @@ namespace Const
 class IBaseObjectInternal : public IBaseEntityInternal
 {
 public:
-	static IBaseObjectInternal* GetEntity(int index)
+	[[nodiscard]] static IBaseObjectInternal* GetEntity(int index)
 	{
 		return static_cast<IBaseObjectInternal*>(IBaseEntityInternal::GetEntity(index));
 	}
-	static IBaseObjectInternal* GetEntity(IBaseHandle hndl)
+	[[nodiscard]] static IBaseObjectInternal* GetEntity(IBaseHandle hndl)
 	{
 		return static_cast<IBaseObjectInternal*>(IBaseEntityInternal::GetEntity(hndl));
 	}

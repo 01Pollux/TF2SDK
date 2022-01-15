@@ -44,7 +44,7 @@ public:
 		std::copy_n(vec.begin(), std::min(_OSize, _Size), begin());
 	}
 
-	constexpr bool is_valid() const noexcept
+	[[nodiscard]] constexpr bool is_valid() const noexcept
 	{
 		if constexpr (std::is_floating_point_v<value_type>)
 		{
@@ -58,50 +58,50 @@ public:
 		return true;
 	}
 
-	constexpr const_reference operator[](difference_type i) const noexcept
+	[[nodiscard]] constexpr const_reference operator[](difference_type i) const noexcept
 	{
 		return m_Data[i];
 	}
-	constexpr reference operator[](difference_type i) noexcept
+	[[nodiscard]] constexpr reference operator[](difference_type i) noexcept
 	{
 		return m_Data[i];
 	}
 
-	constexpr const_pointer data() const noexcept
+	[[nodiscard]] constexpr const_pointer data() const noexcept
 	{
 		return m_Data.data();
 	}
 
-	pointer data() noexcept
+	[[nodiscard]] pointer data() noexcept
 	{
 		return m_Data.data();
 	}
 	
-	constexpr const array_type& get() const noexcept
+	[[nodiscard]] constexpr const array_type& get() const noexcept
 	{
 		return m_Data;
 	}
 
-	array_type& get() noexcept
+	[[nodiscard]] array_type& get() noexcept
 	{
 		return m_Data;
 	}
 
-	constexpr size_t size() const noexcept
+	[[nodiscard]] constexpr size_t size() const noexcept
 	{
 		return _Size;
 	}
 
 	template<typename _OTy>
 		requires (sizeof(_OTy) == sizeof(_Ty) * _Size)
-	constexpr const _OTy& to() const noexcept
+	[[nodiscard]] constexpr const _OTy& to() const noexcept
 	{
 		return *std::bit_cast<const _OTy*>(data());
 	}
 
 	template<typename _OTy>
 		requires (sizeof(_OTy) == sizeof(_Ty) * _Size)
-	_OTy& to() noexcept
+	[[nodiscard]] _OTy& to() noexcept
 	{
 		return *std::bit_cast<_OTy*>(data());
 	}
@@ -114,7 +114,7 @@ public:
 			v = -v;
 	}
 
-	_NODISCARD constexpr float dot(const VectorXD& other) const noexcept
+	[[nodiscard]] constexpr float dot(const VectorXD& other) const noexcept
 	{
 		float res = 0.;
 		for (
@@ -128,27 +128,27 @@ public:
 		return res;
 	}
 
-	_NODISCARD constexpr float length_sqr() const noexcept
+	[[nodiscard]] constexpr float length_sqr() const noexcept
 	{
 		return dot(*this);
 	}
 
-	_NODISCARD constexpr float length() const noexcept
+	[[nodiscard]] constexpr float length() const noexcept
 	{
 		return std::sqrt(length_sqr());
 	}
 
-	_NODISCARD constexpr bool is_length_greater_than(value_type val) const noexcept
+	[[nodiscard]] constexpr bool is_length_greater_than(value_type val) const noexcept
 	{
 		return length_sqr() > (val * val);
 	}
 
-	_NODISCARD constexpr bool is_length_less_than(value_type val) const noexcept
+	[[nodiscard]] constexpr bool is_length_less_than(value_type val) const noexcept
 	{
 		return length_sqr() < (val * val);
 	}
 
-	_NODISCARD constexpr bool is_zero(value_type tolerance = std::numeric_limits<value_type>::epsilon()) const noexcept
+	[[nodiscard]] constexpr bool is_zero(value_type tolerance = std::numeric_limits<value_type>::epsilon()) const noexcept
 	{
 		for (value_type v : m_Data)
 		{
@@ -173,7 +173,7 @@ public:
 		}
 	}
 
-	_NODISCARD constexpr bool within(const VectorXD& min, const VectorXD& max) const noexcept
+	[[nodiscard]] constexpr bool within(const VectorXD& min, const VectorXD& max) const noexcept
 	{
 		for (
 			auto meit = cbegin(), minit = min.cbegin(), maxit = max.cbegin();
@@ -187,12 +187,12 @@ public:
 		return true;
 	}
 	
-	_NODISCARD constexpr float distance_to(const VectorXD& other) const noexcept
+	[[nodiscard]] constexpr float distance_to(const VectorXD& other) const noexcept
 	{
 		return (other - *this).length();
 	}
 
-	_NODISCARD constexpr float distance_to_sqr(const VectorXD& other) const noexcept
+	[[nodiscard]] constexpr float distance_to_sqr(const VectorXD& other) const noexcept
 	{
 		return (other - *this).length_sqr();
 	}
@@ -240,115 +240,115 @@ public:
 		m_Data.swap(other);
 	}
 
-	_NODISCARD constexpr iterator begin() noexcept
+	[[nodiscard]] constexpr iterator begin() noexcept
 	{
 		return m_Data.begin();
 	}
 
-	_NODISCARD constexpr const_iterator begin() const noexcept
+	[[nodiscard]] constexpr const_iterator begin() const noexcept
 	{
 		return m_Data.begin();
 	}
 
-	_NODISCARD constexpr iterator end() noexcept
+	[[nodiscard]] constexpr iterator end() noexcept
 	{
 		return m_Data.end();
 	}
 
-	_NODISCARD constexpr const_iterator end() const noexcept
+	[[nodiscard]] constexpr const_iterator end() const noexcept
 	{
 		return m_Data.end();
 	}
 
-	_NODISCARD constexpr reverse_iterator rbegin() noexcept
+	[[nodiscard]] constexpr reverse_iterator rbegin() noexcept
 	{
 		return m_Data.rbegin();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator rbegin() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return m_Data.rbegin();
 	}
 
-	_NODISCARD constexpr reverse_iterator rend() noexcept
+	[[nodiscard]] constexpr reverse_iterator rend() noexcept
 	{
 		return m_Data.rend();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator rend() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator rend() const noexcept
 	{
 		return m_Data.rend();
 	}
 
-	_NODISCARD constexpr const_iterator cbegin() const noexcept
+	[[nodiscard]] constexpr const_iterator cbegin() const noexcept
 	{
 		return begin();
 	}
 
-	_NODISCARD constexpr const_iterator cend() const noexcept
+	[[nodiscard]] constexpr const_iterator cend() const noexcept
 	{
 		return end();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator crbegin() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return rbegin();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator crend() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator crend() const noexcept
 	{
 		return rend();
 	}
 
 
 public:
-#define VECTORXD_IMPL_MATH_OP(SYMBOL)													\
-	constexpr VectorXD& operator##SYMBOL##=(const VectorXD& other) noexcept				\
-	{																					\
-		auto meit = begin();															\
-		for (auto oit = other.begin(); meit != end(); meit++, oit++)					\
-		{																				\
-			*meit SYMBOL##= *oit;														\
-		}																				\
-		return *this;																	\
-	}																					\
-	template<typename _VTy>																\
-	constexpr VectorXD& operator##SYMBOL##=(_VTy other) noexcept						\
-	{																					\
-		for (reference v : m_Data)														\
-		{																				\
-			v SYMBOL##= static_cast<value_type>(other);									\
-		}																				\
-		return *this;																	\
-	}																					\
-	_NODISCARD constexpr VectorXD operator##SYMBOL(const VectorXD& other) const noexcept\
-	{																					\
-		VectorXD res{ };																\
-		auto rit = res.begin();															\
-		for (																			\
-			auto meit = begin(), oit = other.begin();									\
-			meit != end();																\
-			meit++, oit++, rit++														\
-		)																				\
-		{																				\
-			*rit = *meit SYMBOL *oit;													\
-		}																				\
-		return res;																		\
-	}																					\
-	template<typename _VTy>																\
-	_NODISCARD constexpr VectorXD operator##SYMBOL(_VTy other) const noexcept			\
-	{																					\
-		VectorXD res{ };																\
-		auto rit = res.begin();															\
-		for (																			\
-			auto meit = begin();														\
-			meit != end();																\
-			meit++, rit++																\
-		)																				\
-		{																				\
-			*rit = *meit SYMBOL static_cast<value_type>(other);							\
-		}																				\
-		return res;																		\
+#define VECTORXD_IMPL_MATH_OP(SYMBOL)														\
+	constexpr VectorXD& operator##SYMBOL##=(const VectorXD& other) noexcept					\
+	{																						\
+		auto meit = begin();																\
+		for (auto oit = other.begin(); meit != end(); meit++, oit++)						\
+		{																					\
+			*meit SYMBOL##= *oit;															\
+		}																					\
+		return *this;																		\
+	}																						\
+	template<typename _VTy>																	\
+	constexpr VectorXD& operator##SYMBOL##=(_VTy other) noexcept							\
+	{																						\
+		for (reference v : m_Data)															\
+		{																					\
+			v SYMBOL##= static_cast<value_type>(other);										\
+		}																					\
+		return *this;																		\
+	}																						\
+	[[nodiscard]] constexpr VectorXD operator##SYMBOL(const VectorXD& other) const noexcept	\
+	{																						\
+		VectorXD res{ };																	\
+		auto rit = res.begin();																\
+		for (																				\
+			auto meit = begin(), oit = other.begin();										\
+			meit != end();																	\
+			meit++, oit++, rit++															\
+		)																					\
+		{																					\
+			*rit = *meit SYMBOL *oit;														\
+		}																					\
+		return res;																			\
+	}																						\
+	template<typename _VTy>																	\
+	[[nodiscard]] constexpr VectorXD operator##SYMBOL(_VTy other) const noexcept			\
+	{																						\
+		VectorXD res{ };																	\
+		auto rit = res.begin();																\
+		for (																				\
+			auto meit = begin();															\
+			meit != end();																	\
+			meit++, rit++																	\
+		)																					\
+		{																					\
+			*rit = *meit SYMBOL static_cast<value_type>(other);								\
+		}																					\
+		return res;																			\
 	}
 
 	VECTORXD_IMPL_MATH_OP(+);
@@ -374,7 +374,7 @@ public:
 		return *this;
 	}
 
-	_NODISCARD constexpr VectorXD operator-() const noexcept
+	[[nodiscard]] constexpr VectorXD operator-() const noexcept
 	{
 		VectorXD res{ };
 		auto rit = res.begin();
@@ -385,7 +385,7 @@ public:
 		return res;
 	}
 
-	_NODISCARD constexpr VectorXD min(const VectorXD& other) const noexcept
+	[[nodiscard]] constexpr VectorXD min(const VectorXD& other) const noexcept
 	{
 		VectorXD res{ };
 		auto rit = res.begin();
@@ -396,7 +396,7 @@ public:
 		return res;
 	}
 
-	_NODISCARD constexpr VectorXD max(const VectorXD& other) const noexcept
+	[[nodiscard]] constexpr VectorXD max(const VectorXD& other) const noexcept
 	{
 		VectorXD res{ };
 		auto rit = res.begin();

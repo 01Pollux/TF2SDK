@@ -24,7 +24,7 @@ public:
 
 	void set_assert(bool bassert) noexcept { AssertOnOverflow = bassert; }
 
-	const char* get_name() const noexcept { return DebugName; }
+	[[nodiscard]] const char* get_name() const noexcept { return DebugName; }
 	void set_name(const char* dbgname) noexcept { DebugName = dbgname; }
 
 	void seek(int bitPos) { CurBit = bitPos; }
@@ -96,23 +96,23 @@ public:
 
 	// Status.
 public:
-	int	bits_written()	const noexcept { return CurBit; }
-	int	bytes_written() const noexcept { return (bits_written() + 7) >> 3; }
-	int	max_bits()		const noexcept { return DataBits; }
-	int	bits_left()		const noexcept { return max_bits() - bits_written(); }
-	int	bytes_left()	const noexcept { return bits_left() >> 3; }
-	uint8_t* data()				noexcept { return std::bit_cast<uint8_t*>(Data); }
-	const uint8_t* data() const noexcept { return std::bit_cast<const uint8_t*>(Data); }
+	[[nodiscard]] int	bits_written()	const noexcept { return CurBit; }
+	[[nodiscard]] int	bytes_written() const noexcept { return (bits_written() + 7) >> 3; }
+	[[nodiscard]] int	max_bits()		const noexcept { return DataBits; }
+	[[nodiscard]] int	bits_left()		const noexcept { return max_bits() - bits_written(); }
+	[[nodiscard]] int	bytes_left()	const noexcept { return bits_left() >> 3; }
+	[[nodiscard]] uint8_t* data()				noexcept { return std::bit_cast<uint8_t*>(Data); }
+	[[nodiscard]] const uint8_t* data() const noexcept { return std::bit_cast<const uint8_t*>(Data); }
 
 	// Has the buffer overflowed?
-	bool check_for_overflow(int nBits)
+	[[nodiscard]] bool check_for_overflow(int nBits)
 	{
 		if (CurBit + nBits > DataBits)
 			mark_as_overflowed();
 		return IsOverflow;
 	}
 
-	bool has_overflown() const noexcept { return IsOverflow; }
+	[[nodiscard]] bool has_overflown() const noexcept { return IsOverflow; }
 	void mark_as_overflowed() noexcept { IsOverflow = true; }
 
 private:
@@ -149,7 +149,7 @@ public:
 
 	void set_assert(bool bassert) noexcept { AssertOnOverflow = bassert; }
 
-	const char* get_name() const noexcept { return DebugName; }
+	[[nodiscard]] const char* get_name() const noexcept { return DebugName; }
 	void set_name(const char* dbgname) noexcept { DebugName = dbgname; }
 
 	bool seek(int bitPos) 
@@ -161,40 +161,40 @@ public:
 	}
 	bool seek_relative(int bitPos) { return seek(CurBit + bitPos); }
 
-	PX_SDK_TF2 int
+	[[nodiscard]] PX_SDK_TF2 int
 		read_bit();
 
 public:
 	// Read a list of bits in.
-	PX_SDK_TF2 void
+	[[nodiscard]] PX_SDK_TF2 void
 		read_bits(void* pOut, int nBits);
 
 	// Read a list of bits in, but don't overrun the destination buffer.
 	// Returns the number of bits read into the buffer. The remaining
 	// bits are skipped over.
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		read_angle(int numbits);
 
-	PX_SDK_TF2 uint32_t
+	[[nodiscard]] PX_SDK_TF2 uint32_t
 		peek_ubit(int numbits);
-	PX_SDK_TF2 uint32_t
+	[[nodiscard]] PX_SDK_TF2 uint32_t
 		read_ubit(int numbits);
-	PX_SDK_TF2 int
+	[[nodiscard]] PX_SDK_TF2 int
 		read_sbit(int numbits);
 
 	// reads a varint encoded integer
-	PX_SDK_TF2 uint32_t
+	[[nodiscard]] PX_SDK_TF2 uint32_t
 		read_uint32();
-	PX_SDK_TF2 uint64_t
+	[[nodiscard]] PX_SDK_TF2 uint64_t
 		read_uint64();
-	PX_SDK_TF2 int32_t
+	[[nodiscard]] PX_SDK_TF2 int32_t
 		read_int32();
-	PX_SDK_TF2 int64_t
+	[[nodiscard]] PX_SDK_TF2 int64_t
 		read_int64();
 
-	PX_SDK_TF2 float 
+	[[nodiscard]] PX_SDK_TF2 float
 		read_coord();
-	PX_SDK_TF2 void
+	[[nodiscard]] PX_SDK_TF2 void
 		read_vec3(float fa[3]);
 
 	// Byte functions (these still read data in bit-by-bit).
@@ -235,23 +235,23 @@ public:
 
 	// Status.
 public:
-	int	bits_written()	const noexcept { return CurBit; }
-	int	bytes_written() const noexcept { return (bits_written() + 7) >> 3; }
-	int	max_bits()		const noexcept { return DataBits; }
-	int	bits_left()		const noexcept { return max_bits() - bits_written(); }
-	int	bytes_left()	const noexcept { return bits_left() >> 3; }
-	const uint8_t* data() const noexcept { return std::bit_cast<const uint8_t*>(Data); }
-	int	remaining_bytes()const noexcept { return DataBytes; }
+	[[nodiscard]] int	bits_written()	const noexcept { return CurBit; }
+	[[nodiscard]] int	bytes_written() const noexcept { return (bits_written() + 7) >> 3; }
+	[[nodiscard]] int	max_bits()		const noexcept { return DataBits; }
+	[[nodiscard]] int	bits_left()		const noexcept { return max_bits() - bits_written(); }
+	[[nodiscard]] int	bytes_left()	const noexcept { return bits_left() >> 3; }
+	[[nodiscard]] const uint8_t* data() const noexcept { return std::bit_cast<const uint8_t*>(Data); }
+	[[nodiscard]] int	remaining_bytes()const noexcept { return DataBytes; }
 
 	// Has the buffer overflowed?
-	bool check_for_overflow(int nBits)
+	[[nodiscard]] bool check_for_overflow(int nBits)
 	{
 		if (CurBit + nBits > DataBits)
 			mark_as_overflowed();
 		return IsOverflow;
 	}
 
-	bool has_overflown() const noexcept { return IsOverflow; }
+	[[nodiscard]] bool has_overflown() const noexcept { return IsOverflow; }
 	void mark_as_overflowed() noexcept { IsOverflow = true; }
 
 private:

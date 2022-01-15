@@ -25,9 +25,9 @@ TF2_NAMESPACE_BEGIN(::utils)
 class _empty_callclass { };
 
 template<typename _Ty>
-constexpr _empty_callclass* to_empty_class(const _Ty& cls) noexcept
+constexpr _empty_callclass* to_empty_class(const _Ty* cls) noexcept
 {
-    return std::bit_cast<_empty_callclass*>(&cls);
+    return std::bit_cast<_empty_callclass*>(const_cast<_Ty*>(cls));
 }
 
 enum class callconv_t : char

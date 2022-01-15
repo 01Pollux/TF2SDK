@@ -32,26 +32,26 @@ public:
 	const_reference operator=(const _Ty& o) { return (get_ref() = static_cast<const_reference>(o)); }
 
 
-#define UNKNOWNPROP_IMPL_OPERATOR(SYMBOL)								\
-	reference operator##SYMBOL##=(const UnknowProp& prop) noexcept		\
-	{																	\
-		get_ref() SYMBOL##= prop.get_ref();								\
-		return *this;													\
-	}																	\
-	template<typename _Ty>												\
-	reference operator##SYMBOL##=(const _Ty& o)	noexcept				\
-	{																	\
-		get_ref() SYMBOL##= static_cast<const_reference>(o);			\
-		return *this;													\
-	}																	\
-	type operator##SYMBOL(const UnknowProp& prop) const noexcept		\
-	{																	\
-		return get_ref() SYMBOL prop.get_ref();							\
-	}																	\
-	template<typename _Ty>												\
-	type operator##SYMBOL(const _Ty& o) const noexcept					\
-	{																	\
-		return get_ref() SYMBOL static_cast<const_reference>(o);		\
+#define UNKNOWNPROP_IMPL_OPERATOR(SYMBOL)											\
+	reference operator##SYMBOL##=(const UnknowProp& prop) noexcept					\
+	{																				\
+		get_ref() SYMBOL##= prop.get_ref();											\
+		return *this;																\
+	}																				\
+	template<typename _Ty>															\
+	reference operator##SYMBOL##=(const _Ty& o)	noexcept							\
+	{																				\
+		get_ref() SYMBOL##= static_cast<const_reference>(o);						\
+		return *this;																\
+	}																				\
+	[[nodiscard]] type operator##SYMBOL(const UnknowProp& prop) const noexcept		\
+	{																				\
+		return get_ref() SYMBOL prop.get_ref();										\
+	}																				\
+	template<typename _Ty>															\
+	[[nodiscard]] type operator##SYMBOL(const _Ty& o) const noexcept				\
+	{																				\
+		return get_ref() SYMBOL static_cast<const_reference>(o);					\
 	}
 
 	UNKNOWNPROP_IMPL_OPERATOR(+);
@@ -67,65 +67,57 @@ public:
 
 #undef UNKNOWNPROP_IMPL_OPERATOR
 
-	template<typename _Ty = type> _NODISCARD auto operator<=>(const _Ty& o) const noexcept	{ return get_ref() <=> static_cast<const_reference>(o); }
-	template<typename _Ty = type> _NODISCARD bool operator!=(const _Ty& o) const noexcept	{ return get_ref() != static_cast<const_reference>(o); }
+	template<typename _Ty = type> [[nodiscard]] auto operator<=>(const _Ty& o) const noexcept	{ return get_ref() <=> static_cast<const_reference>(o); }
+	template<typename _Ty = type> [[nodiscard]] bool operator!=(const _Ty& o) const noexcept	{ return get_ref() != static_cast<const_reference>(o); }
 
-	template<typename _Ty = type> _NODISCARD auto operator<=>(const UnknowProp<_Ty>& prop) const noexcept { return get_ref() <=> static_cast<const_reference>(prop.get_ref()); }
-	template<typename _Ty = type> _NODISCARD bool operator!=(const UnknowProp<_Ty>& prop) const noexcept { return get_ref() != static_cast<const_reference>(prop.get_ref()); }
+	template<typename _Ty = type> [[nodiscard]] auto operator<=>(const UnknowProp<_Ty>& prop) const noexcept { return get_ref() <=> static_cast<const_reference>(prop.get_ref()); }
+	template<typename _Ty = type> [[nodiscard]] bool operator!=(const UnknowProp<_Ty>& prop) const noexcept { return get_ref() != static_cast<const_reference>(prop.get_ref()); }
 
-	_NODISCARD auto operator+() const noexcept { return +this->get_ref(); }
-	_NODISCARD auto operator-() const noexcept { return -this->get_ref(); }
-	_NODISCARD auto operator~() const noexcept { return ~this->get_ref(); }
+	[[nodiscard]] auto operator+() const noexcept { return +this->get_ref(); }
+	[[nodiscard]] auto operator-() const noexcept { return -this->get_ref(); }
+	[[nodiscard]] auto operator~() const noexcept { return ~this->get_ref(); }
 
 	auto operator++()		{ return ++get_ref(); }
 	auto operator--()		{ return --get_ref(); }
 	auto operator++(int)	{ return get_ref()++; }
 	auto operator--(int)	{ return get_ref()--; }
 
-	_NODISCARD const_pointer operator&() const noexcept			{ return this->get_ptr(); }
-	_NODISCARD pointer operator&() noexcept						{ return this->get_ptr(); }
+	[[nodiscard]] const_pointer operator&() const noexcept			{ return this->get_ptr(); }
+	[[nodiscard]] pointer operator&() noexcept						{ return this->get_ptr(); }
 
-	_NODISCARD const_pointer operator->() const noexcept		{ return this->get_ptr(); }
-	_NODISCARD pointer operator->() noexcept					{ return this->get_ptr(); }
+	[[nodiscard]] const_pointer operator->() const noexcept		{ return this->get_ptr(); }
+	[[nodiscard]] pointer operator->() noexcept					{ return this->get_ptr(); }
 
-	_NODISCARD const auto& operator[](int i) const noexcept		{ return get_ref()[i]; }
-	_NODISCARD auto& operator[](int i) noexcept					{ return get_ref()[i]; }
+	[[nodiscard]] const auto& operator[](int i) const noexcept		{ return get_ref()[i]; }
+	[[nodiscard]] auto& operator[](int i) noexcept					{ return get_ref()[i]; }
 
-	_NODISCARD auto begin() const noexcept
+	[[nodiscard]] auto begin() const noexcept
 	{
-		constexpr bool has_begin = requires(const type& v) { std::begin(v); };
-
-		if constexpr (has_begin)
+		if constexpr (requires(const_reference v) { std::begin(v); })
 			return std::begin(get_ref());
 		else
 			return get_ptr();
 	}
 
-	_NODISCARD auto begin() noexcept
+	[[nodiscard]] auto begin() noexcept
 	{
-		constexpr bool has_begin = requires(const type& v) { std::begin(v); };
-
-		if constexpr (has_begin)
+		if constexpr (requires(const_reference v) { std::begin(v); })
 			return std::begin(get_ref());
 		else
 			return get_ptr();
 	}
 
-	_NODISCARD auto end() const noexcept
+	[[nodiscard]] auto end() const noexcept
 	{
-		constexpr bool has_end = requires(const type& v) { std::end(v); };
-
-		if constexpr (has_end)
+		if constexpr (requires(const_reference v) { std::end(v); })
 			return std::end(get_ref());
 		else
 			return get_ptr() + sizeof(type);
 	}
 
-	_NODISCARD auto end() noexcept
+	[[nodiscard]] auto end() noexcept
 	{
-		constexpr bool has_end = requires(const type& v) { std::end(v); };
-
-		if constexpr (has_end)
+		if constexpr (requires(const_reference v) { std::end(v); })
 			return std::end(get_ref());
 		else
 			return get_ptr() + sizeof(type);
@@ -133,46 +125,46 @@ public:
 
 	void set(const_reference o) noexcept { get_ref() = o; }
 
-	_NODISCARD reference get() noexcept				{ return get_ref(); }
-	_NODISCARD const_reference get() const noexcept { return get_ref(); }
+	[[nodiscard]] reference get() noexcept				{ return get_ref(); }
+	[[nodiscard]] const_reference get() const noexcept { return get_ref(); }
 
-	_NODISCARD pointer data() noexcept				{ return get_ptr(); }
-	_NODISCARD const_pointer data() const noexcept { return get_ptr(); }
+	[[nodiscard]] pointer data() noexcept				{ return get_ptr(); }
+	[[nodiscard]] const_pointer data() const noexcept { return get_ptr(); }
 
-	template<typename _OTy>	_NODISCARD _OTy get() const noexcept		{ return std::bit_cast<_OTy>(get_ref()); }
-	template<typename _OTy>	_NODISCARD _OTy* data() noexcept			{ return std::bit_cast<_OTy*>(get_ptr()); }
-	template<typename _OTy>	_NODISCARD const _OTy* data() const noexcept	{ return std::bit_cast<const _OTy*>(get_ptr()); }
+	template<typename _OTy>	[[nodiscard]] _OTy get() const noexcept		{ return std::bit_cast<_OTy>(get_ref()); }
+	template<typename _OTy>	[[nodiscard]] _OTy* data() noexcept			{ return std::bit_cast<_OTy*>(get_ptr()); }
+	template<typename _OTy>	[[nodiscard]] const _OTy* data() const noexcept	{ return std::bit_cast<const _OTy*>(get_ptr()); }
 
-	_NODISCARD const ptrdiff_t offset() const noexcept	{ return get_offset(); }
+	[[nodiscard]] const ptrdiff_t offset() const noexcept	{ return get_offset(); }
 
 	template<typename = std::enable_if_t<std::is_array_v<type>>>
-	_NODISCARD constexpr size_t size() const noexcept	{ return sizeof(type) / sizeof(std::remove_extent_t<type>); }
+	[[nodiscard]] constexpr size_t size() const noexcept	{ return sizeof(type) / sizeof(std::remove_extent_t<type>); }
 
-	uintptr_t get_this() const noexcept					{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
-	uintptr_t get_this() noexcept						{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
+	[[nodiscard]] uintptr_t get_this() const noexcept					{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
+	[[nodiscard]] uintptr_t get_this() noexcept						{ return std::bit_cast<uintptr_t>(this) - _TypeInfo::offset_to_this(); }
 
 private:
-	pointer get_ptr() noexcept
+	[[nodiscard]] pointer get_ptr() noexcept
 	{
 		return std::bit_cast<pointer>(get_this() + get_offset());
 	}
 
-	const_pointer get_ptr() const noexcept
+	[[nodiscard]] const_pointer get_ptr() const noexcept
 	{
 		return std::bit_cast<const_pointer>(get_this() + get_offset());
 	}
 
-	reference get_ref() noexcept
+	[[nodiscard]] reference get_ref() noexcept
 	{
 		return *get_ptr();
 	}
 
-	const_reference get_ref() const noexcept
+	[[nodiscard]] const_reference get_ref() const noexcept
 	{
 		return *get_ptr();
 	}
 
-	uint32_t get_offset() const noexcept
+	[[nodiscard]] uint32_t get_offset() const noexcept
 	{
 		if constexpr (_TypeInfo::use_this_ptr)
 		{
@@ -198,11 +190,11 @@ struct TypeInfo_##CustomName##Class													\
 	{																				\
 		return offsetof(Class, CustomName);											\
 	}																				\
-	static uint32_t offset_to_prop() noexcept										\
+	[[nodiscard]] static uint32_t offset_to_prop() noexcept							\
 	{																				\
 		return GETTER + EXTRA;														\
 	}																				\
-	static uint32_t offset_to_prop(uintptr_t) noexcept								\
+	[[nodiscard]] static uint32_t offset_to_prop(uintptr_t) noexcept				\
 	{																				\
 		return 0;																	\
 	}																				\
@@ -222,11 +214,11 @@ struct TypeInfo_##CustomName##Class													\
 	{																				\
 		return offsetof(Class, CustomName);											\
 	}																				\
-	static uint32_t offset_to_prop() noexcept										\
+	[[nodiscard]] static uint32_t offset_to_prop() noexcept							\
 	{																				\
 		return 0;																	\
 	}																				\
-	static uint32_t offset_to_prop(uintptr_t pthis) noexcept						\
+	[[nodiscard]] static uint32_t offset_to_prop(uintptr_t pthis) noexcept			\
 	{																				\
 		return GETTER + EXTRA;														\
 	}																				\

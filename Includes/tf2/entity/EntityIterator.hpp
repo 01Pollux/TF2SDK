@@ -20,8 +20,8 @@ namespace Impl::EntityIterator
 		const_iterator(unsigned short first_idx = static_cast<unsigned short>(-1)) noexcept :
 			m_CurrentIndex(first_idx) { }
 
-		PX_SDK_TF2 _NODISCARD reference operator*() const;
-		_NODISCARD pointer operator->() const
+		[[nodiscard]] PX_SDK_TF2 reference operator*() const;
+		[[nodiscard]] pointer operator->() const
 		{
 			return &(**this);
 		}
@@ -42,12 +42,12 @@ namespace Impl::EntityIterator
 			return tmp;
 		}
 
-		_NODISCARD bool operator==(const const_iterator& right) const noexcept
+		[[nodiscard]] bool operator==(const const_iterator& right) const noexcept
 		{
 			return this->m_CurrentIndex == right.m_CurrentIndex;
 		}
 
-		_NODISCARD bool operator!=(const const_iterator& right) const noexcept
+		[[nodiscard]] bool operator!=(const const_iterator& right) const noexcept
 		{
 			return !(*this == right);
 		}
@@ -68,8 +68,8 @@ namespace Impl::EntityIterator
 		iterator(unsigned short first_idx = static_cast<unsigned short>(-1)) noexcept :
 			m_CurrentIndex(first_idx) { }
 
-		PX_SDK_TF2 _NODISCARD reference operator*() const;
-		_NODISCARD pointer operator->() const
+		[[nodiscard]] PX_SDK_TF2 reference operator*() const;
+		[[nodiscard]] pointer operator->() const
 		{
 			return &(**this);
 		}
@@ -90,12 +90,12 @@ namespace Impl::EntityIterator
 			return tmp;
 		}
 
-		_NODISCARD bool operator==(const iterator& right) const noexcept
+		[[nodiscard]] bool operator==(const iterator& right) const noexcept
 		{
 			return this->m_CurrentIndex == right.m_CurrentIndex;
 		}
 
-		_NODISCARD bool operator!=(const iterator& right) const noexcept
+		[[nodiscard]] bool operator!=(const iterator& right) const noexcept
 		{
 			return !(*this == right);
 		}
@@ -116,45 +116,45 @@ public:
 	using reverse_iterator = Impl::EntityIterator::reverse_iterator;
 	using const_reverse_iterator = Impl::EntityIterator::const_reverse_iterator;
 
-	PX_SDK_TF2 const_iterator begin() const;
-	const_iterator end() const
+	[[nodiscard]] PX_SDK_TF2 const_iterator begin() const;
+	[[nodiscard]] const_iterator end() const
 	{
 		return const_iterator();
 	}
 
-	const_iterator cbegin() const
+	[[nodiscard]] const_iterator cbegin() const
 	{
 		return begin();
 	}
-	const_iterator cend() const
+	[[nodiscard]] const_iterator cend() const
 	{
 		return end();
 	}
 
-	PX_SDK_TF2 iterator begin();
-	iterator end()
+	[[nodiscard]] PX_SDK_TF2 iterator begin();
+	[[nodiscard]] iterator end()
 	{
 		return iterator();
 	}
 
-	PX_SDK_TF2 const_reverse_iterator rbegin() const;
-	const_reverse_iterator rend() const
+	[[nodiscard]] PX_SDK_TF2 const_reverse_iterator rbegin() const;
+	[[nodiscard]] const_reverse_iterator rend() const
 	{
 		return const_reverse_iterator(begin());
 	}
 
-	const_reverse_iterator crbegin() const
+	[[nodiscard]] const_reverse_iterator crbegin() const
 	{
 		return rbegin();
 	}
 
-	const_reverse_iterator crend() const
+	[[nodiscard]] const_reverse_iterator crend() const
 	{
 		return rend();
 	}
 
-	PX_SDK_TF2 reverse_iterator rbegin();
-	reverse_iterator rend()
+	[[nodiscard]] PX_SDK_TF2 reverse_iterator rbegin();
+	[[nodiscard]] reverse_iterator rend()
 	{
 		return reverse_iterator(begin());
 	}

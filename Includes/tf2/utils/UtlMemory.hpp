@@ -17,63 +17,73 @@ public:
 	static constexpr int GrowType_Internal = 0;
 	static constexpr int GrowType_External_Const = -1;
 	static constexpr int GrowType_External_Mutable = -2;
+	using value_type = _Ty;
+
+	using reference = value_type&;
+	using const_reference = const value_type&;
+
+	using pointer = value_type*;
+	using const_pointer = const value_type*;
+
+	using iterator = pointer;
+	using const_iterator = const_pointer;
 
 	// constructor, destructor
 	UtlMemory(int nGrowSize = GrowType_Internal, uint32_t nInitSize = 0);
-	UtlMemory(_Ty* pMemory, uint32_t numElements);
-	UtlMemory(const _Ty* pMemory, uint32_t numElements);
+	UtlMemory(pointer pMemory, uint32_t numElements);
+	UtlMemory(const_pointer pMemory, uint32_t numElements);
 	~UtlMemory();
 
 	// Set the capacity by which the memory grows
 	void init(int nGrowSize = GrowType_Internal, uint32_t nInitSize = 0);
 
-	class Iterator_t
+	class iterator_t
 	{
 	public:
-		Iterator_t(_IterTy _IterTy) : index(_IterTy) { }
+		iterator_t(_IterTy _IterTy) : index(_IterTy) { }
 		_IterTy index;
 
-		bool operator==(const Iterator_t it) const { return index == it.index; }
-		bool operator!=(const Iterator_t it) const { return index != it.index; }
+		bool operator==(const iterator_t it) const { return index == it.index; }
+		bool operator!=(const iterator_t it) const { return index != it.index; }
 	};
-	Iterator_t first() const { return Iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
-	Iterator_t next(const Iterator_t& it) const { return Iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
-	_IterTy get_index(const Iterator_t& it) const { return it.index; }
-	bool is_index_after(_IterTy _IterTy, const Iterator_t& it) const { return _IterTy > it.index; }
-	bool is_valid_iterator(const Iterator_t& it) const { return is_valid_index(it.index); }
-	Iterator_t invalid_iterator() const { return Iterator_t(invalid_index()); }
+	[[nodiscard]] iterator_t first() const { return iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
+	[[nodiscard]] iterator_t next(const iterator_t& it) const { return iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
+	[[nodiscard]] _IterTy get_index(const iterator_t& it) const { return it.index; }
+	[[nodiscard]] bool is_index_after(_IterTy _IterTy, const iterator_t& it) const { return _IterTy > it.index; }
+	[[nodiscard]] bool is_valid_iterator(const iterator_t& it) const { return is_valid_index(it.index); }
+	[[nodiscard]] iterator_t invalid_iterator() const { return iterator_t(invalid_index()); }
 
 	// element access
-	_Ty& operator[](_IterTy _IterTy);
-	const _Ty& operator[](_IterTy _IterTy) const;
-	_Ty& at(_IterTy _IterTy);
-	const _Ty& at(_IterTy _IterTy) const;
+	[[nodiscard]] reference operator[](_IterTy _IterTy);
+	[[nodiscard]] const_reference operator[](_IterTy _IterTy) const;
+	[[nodiscard]] reference at(_IterTy _IterTy);
+	[[nodiscard]] const_reference at(_IterTy _IterTy) const;
 
 	// Can we use this index?
-	bool is_valid_index(_IterTy _IterTy) const;
+	[[nodiscard]] bool is_valid_index(_IterTy _IterTy) const;
 
 	// Specify the invalid ('null') index that we'll only return on failure
-	static _IterTy invalid_index() { return static_cast<_IterTy>(-1); }
+	[[nodiscard]] static _IterTy invalid_index() { return static_cast<_IterTy>(-1); }
 
 	// Gets the base address (can change when adding elements!)
-	_Ty* data();
-	const _Ty* data() const;
+	[[nodiscard]] pointer data();
+	[[nodiscard]] const_pointer data() const;
 
 	// Attaches the buffer to external memory....
-	void set_external_buffer(_Ty* pMemory, uint32_t numElements);
-	void set_external_buffer(const _Ty* pMemory, uint32_t numElements);
+	void set_external_buffer(pointer pMemory, uint32_t numElements);
+	void set_external_buffer(const_pointer pMemory, uint32_t numElements);
 	// Takes ownership of the passed memory, including freeing it when this buffer is destroyed.
-	void take_ownership(_Ty* pMemory, uint32_t nSize);
+	void take_ownership(pointer pMemory, uint32_t nSize);
 
 	// Fast swap
-	void swap(UtlMemory< _Ty, _IterTy >& mem);
+	void swap(UtlMemory& mem);
 
 	// Switches the buffer from an external memory buffer to a reallocatable buffer
 	// Will copy the current contents of the external buffer to the reallocatable buffer
 	void convert_to_growable(uint32_t nGrowSize);
 
 	// Size
-	uint32_t capacity() const;
+	[[nodiscard]] uint32_t capacity() const;
 
 	// Grows the memory, so that at least allocated + num elements are allocated
 	void grow_by(uint32_t num = 1);
@@ -88,16 +98,16 @@ public:
 	void destroy(uint32_t numElements);
 
 	// is the memory externally allocated?
-	bool is_external() const;
+	[[nodiscard]] bool is_external() const;
 
 	// is the memory read only?
-	bool is_read_only() const;
+	[[nodiscard]] bool is_read_only() const;
 
 	// Set the capacity by which the memory grows
 	void set_grow_size(int capacity);
 
 protected:
-	_Ty* m_Memory;
+	pointer m_Memory;
 	uint32_t m_AllocationCount;
 	int m_GrowSize;
 };
@@ -107,13 +117,13 @@ protected:
 // The UtlMemory class:
 // A growable memory class which doubles in capacity by default.
 //-----------------------------------------------------------------------------
-template<class _Ty, uint32_t SIZE, class _IterTy = uint32_t>
+template<class _Ty, uint32_t _Size, class _IterTy = uint32_t>
 class UtlMemoryFixedGrowable : public UtlMemory< _Ty, _IterTy >
 {
-	typedef UtlMemory< _Ty, _IterTy > BaseClass;
-
 public:
-	UtlMemoryFixedGrowable(uint32_t nGrowSize = 0, uint32_t nInitSize = SIZE) : BaseClass(m_FixedMemory, SIZE)
+	using base_class = UtlMemory<_Ty, _IterTy>;
+
+	UtlMemoryFixedGrowable(uint32_t nGrowSize = 0, uint32_t nInitSize = _Size) : base_class(m_FixedMemory, _Size)
 	{
 		m_MallocGrowSize = nGrowSize;
 	}
@@ -124,12 +134,12 @@ public:
 		{
 			this->convert_to_growable(m_MallocGrowSize);
 		}
-		BaseClass::grow_by(nCount);
+		base_class::grow_by(nCount);
 	}
 
 	void reserve(uint32_t num)
 	{
-		if (UtlMemory<_Ty>::m_AllocationCount >= num)
+		if (base_class::m_AllocationCount >= num)
 			return;
 
 		if (this->is_external())
@@ -138,50 +148,61 @@ public:
 			this->convert_to_growable(m_MallocGrowSize);
 		}
 
-		BaseClass::reserve(num);
+		base_class::reserve(num);
 	}
 
 private:
 	uint32_t m_MallocGrowSize;
-	_Ty m_FixedMemory[SIZE];
+	base_class::value_type m_FixedMemory[_Size];
 };
 
 //-----------------------------------------------------------------------------
 // The UtlMemoryFixed class:
 // A fixed memory class
 //-----------------------------------------------------------------------------
-template< typename _Ty, uint32_t SIZE, uint32_t nAlignment = 0>
+template< typename _Ty, uint32_t _Size, uint32_t _Alignment = 0>
 class UtlMemoryFixed
 {
 public:
+	using value_type = _Ty;
+
+	using reference = value_type&;
+	using const_reference = const value_type&;
+
+	using pointer = value_type*;
+	using const_pointer = const value_type*;
+
+	using iterator = pointer;
+	using const_iterator = const_pointer;
+
 	// constructor, destructor
 	UtlMemoryFixed(uint32_t nGrowSize = 0, uint32_t nInitSize = 0) { }
-	UtlMemoryFixed(_Ty* pMemory, uint32_t numElements) { }
+	UtlMemoryFixed(pointer pMemory, uint32_t numElements) { }
 
 	// Can we use this index?
 	// Use unsigned math to improve performance
-	bool is_valid_index(uint32_t _IterTy) const { return (uint32_t)_IterTy < SIZE; }
+	[[nodiscard]] bool is_valid_index(uint32_t _IterTy) const { return (uint32_t)_IterTy < _Size; }
 
 	// Specify the invalid ('null') index that we'll only return on failure
 	static const uint32_t INVALID_INDEX = -1; // For use with COMPILE_TIME_ASSERT
 	static uint32_t invalid_index() { return INVALID_INDEX; }
 
 	// Gets the base address
-	_Ty* data() { if (nAlignment == 0) return (_Ty*)(&m_Memory[0]); else return (_Ty*)AlignValue(&m_Memory[0], nAlignment); }
-	const _Ty* data() const { if (nAlignment == 0) return (_Ty*)(&m_Memory[0]); else return (_Ty*)AlignValue(&m_Memory[0], nAlignment); }
+	[[nodiscard]] pointer data() { if (_Alignment == 0) return (pointer)(&m_Memory[0]); else return (pointer)AlignValue(&m_Memory[0], _Alignment); }
+	[[nodiscard]] const_pointer data() const { if (_Alignment == 0) return (pointer)(&m_Memory[0]); else return (pointer)AlignValue(&m_Memory[0], _Alignment); }
 
 	// element access
 	// Use unsigned math and inlined checks to improve performance.
-	_Ty& operator[](uint32_t _IterTy) { return data()[_IterTy]; }
-	const _Ty& operator[](uint32_t _IterTy) const { return data()[_IterTy]; }
-	_Ty& at(uint32_t _IterTy) { return data()[_IterTy]; }
-	const _Ty& at(uint32_t _IterTy) const { return data()[_IterTy]; }
+	[[nodiscard]] reference operator[](uint32_t _IterTy) { return data()[_IterTy]; }
+	[[nodiscard]] const_reference operator[](uint32_t _IterTy) const { return data()[_IterTy]; }
+	[[nodiscard]] reference at(uint32_t _IterTy) { return data()[_IterTy]; }
+	[[nodiscard]] const_reference at(uint32_t _IterTy) const { return data()[_IterTy]; }
 
 	// Attaches the buffer to external memory....
-	void set_external_buffer(_Ty* pMemory, uint32_t numElements) { }
+	void set_external_buffer(pointer pMemory, uint32_t numElements) { }
 
 	// Size
-	uint32_t capacity() const { return SIZE; }
+	[[nodiscard]] uint32_t capacity() const { return _Size; }
 
 	// Grows the memory, so that at least allocated + num elements are allocated
 	void grow_by(uint32_t num = 1) { }
@@ -196,28 +217,28 @@ public:
 	void destroy(uint32_t numElements) { }
 
 	// is the memory externally allocated?
-	bool is_external() const { return false; }
+	[[nodiscard]] bool is_external() const { return false; }
 
 	// Set the capacity by which the memory grows
 	void set_grow_size(uint32_t capacity) { }
 
-	class Iterator_t
+	class iterator_t
 	{
 	public:
-		Iterator_t(uint32_t _IterTy) : index(_IterTy) { }
+		iterator_t(uint32_t _IterTy) : index(_IterTy) { }
 		uint32_t index;
-		bool operator==(const Iterator_t it) const { return index == it.index; }
-		bool operator!=(const Iterator_t it) const { return index != it.index; }
+		bool operator==(const iterator_t it) const { return index == it.index; }
+		bool operator!=(const iterator_t it) const { return index != it.index; }
 	};
-	Iterator_t first() const { return Iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
-	Iterator_t next(const Iterator_t& it) const { return Iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
-	uint32_t get_index(const Iterator_t& it) const { return it.index; }
-	bool is_index_after(uint32_t _IterTy, const Iterator_t& it) const { return _IterTy > it.index; }
-	bool is_valid_iterator(const Iterator_t& it) const { return is_valid_index(it.index); }
-	Iterator_t invalid_iterator() const { return Iterator_t(invalid_index()); }
+	[[nodiscard]] iterator_t first() const { return iterator_t(is_valid_index(0) ? 0 : invalid_index()); }
+	[[nodiscard]] iterator_t next(const iterator_t& it) const { return iterator_t(is_valid_index(it.index + 1) ? it.index + 1 : invalid_index()); }
+	[[nodiscard]] uint32_t get_index(const iterator_t& it) const { return it.index; }
+	[[nodiscard]] bool is_index_after(uint32_t _IterTy, const iterator_t& it) const { return _IterTy > it.index; }
+	[[nodiscard]] bool is_valid_iterator(const iterator_t& it) const { return is_valid_index(it.index); }
+	[[nodiscard]] iterator_t invalid_iterator() const { return iterator_t(invalid_index()); }
 
 private:
-	char m_Memory[SIZE * sizeof(_Ty) + nAlignment];
+	char m_Memory[_Size * sizeof(value_type) + _Alignment];
 };
 
 #if defined(POSIX)
@@ -238,11 +259,11 @@ UtlMemory<_Ty, _IterTy>::UtlMemory(int nGrowSize, uint32_t nInitAllocationCount)
 m_AllocationCount(nInitAllocationCount), m_GrowSize(nGrowSize)
 {
 	if (m_AllocationCount)
-		m_Memory = (_Ty*)malloc(m_AllocationCount * sizeof(_Ty));
+		m_Memory = (pointer)malloc(m_AllocationCount * sizeof(value_type));
 }
 
 template<class _Ty, class _IterTy>
-UtlMemory<_Ty, _IterTy>::UtlMemory(_Ty* pMemory, uint32_t numElements) : m_Memory(pMemory),
+UtlMemory<_Ty, _IterTy>::UtlMemory(pointer pMemory, uint32_t numElements) : m_Memory(pMemory),
 m_AllocationCount(numElements)
 {
 	// Special marker indicating externally supplied modifyable memory
@@ -250,7 +271,7 @@ m_AllocationCount(numElements)
 }
 
 template<class _Ty, class _IterTy>
-UtlMemory<_Ty, _IterTy>::UtlMemory(const _Ty* pMemory, uint32_t numElements) : m_Memory((_Ty*)pMemory),
+UtlMemory<_Ty, _IterTy>::UtlMemory(const_pointer pMemory, uint32_t numElements) : m_Memory((pointer)pMemory),
 m_AllocationCount(numElements)
 {
 	// Special marker indicating externally supplied modifyable memory
@@ -272,7 +293,7 @@ void UtlMemory<_Ty, _IterTy>::init(int nGrowSize /*= 0*/, uint32_t nInitSize /*=
 	m_AllocationCount = nInitSize;
 	if (m_AllocationCount)
 	{
-		m_Memory = (_Ty*)malloc(m_AllocationCount * sizeof(_Ty));
+		m_Memory = static_cast<pointer>(malloc(m_AllocationCount * sizeof(value_type)));
 	}
 }
 
@@ -300,14 +321,14 @@ void UtlMemory<_Ty, _IterTy>::convert_to_growable(uint32_t nGrowSize)
 	m_GrowSize = nGrowSize;
 	if (m_AllocationCount)
 	{
-		uint32_t nNumBytes = m_AllocationCount * sizeof(_Ty);
-		_Ty* pMemory = (_Ty*)malloc(nNumBytes);
-		memcpy((void*)pMemory, (void*)m_Memory, nNumBytes);
+		uint32_t nNumBytes = m_AllocationCount * sizeof(value_type);
+		pointer pMemory = static_cast<pointer>(malloc(nNumBytes));
+		std::memcpy(pMemory, m_Memory, nNumBytes);
 		m_Memory = pMemory;
 	}
 	else
 	{
-		m_Memory = NULL;
+		m_Memory = nullptr;
 	}
 }
 
@@ -316,7 +337,7 @@ void UtlMemory<_Ty, _IterTy>::convert_to_growable(uint32_t nGrowSize)
 // Attaches the buffer to external memory....
 //-----------------------------------------------------------------------------
 template<class _Ty, class _IterTy>
-void UtlMemory<_Ty, _IterTy>::set_external_buffer(_Ty* pMemory, uint32_t numElements)
+void UtlMemory<_Ty, _IterTy>::set_external_buffer(pointer pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
 	destroy();
@@ -329,12 +350,12 @@ void UtlMemory<_Ty, _IterTy>::set_external_buffer(_Ty* pMemory, uint32_t numElem
 }
 
 template<class _Ty, class _IterTy>
-void UtlMemory<_Ty, _IterTy>::set_external_buffer(const _Ty* pMemory, uint32_t numElements)
+void UtlMemory<_Ty, _IterTy>::set_external_buffer(const_pointer pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
 	destroy();
 
-	m_Memory = const_cast<_Ty*>(pMemory);
+	m_Memory = const_cast<pointer>(pMemory);
 	m_AllocationCount = numElements;
 
 	// Indicate that we don'_Ty own the memory
@@ -342,7 +363,7 @@ void UtlMemory<_Ty, _IterTy>::set_external_buffer(const _Ty* pMemory, uint32_t n
 }
 
 template<class _Ty, class _IterTy>
-void UtlMemory<_Ty, _IterTy>::take_ownership(_Ty* pMemory, uint32_t numElements)
+void UtlMemory<_Ty, _IterTy>::take_ownership(pointer pMemory, uint32_t numElements)
 {
 	// Blow away any existing allocated memory
 	destroy();
@@ -357,27 +378,27 @@ void UtlMemory<_Ty, _IterTy>::take_ownership(_Ty* pMemory, uint32_t numElements)
 // element access
 //-----------------------------------------------------------------------------
 template<class _Ty, class _IterTy>
-inline _Ty& UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy)
+inline UtlMemory<_Ty, _IterTy>::reference UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy)
 {
-	return m_Memory[(uint32_t)_IterTy];
+	return m_Memory[_IterTy];
 }
 
 template<class _Ty, class _IterTy>
-inline const _Ty& UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy) const
+inline UtlMemory<_Ty, _IterTy>::const_reference UtlMemory<_Ty, _IterTy>::operator[](_IterTy _IterTy) const
 {
-	return m_Memory[(uint32_t)_IterTy];
+	return m_Memory[_IterTy];
 }
 
 template<class _Ty, class _IterTy>
-inline _Ty& UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy)
+inline UtlMemory<_Ty, _IterTy>::reference UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy)
 {
-	return m_Memory[(uint32_t)_IterTy];
+	return m_Memory[_IterTy];
 }
 
 template<class _Ty, class _IterTy>
-inline const _Ty& UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy) const
+inline UtlMemory<_Ty, _IterTy>::const_reference UtlMemory<_Ty, _IterTy>::at(_IterTy _IterTy) const
 {
-	return m_Memory[(uint32_t)_IterTy];
+	return m_Memory[_IterTy];
 }
 
 
@@ -412,13 +433,13 @@ void UtlMemory<_Ty, _IterTy>::set_grow_size(int nSize)
 // Gets the base address (can change when adding elements!)
 //-----------------------------------------------------------------------------
 template<class _Ty, class _IterTy>
-inline _Ty* UtlMemory<_Ty, _IterTy>::data()
+inline UtlMemory<_Ty, _IterTy>::pointer UtlMemory<_Ty, _IterTy>::data()
 {
 	return m_Memory;
 }
 
 template<class _Ty, class _IterTy>
-inline const _Ty* UtlMemory<_Ty, _IterTy>::data() const
+inline UtlMemory<_Ty, _IterTy>::const_pointer UtlMemory<_Ty, _IterTy>::data() const
 {
 	return m_Memory;
 }
@@ -443,7 +464,7 @@ inline bool UtlMemory<_Ty, _IterTy>::is_valid_index(_IterTy _IterTy) const
 	// If we always cast '_IterTy' and 'm_AllocationCount' to unsigned then we can
 	// do our range checking with a single comparison instead of two. This gives
 	// a modest speedup in debug builds.
-	return (uint32_t)_IterTy < m_AllocationCount;
+	return static_cast<uint32_t>(_IterTy) < m_AllocationCount;
 }
 
 template<class _Ty, class _IterTy>
@@ -479,30 +500,30 @@ void UtlMemory<_Ty, _IterTy>::grow_by(uint32_t num)
 
 		return nAllocationCount;
 	};
-	uint32_t nNewAllocationCount = calc_new_alloc_count(m_AllocationCount, static_cast<uint32_t>(m_GrowSize), nAllocationRequested, sizeof(_Ty));
+	uint32_t nNewAllocationCount = calc_new_alloc_count(m_AllocationCount, static_cast<uint32_t>(m_GrowSize), nAllocationRequested, sizeof(value_type));
 
 	// if m_nAllocationRequested wraps index type _IterTy, recalculate
-	if ((uint32_t)(_IterTy)nNewAllocationCount < nAllocationRequested)
+	if (static_cast<uint32_t>(nNewAllocationCount) < nAllocationRequested)
 	{
-		if ((uint32_t)(_IterTy)nNewAllocationCount == 0 && (uint32_t)(_IterTy)(nNewAllocationCount - 1) >= nAllocationRequested)
+		if (static_cast<uint32_t>(nNewAllocationCount) == 0 && static_cast<uint32_t>(nNewAllocationCount - 1) >= nAllocationRequested)
 		{
 			--nNewAllocationCount; // deal w/ the common case of m_AllocationCount == MAX_USHORT + 1
 		}
 		else
 		{
-			if ((uint32_t)(_IterTy)nAllocationRequested != nAllocationRequested)
+			if (static_cast<uint32_t>(nAllocationRequested) != nAllocationRequested)
 			{
 				// we've been asked to grow memory to a capacity s._Ty. the index type can'_Ty address the requested amount of memory
 				return;
 			}
-			while ((uint32_t)(_IterTy)nNewAllocationCount < nAllocationRequested)
+			while (static_cast<uint32_t>(nNewAllocationCount) < nAllocationRequested)
 			{
 				nNewAllocationCount = (nNewAllocationCount + nAllocationRequested) / 2;
 			}
 		}
 	}
 
-	if (_Ty* mem = (_Ty*)realloc(m_Memory, nNewAllocationCount * sizeof(_Ty)))
+	if (pointer mem = static_cast<pointer>(std::realloc(m_Memory, nNewAllocationCount * sizeof(value_type))))
 	{
 		m_Memory = mem;
 		m_AllocationCount = nNewAllocationCount;
@@ -525,7 +546,7 @@ inline void UtlMemory<_Ty, _IterTy>::reserve(uint32_t num)
 		return;
 	}
 
-	if (_Ty* mem = std::bit_cast<_Ty*>(realloc(m_Memory, num * sizeof(_Ty))))
+	if (pointer mem = static_cast<pointer>(std::realloc(m_Memory, num * sizeof(value_type))))
 	{
 		m_Memory = mem;
 		m_AllocationCount = num;
@@ -585,7 +606,7 @@ void UtlMemory<_Ty, _IterTy>::destroy(uint32_t numElements)
 		return;
 	}
 
-	if (_Ty* mem = realloc(m_Memory, numElements * sizeof(_Ty)))
+	if (pointer mem = static_cast<pointer>(std::realloc(m_Memory, numElements * sizeof(value_type))))
 	{
 		m_Memory = mem;
 		m_AllocationCount = numElements;

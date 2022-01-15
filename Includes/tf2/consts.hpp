@@ -2,7 +2,6 @@
 
 #include <tf2/config.hpp>
 
-
 TF2_NAMESPACE_BEGIN(::Const);
 
 // the message a server sends when a clients steam login is expired
@@ -375,7 +374,7 @@ namespace EntSolidFlags
 	constexpr uint32_t Trigger_Touch_Debris		= 0x0200;
 };
 
-constexpr bool IsSolidType(EntSolidType solidType, uint32_t solidFlags)
+[[nodiscard]] constexpr bool IsSolidType(EntSolidType solidType, uint32_t solidFlags) noexcept
 {
 	return (solidType != EntSolidType::None) && (solidFlags & ~EntSolidFlags::Not_Solid);
 }

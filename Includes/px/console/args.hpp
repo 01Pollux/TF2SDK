@@ -18,7 +18,7 @@ public:
         static constexpr bool has_lexial_cast = false;
     };
 
-    static _NODISCARD auto from_string(const std::string_view& value, const char* delimiters = "[{,}]")
+    [[nodiscard]] static auto from_string(const std::string_view& value, const char* delimiters = "[{,}]")
     {
         if constexpr (typeinfo::has_lexial_cast)
         {
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    static _NODISCARD std::string to_string(const _Ty& value, const char delimiters[3] = "{,}")
+    [[nodiscard]] static std::string to_string(const _Ty& value, const char delimiters[3] = "{,}")
     {
         if constexpr (typeinfo::has_lexial_cast)
         {
@@ -86,10 +86,10 @@ public:
 class CommandArgs
 {
 public:
-	CommandArgs(std::vector<std::pair<std::string_view, std::string_view>>&& argv, const std::string_view& value) :
+	CommandArgs(std::vector<std::pair<std::string_view, std::string_view>>&& argv, const std::string_view& value) noexcept :
 		m_ArgV(std::move(argv)), m_Value(value) { }
 
-	bool contains(const std::string_view& arg_name) const noexcept
+	[[nodiscard]] bool contains(const std::string_view& arg_name) const noexcept
 	{
 		for (auto& arg_val : m_ArgV)
 			if (arg_name == arg_val.first)
@@ -97,7 +97,7 @@ public:
 		return false;
 	}
 
-	bool contains(const std::string_view& arg_name)
+    [[nodiscard]] bool contains(const std::string_view& arg_name)
 	{
 		for (auto& arg_val : m_ArgV)
 		{
@@ -108,7 +108,7 @@ public:
 	}
 
 	template<typename _Ty = std::string_view>
-	decltype(auto) get_arg(
+    [[nodiscard]] decltype(auto) get_arg(
 		const std::string_view& arg_name,
 		const _Ty& default_value = { },
         const char* delimiters = "[{,}]"
@@ -129,18 +129,18 @@ public:
 		return _Ty(default_value);
 	}
 
-	size_t arg_size() const noexcept
+    [[nodiscard]] size_t arg_size() const noexcept
 	{
 		return m_ArgV.size();
 	}
 
-	size_t has_args() const noexcept
+    [[nodiscard]] size_t has_args() const noexcept
 	{
 		return !m_ArgV.empty();
 	}
 
 	template<typename _Ty = std::string_view>
-	decltype(auto) get_val(
+    [[nodiscard]] decltype(auto) get_val(
 		const _Ty& default_value = { },
         const char* delimiters = "[{,}]"
 	) const
@@ -153,12 +153,12 @@ public:
             return !has_val() ? default_value : CommandParser<_Ty>::from_string(m_Value, delimiters);
 	}
 
-	size_t val_size() const noexcept
+    [[nodiscard]] size_t val_size() const noexcept
 	{
 		return m_Value.size();
 	}
 
-	size_t has_val() const noexcept
+    [[nodiscard]] size_t has_val() const noexcept
 	{
 		return val_size() > 0;
 	}

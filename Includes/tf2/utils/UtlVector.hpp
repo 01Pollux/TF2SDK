@@ -12,7 +12,6 @@ public:
 	static constexpr bool IsUtlVector = true;
 };
 
-
 //-----------------------------------------------------------------------------
 // The UtlVector class:
 // _AllocTy growable array class which doubles in size by default.
@@ -24,11 +23,20 @@ public:
 template<class _Ty, class _AllocTy = UtlMemory<_Ty>>
 class UtlVector : public UtlBaseVector
 {
-	using allocator_type = _AllocTy;
 public:
+	using allocator_type = std::allocator<_Ty>;
+	using allocator_traits = std::allocator_traits<allocator_type>;
+
 	using value_type = _Ty;
-	using iterator = _Ty*;
-	using const_iterator = const _Ty*;
+
+	using reference = value_type&;
+	using const_reference = const value_type&;
+
+	using pointer = value_type*;
+	using const_pointer = const value_type*;
+
+	using iterator = pointer;
+	using const_iterator = const_pointer;
 
 	// Set the growth policy and initial capacity. size will always be zero. This is different from std::vector
 	// where the constructor sets count as well as capacity.
@@ -37,7 +45,7 @@ public:
 
 	// Initialize with separately allocated buffer, setting the capacity and count.
 	// The container will not be growable.
-	UtlVector(_Ty* pMemory, uint32_t initialCapacity, uint32_t initialCount = 0);
+	UtlVector(pointer pMemory, uint32_t initialCapacity, uint32_t initialCount = 0);
 	~UtlVector();
 
 	// Copy the array.
@@ -45,58 +53,61 @@ public:
 	UtlVector(const UtlVector&) = delete;
 
 	// element access
-	_Ty& operator[](uint32_t i);
-	const _Ty& operator[](uint32_t i) const;
-	_Ty& at(uint32_t i);
-	const _Ty& at(uint32_t i) const;
-	_Ty& head();
-	const _Ty& head() const;
-	_Ty& tail();
-	const _Ty& tail() const;
+	[[nodiscard]] reference operator[](uint32_t i);
+	[[nodiscard]] const_reference operator[](uint32_t i) const;
+
+	[[nodiscard]] reference at(uint32_t i);
+	[[nodiscard]] const_reference at(uint32_t i) const;
+
+	[[nodiscard]] reference head();
+	[[nodiscard]] const_reference head() const;
+
+	[[nodiscard]] reference tail();
+	[[nodiscard]] const_reference tail() const;
 
 	// STL compatible member functions. These allow easier use of std::sort
 	// and they are forward compatible with the C++ 11 range-based for loops.
-	iterator begin() { return data(); }
-	const_iterator begin() const { return data(); }
-	iterator end() { return data() + size(); }
-	const_iterator end() const { return data() + size(); }
+	[[nodiscard]] iterator begin()				  { return data(); }
+	[[nodiscard]] const_iterator begin()	const { return data(); }
+	[[nodiscard]] iterator end()				  { return data() + size(); }
+	[[nodiscard]] const_iterator end()		const { return data() + size(); }
 
 	// Gets the base address (can change when adding elements!)
-	_Ty* data() { return m_Memory.data(); }
-	const _Ty* data() const { return m_Memory.data(); }
+	[[nodiscard]] pointer data() { return m_Memory.data(); }
+	[[nodiscard]] const_pointer data() const { return m_Memory.data(); }
 
 	// Returns the number of elements in the vector
-	uint32_t size() const;
+	[[nodiscard]] uint32_t size() const;
 
 	/// are there no elements? For compatibility with lists.
-	inline bool is_empty() const
+	[[nodiscard]] bool is_empty() const
 	{
 		return (size() == 0);
 	}
 
 	// Is element index valid?
-	bool is_valid_index(uint32_t i) const;
-	static uint32_t invalid_index();
+	[[nodiscard]] bool is_valid_index(uint32_t i) const;
+	[[nodiscard]] static uint32_t invalid_index();
 
 	// Adds an element, uses default constructor
 	uint32_t push_to_head();
 	uint32_t push_to_tail();
-	_Ty* push_to_tail_ptr();
+	pointer push_to_tail_ptr();
 	uint32_t push_before(uint32_t elem);
 	uint32_t push_after(uint32_t elem);
 
 	// Adds an element, uses copy constructor
-	uint32_t push_to_head(const _Ty& src);
-	uint32_t push_to_tail(const _Ty& src);
-	uint32_t push_before(uint32_t elem, const _Ty& src);
-	uint32_t push_after(uint32_t elem, const _Ty& src);
+	uint32_t push_to_head(const_reference src);
+	uint32_t push_to_tail(const_reference src);
+	uint32_t push_before(uint32_t elem, const_reference src);
+	uint32_t push_after(uint32_t elem, const_reference src);
 
 	// Adds multiple elements, uses default constructor
 	uint32_t push_to_head_multiple(uint32_t num);
 	uint32_t push_to_tail_multiple(uint32_t num);
-	uint32_t push_to_tail_multiple(uint32_t num, const _Ty* pToCopy);
+	uint32_t push_to_tail_multiple(uint32_t num, const_pointer pToCopy);
 	uint32_t push_before_multiple(uint32_t elem, uint32_t num);
-	uint32_t push_before_multiple(uint32_t elem, uint32_t num, const _Ty* pToCopy);
+	uint32_t push_before_multiple(uint32_t elem, uint32_t num, const_pointer pToCopy);
 	uint32_t push_after_multiple(uint32_t elem, uint32_t num);
 
 	// resize deletes the previous contents of the container and sets the
@@ -107,7 +118,7 @@ public:
 	void resize_no_destroy(uint32_t count); //sets count by adding or removing elements to tail TODO: This should probably be the default behavior for resize
 
 	// Calls resize and copies each element.
-	void copy(const _Ty* pArray, uint32_t size);
+	void copy(const_pointer pArray, uint32_t size);
 
 	// Fast swap
 	void swap(UtlVector< _Ty, _AllocTy >& vec);
@@ -116,7 +127,7 @@ public:
 	uint32_t push_to_tail(const UtlVector& src);
 
 	// Finds an element (element needs operator== defined)
-	uint32_t Find(const _Ty& src) const;
+	uint32_t Find(const_reference src) const;
 
 	// Helper to find using std::find_if with _AllocTy predicate
 	//   e.g. [] -> bool ( _Ty &_AllocTy ) { return _AllocTy.IsTheThingIWant(); }
@@ -125,9 +136,9 @@ public:
 	template<typename _FnTy>
 	uint32_t find(_FnTy predicate) const;
 
-	void fill(const _Ty& src);
+	void fill(const_reference src);
 
-	bool contains(const _Ty& src) const;
+	bool contains(const_reference src) const;
 
 	// Makes sure we have enough memory allocated to store _AllocTy requested # of elements
 	// Use capacity() to retrieve the current capacity.
@@ -140,8 +151,8 @@ public:
 	// at removal
 	void erase_fast(uint32_t elem);	// doesn'_Ty preserve order
 	void erase(uint32_t elem);		// preserves order, shifts elements
-	bool find_and_erase(const _Ty& src);	// removes first occurrence of src, preserves order, shifts elements
-	bool find_and_erase_fast(const _Ty& src);	// removes first occurrence of src, doesn'_Ty preserve order
+	bool find_and_erase(const_reference src);	// removes first occurrence of src, preserves order, shifts elements
+	bool find_and_erase_fast(const_reference src);	// removes first occurrence of src, doesn'_Ty preserve order
 	void erase_multiple(uint32_t elem, uint32_t num);	// preserves order, shifts elements
 	void erase_from_head_multiple(uint32_t num); // removes num elements from tail
 	void erase_from_tail_multiple(uint32_t num); // removes num elements from tail
@@ -159,7 +170,7 @@ public:
 	// Set the size by which it grows when it needs to allocate more memory.
 	void set_grow_size(int size) { m_Memory.set_grow_size(size); }
 
-	uint32_t capacity() const;	// Only use this if you really know what you're doing!
+	[[nodiscard]] uint32_t capacity() const;	// Only use this if you really know what you're doing!
 
 	// reverse the order of elements
 	void reverse();
@@ -172,12 +183,12 @@ protected:
 	void shift_to_right(uint32_t elem, uint32_t num = 1);
 	void shift_to_left(uint32_t elem, uint32_t num = 1);
 
-	allocator_type m_Memory;
+	_AllocTy m_Memory;
 	uint32_t m_Size;
 
 	// For easier access to the elements through the debugger
 	// it's in release builds so this can be used in libraries correctly
-	_Ty* m_Elements;
+	pointer m_Elements;
 
 	inline void reset_dbg_info()
 	{
@@ -197,7 +208,7 @@ inline UtlVector<_Ty, _AllocTy>::UtlVector(int growSize, uint32_t initSize) :
 }
 
 template<typename _Ty, class _AllocTy>
-inline UtlVector<_Ty, _AllocTy>::UtlVector(_Ty* pMemory, uint32_t allocationCount, uint32_t numElements) :
+inline UtlVector<_Ty, _AllocTy>::UtlVector(pointer pMemory, uint32_t allocationCount, uint32_t numElements) :
 	m_Memory(pMemory, allocationCount), m_Size(numElements)
 {
 	reset_dbg_info();
@@ -225,54 +236,52 @@ inline UtlVector<_Ty, _AllocTy>& UtlVector<_Ty, _AllocTy>::operator=(const UtlVe
 // element access
 //-----------------------------------------------------------------------------
 template<typename _Ty, class _AllocTy>
-inline _Ty& UtlVector<_Ty, _AllocTy>::operator[](uint32_t i)
+inline UtlVector<_Ty, _AllocTy>::reference UtlVector<_Ty, _AllocTy>::operator[](uint32_t i)
 {
 	return m_Memory[i];
 }
 
 template<typename _Ty, class _AllocTy>
-inline const _Ty& UtlVector<_Ty, _AllocTy>::operator[](uint32_t i) const
+inline UtlVector<_Ty, _AllocTy>::const_reference UtlVector<_Ty, _AllocTy>::operator[](uint32_t i) const
 {
 	return m_Memory[i];
 }
 
 template<typename _Ty, class _AllocTy>
-inline _Ty& UtlVector<_Ty, _AllocTy>::at(uint32_t i)
+inline UtlVector<_Ty, _AllocTy>::reference UtlVector<_Ty, _AllocTy>::at(uint32_t i)
 {
 	return m_Memory[i];
 }
 
 template<typename _Ty, class _AllocTy>
-inline const _Ty& UtlVector<_Ty, _AllocTy>::at(uint32_t i) const
+inline UtlVector<_Ty, _AllocTy>::const_reference UtlVector<_Ty, _AllocTy>::at(uint32_t i) const
 {
 	return m_Memory[i];
 }
 
 template<typename _Ty, class _AllocTy>
-inline _Ty& UtlVector<_Ty, _AllocTy>::head()
+inline UtlVector<_Ty, _AllocTy>::reference UtlVector<_Ty, _AllocTy>::head()
 {
 	return m_Memory[0];
 }
 
 template<typename _Ty, class _AllocTy>
-inline const _Ty& UtlVector<_Ty, _AllocTy>::head() const
+inline UtlVector<_Ty, _AllocTy>::const_reference UtlVector<_Ty, _AllocTy>::head() const
 {
 	return m_Memory[0];
 }
 
 template<typename _Ty, class _AllocTy>
-inline _Ty& UtlVector<_Ty, _AllocTy>::tail()
+inline UtlVector<_Ty, _AllocTy>::reference UtlVector<_Ty, _AllocTy>::tail()
 {
 	return m_Memory[m_Size - 1];
 }
 
 template<typename _Ty, class _AllocTy>
-inline const _Ty& UtlVector<_Ty, _AllocTy>::tail() const
+inline UtlVector<_Ty, _AllocTy>::const_reference UtlVector<_Ty, _AllocTy>::tail() const
 {
 	return m_Memory[m_Size - 1];
 }
-
-
 
 template<typename _Ty, class _AllocTy>
 inline uint32_t UtlVector<_Ty, _AllocTy>::size() const
@@ -393,7 +402,7 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail()
 }
 
 template<typename _Ty, class _AllocTy>
-inline _Ty* UtlVector<_Ty, _AllocTy>::push_to_tail_ptr()
+inline UtlVector<_Ty, _AllocTy>::pointer UtlVector<_Ty, _AllocTy>::push_to_tail_ptr()
 {
 	return &at(push_to_tail());
 }
@@ -418,25 +427,25 @@ uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem)
 // Adds an element, uses copy constructor
 //-----------------------------------------------------------------------------
 template<typename _Ty, class _AllocTy>
-inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_head(const _Ty& src)
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_head(const_reference src)
 {
 	return push_before(0, src);
 }
 
 template<typename _Ty, class _AllocTy>
-inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail(const _Ty& src)
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail(const_reference src)
 {
 	return push_before(m_Size, src);
 }
 
 template<typename _Ty, class _AllocTy>
-inline uint32_t UtlVector<_Ty, _AllocTy>::push_after(uint32_t elem, const _Ty& src)
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_after(uint32_t elem, const_reference src)
 {
 	return push_before(elem + 1, src);
 }
 
 template<typename _Ty, class _AllocTy>
-uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem, const _Ty& src)
+uint32_t UtlVector<_Ty, _AllocTy>::push_before(uint32_t elem, const_reference src)
 {
 	grow_by();
 	shift_to_right(elem);
@@ -461,7 +470,7 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail_multiple(uint32_t num)
 }
 
 template<typename _Ty, class _AllocTy>
-inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail_multiple(uint32_t num, const _Ty* pToCopy)
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_to_tail_multiple(uint32_t num, const_pointer pToCopy)
 {
 	return push_before_multiple(m_Size, num, pToCopy);
 }
@@ -489,7 +498,7 @@ void UtlVector<_Ty, _AllocTy>::resize_no_destroy(uint32_t count)
 }
 
 template<typename _Ty, class _AllocTy>
-void UtlVector<_Ty, _AllocTy>::copy(const _Ty* pArray, uint32_t size)
+void UtlVector<_Ty, _AllocTy>::copy(const_pointer pArray, uint32_t size)
 {
 	// Can'_Ty insert something that's in the list... reallocation may hose us
 	resize(size);
@@ -544,7 +553,7 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, ui
 }
 
 template<typename _Ty, class _AllocTy>
-inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, uint32_t num, const _Ty* pToInsert)
+inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, uint32_t num, const_pointer pToInsert)
 {
 	if (num == 0)
 		return elem;
@@ -576,7 +585,7 @@ inline uint32_t UtlVector<_Ty, _AllocTy>::push_before_multiple(uint32_t elem, ui
 // Finds an element (element needs operator== defined)
 //-----------------------------------------------------------------------------
 template<typename _Ty, class _AllocTy>
-uint32_t UtlVector<_Ty, _AllocTy>::Find(const _Ty& src) const
+uint32_t UtlVector<_Ty, _AllocTy>::Find(const_reference src) const
 {
 	for (uint32_t i = 0; i < size(); ++i)
 	{
@@ -593,9 +602,9 @@ template<typename _Ty, class _AllocTy>
 template<typename _FnTy>
 uint32_t UtlVector<_Ty, _AllocTy>::find(_FnTy predicate) const
 {
-	const _Ty* begin = data();
-	const _Ty* end = begin + size();
-	const _Ty* const& elem = std::find_if(begin, end, predicate);
+	const_pointer begin = data();
+	const_pointer end = begin + size();
+	const_pointer const& elem = std::find_if(begin, end, predicate);
 
 	if (elem != end)
 	{
@@ -606,7 +615,7 @@ uint32_t UtlVector<_Ty, _AllocTy>::find(_FnTy predicate) const
 }
 
 template<typename _Ty, class _AllocTy>
-void UtlVector<_Ty, _AllocTy>::fill(const _Ty& src)
+void UtlVector<_Ty, _AllocTy>::fill(const_reference src)
 {
 	for (uint32_t i = 0; i < size(); i++)
 	{
@@ -615,7 +624,7 @@ void UtlVector<_Ty, _AllocTy>::fill(const _Ty& src)
 }
 
 template<typename _Ty, class _AllocTy>
-bool UtlVector<_Ty, _AllocTy>::contains(const _Ty& src) const
+bool UtlVector<_Ty, _AllocTy>::contains(const_reference src) const
 {
 	return (Find(src) >= 0);
 }
@@ -647,7 +656,7 @@ void UtlVector<_Ty, _AllocTy>::erase(uint32_t elem)
 }
 
 template<typename _Ty, class _AllocTy>
-bool UtlVector<_Ty, _AllocTy>::find_and_erase(const _Ty& src)
+bool UtlVector<_Ty, _AllocTy>::find_and_erase(const_reference src)
 {
 	uint32_t elem = Find(src);
 	if (elem != -1)
@@ -659,7 +668,7 @@ bool UtlVector<_Ty, _AllocTy>::find_and_erase(const _Ty& src)
 }
 
 template<typename _Ty, class _AllocTy>
-bool UtlVector<_Ty, _AllocTy>::find_and_erase_fast(const _Ty& src)
+bool UtlVector<_Ty, _AllocTy>::find_and_erase_fast(const_reference src)
 {
 	uint32_t elem = Find(src);
 	if (elem != -1)

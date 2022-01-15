@@ -26,35 +26,35 @@ namespace px
 			m_StartTick = clock_type::now();
 		}
 
-		auto elapsed_nano() const noexcept
+		[[nodiscard]] auto elapsed_nano() const noexcept
 		{
 			using namespace std::chrono;
 			const auto delta = elapsed();
 			return duration_cast<nanoseconds>(delta);
 		}
 
-		auto elapsed_micro() const noexcept
+		[[nodiscard]] auto elapsed_micro() const noexcept
 		{
 			using namespace std::chrono;
 			const auto delta = elapsed();
 			return duration_cast<microseconds>(delta);
 		}
 
-		auto elapsed_milli() const noexcept
+		[[nodiscard]] auto elapsed_milli() const noexcept
 		{
 			using namespace std::chrono;
 			const auto delta = elapsed();
 			return duration_cast<milliseconds>(delta);
 		}
 
-		auto elapsed_sec() const noexcept
+		[[nodiscard]] auto elapsed_sec() const noexcept
 		{
 			using namespace std::chrono;
 			const auto delta = elapsed();
 			return duration_cast<seconds>(delta);
 		}
 
-		clock_type::duration elapsed() const noexcept
+		[[nodiscard]] clock_type::duration elapsed() const noexcept
 		{
 			const auto now = clock_type::now();
 			return now - m_StartTick;
@@ -64,14 +64,14 @@ namespace px
 		clock_type::time_point	m_StartTick;
 	};
 
-	class Collectiblestopwatch
+	class collectible_stopwatch
 	{
 	private:
 		friend class stopwatchWrapper;
 		class stopwatchWrapper
 		{
 		public:
-			stopwatchWrapper(Collectiblestopwatch* owner) noexcept : m_Handler(owner) { }
+			stopwatchWrapper(collectible_stopwatch* owner) noexcept : m_Handler(owner) { }
 
 			~stopwatchWrapper()
 			{
@@ -84,20 +84,20 @@ namespace px
 
 		private:
 			stopwatch m_Timer;
-			Collectiblestopwatch* m_Handler{ };
+			collectible_stopwatch* m_Handler{ };
 		};
 		
 	public:
 		using clock_type = std::chrono::steady_clock;
 
-		Collectiblestopwatch(size_t capacity = 0) { m_Durations.reserve(capacity); }
+		constexpr collectible_stopwatch(size_t capacity = 0) { m_Durations.reserve(capacity); }
 
-		stopwatchWrapper start() noexcept
+		[[nodiscard]] stopwatchWrapper start() noexcept
 		{
 			return stopwatchWrapper{ this };
 		}
 
-		clock_type::duration avg() const noexcept
+		[[nodiscard]] clock_type::duration avg() const noexcept
 		{
 			clock_type::duration avg{ };
 
@@ -107,7 +107,7 @@ namespace px
 			return avg / m_Durations.size();
 		}
 
-		clock_type::duration min() const noexcept
+		[[nodiscard]] clock_type::duration min() const noexcept
 		{
 			clock_type::duration min = clock_type::duration::max();
 
@@ -118,7 +118,7 @@ namespace px
 			return min;
 		}
 
-		clock_type::duration max() const noexcept
+		[[nodiscard]] clock_type::duration max() const noexcept
 		{
 			clock_type::duration max = clock_type::duration::min();
 
@@ -131,8 +131,8 @@ namespace px
 
 		void reset() noexcept { m_Durations.clear(); }
 
-		auto& get() noexcept { return m_Durations; }
-		auto& get() const noexcept { return m_Durations; }
+		[[nodiscard]] auto& get() noexcept { return m_Durations; }
+		[[nodiscard]] auto& get() const noexcept { return m_Durations; }
 
 	private:
 		std::vector<clock_type::duration> m_Durations;

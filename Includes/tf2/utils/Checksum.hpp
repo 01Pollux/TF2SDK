@@ -29,7 +29,7 @@ struct MD5Value
 {
 	uint8_t bits[MD5_BIT_LENGTH]{ };
 
-	bool is_zero() const noexcept
+	[[nodiscard]] bool is_zero() const noexcept
 	{
 		for (const uint8_t bit : bits)
 			if (bit)
@@ -37,8 +37,8 @@ struct MD5Value
 		return true;
 	}
 
-	bool operator==(const MD5Value& src) const = default;
-	bool operator!=(const MD5Value& src) const = default;
+	[[nodiscard]] bool operator==(const MD5Value& src) const = default;
+	[[nodiscard]] bool operator!=(const MD5Value& src) const = default;
 };
 
 

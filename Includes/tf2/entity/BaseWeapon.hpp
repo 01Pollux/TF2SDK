@@ -144,11 +144,11 @@ class GameTrace;
 class IBaseWeaponInternal : public IEconEntityInternal
 {
 public:
-	static IBaseWeaponInternal* GetEntity(int index)
+	[[nodiscard]] static IBaseWeaponInternal* GetEntity(int index)
 	{
 		return static_cast<IBaseWeaponInternal*>(IBaseEntityInternal::GetEntity(index));
 	}
-	static IBaseWeaponInternal* GetEntity(IBaseHandle hndl)
+	[[nodiscard]] static IBaseWeaponInternal* GetEntity(IBaseHandle hndl)
 	{
 		return static_cast<IBaseWeaponInternal*>(IBaseEntityInternal::GetEntity(hndl));
 	}
@@ -156,49 +156,49 @@ public:
 	/// <summary>
 	/// Get weapon slot
 	/// </summary>
-	PX_SDK_TF2 Const::WeaponSlot
+	[[nodiscard]] PX_SDK_TF2 Const::WeaponSlot
 		GetWeaponSlot() const noexcept;
 
 	/// <summary>
 	/// Traces a swing trace of melee
 	/// </summary>
-	PX_SDK_TF2 bool 
+	[[nodiscard]] PX_SDK_TF2 bool
 		DoSwingTrace(GameTrace& trace) noexcept;
 
 	/// <summary>
 	/// Get melee's swing range
 	/// </summary>
-	PX_SDK_TF2 int
+	[[nodiscard]] PX_SDK_TF2 int
 		GetSwingRange() const noexcept;
 
 	/// <summary>
 	/// Get weapon's id
 	/// </summary>
-	PX_SDK_TF2 Const::WeaponType
+	[[nodiscard]] PX_SDK_TF2 Const::WeaponType
 		GetWeaponId() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's speed
 	/// </summary>
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		GetProjectileSpeed() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's gravity
 	/// </summary>
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		GetProjectileGravity() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's spread
 	/// </summary>
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		GetProjectileSpread() const noexcept;
 
 	/// <summary>
 	/// Get weapon projectile's damage
 	/// </summary>
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		GetProjectileDamage() const noexcept;
 
 	PX_DECL_RECVPROP(IBaseWeaponInternal,	int,				Const::EntClassID::CTFWeaponBase,	"m_iViewModelIndex",	ViewModelIndex, 0);

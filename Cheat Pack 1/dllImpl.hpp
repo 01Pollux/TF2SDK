@@ -71,7 +71,7 @@ namespace px
 		requires std::is_base_of_v<IInterface, std::remove_pointer_t<_Ty>>
 	inline void GetInterface_NoFail(const char* name, IPluginManager* pFactory, _Ty& iface)
 	{
-		pFactory->RequestInterface(name, std::bit_cast<IInterface**>(&iface));
+		[[maybe_unused]] bool unused = pFactory->RequestInterface(name, std::bit_cast<IInterface**>(&iface));
 	}
 
 	template<typename _Ty>

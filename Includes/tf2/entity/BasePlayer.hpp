@@ -377,7 +377,7 @@ namespace Const
 			}
 		}
 
-		constexpr ptrdiff_t size() const noexcept
+		[[nodiscard]] constexpr ptrdiff_t size() const noexcept
 		{
 			return std::ssize(Flags);
 		}
@@ -387,17 +387,17 @@ namespace Const
 			return Flags[bit_idx];
 		}
 
-		constexpr bool any(int bit_idx) const noexcept
+		[[nodiscard]] constexpr bool any(int bit_idx) const noexcept
 		{
 			return at(bit_idx) != 0;
 		}
 
-		constexpr bool empty(int bit_idx) const noexcept
+		[[nodiscard]] constexpr bool empty(int bit_idx) const noexcept
 		{
 			return !any(bit_idx);
 		}
 
-		constexpr bool is_set(int bit_idx, uint32_t flags) const noexcept
+		[[nodiscard]] constexpr bool is_set(int bit_idx, uint32_t flags) const noexcept
 		{
 			return (at(bit_idx) & flags) == flags;
 		}
@@ -408,11 +408,11 @@ class TFPlayerStreak
 {
 	using streak_type = std::underlying_type_t<Const::TFStreakType>;
 public:
-	int& operator[](Const::TFStreakType i) noexcept { return Streaks[static_cast<streak_type>(i)]; };
-	int operator[](Const::TFStreakType i) const noexcept { return Streaks[static_cast<streak_type>(i)]; };
+	[[nodiscard]] int& operator[](Const::TFStreakType i) noexcept { return Streaks[static_cast<streak_type>(i)]; };
+	[[nodiscard]] int operator[](Const::TFStreakType i) const noexcept { return Streaks[static_cast<streak_type>(i)]; };
 
 	void set(Const::TFStreakType i, const int val) noexcept { Streaks[static_cast<streak_type>(i)] = val; }
-	int get(Const::TFStreakType i) const noexcept { return Streaks[static_cast<streak_type>(i)]; }
+	[[nodiscard]] int get(Const::TFStreakType i) const noexcept { return Streaks[static_cast<streak_type>(i)]; }
 
 private:
 	int Streaks[static_cast<streak_type>(Const::TFStreakType::Count)];
@@ -444,25 +444,25 @@ public:
 class ITFPlayerInternal : public IBaseEntityInternal
 {
 public:
-	static ITFPlayerInternal* GetEntity(int index)
+	[[nodiscard]] static ITFPlayerInternal* GetEntity(int index)
 	{
 		return static_cast<ITFPlayerInternal*>(IBaseEntityInternal::GetEntity(index));
 	}
-	static ITFPlayerInternal* GetEntity(IBaseHandle hndl)
+	[[nodiscard]] static ITFPlayerInternal* GetEntity(IBaseHandle hndl)
 	{
 		return static_cast<ITFPlayerInternal*>(IBaseEntityInternal::GetEntity(hndl));
 	}
-	static ITFPlayerInternal* GetLocalPlayer()
+	[[nodiscard]] static ITFPlayerInternal* GetLocalPlayer()
 	{
 		return static_cast<ITFPlayerInternal*>(IBaseEntityInternal::GetLocalPlayer());
 	}
 
-	static ITFPlayerInternal* FromShared(ITFPlayerShared* pSharedEnt)
+	[[nodiscard]] static ITFPlayerInternal* FromShared(ITFPlayerShared* pSharedEnt)
 	{
 		return *(std::bit_cast<ITFPlayerInternal**>(pSharedEnt) + 0x188);
 	}
 
-	Vector3D_F EyePosition() const
+	[[nodiscard]] Vector3D_F EyePosition() const
 	{
 		return VecOrigin + ViewOffset;
 	}
@@ -475,7 +475,7 @@ public:
 	/// <summary>
 	/// Test if the player has those conditions
 	/// </summary>
-	PX_SDK_TF2 bool 
+	[[nodiscard]] PX_SDK_TF2 bool
 		InCond(const Const::TFCondFlags& conds) const;
 
 	/// <summary>
@@ -483,7 +483,7 @@ public:
 	/// </summary>
 	template<typename... _CondTy>
 	requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
-	bool InCond(_CondTy... conds) const
+	[[nodiscard]] bool InCond(_CondTy... conds) const
 	{
 		return InCond({ conds... });
 	}
@@ -498,7 +498,7 @@ public:
 	/// * Bleeding
 	/// 
 	/// </summary>
-	bool IsPlayerInCondEffect() const
+	[[nodiscard]] bool IsPlayerInCondEffect() const
 	{
 		using enum Const::TFCond;
 		return InCond(OnFire, Jarated, CloakFlicker, Milked, Bleeding);
@@ -511,7 +511,7 @@ public:
 	/// * Cloaked
 	/// 
 	/// </summary>
-	bool IsPlayerInvisible() const
+	[[nodiscard]] bool IsPlayerInvisible() const
 	{
 		using enum Const::TFCond;
 		return InCond(Stealthed, Cloaked);
@@ -528,7 +528,7 @@ public:
 	/// * DefenseBuffMmmph
 	/// 
 	/// </summary>
-	bool IsPlayerInvunerable() const
+	[[nodiscard]] bool IsPlayerInvunerable() const
 	{
 		using enum Const::TFCond;
 		return InCond(Ubercharged, UberchargedCanteen, UberchargedHidden, UberchargedOnTakeDamage, Bonked, DefenseBuffMmmph);
@@ -549,7 +549,7 @@ public:
 	/// * HalloweenCritCandy
 	/// 
 	/// </summary>
-	bool IsPlayerCritBoosted() const
+	[[nodiscard]] bool IsPlayerCritBoosted() const
 	{
 		using enum Const::TFCond;
 		return InCond(Kritzkrieged, CritRuneTemp, CritCanteen, CritMmmph, CritOnKill, CritOnDamage, CritOnFirstBlood, CritOnWin, CritRuneTemp, HalloweenCritCandy);
@@ -566,9 +566,9 @@ public:
 	/// </summary>
 	template<typename... _CondTy>
 		requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
-	bool AddCond(_CondTy... conds) const
+	void AddCond(_CondTy... conds) const
 	{
-		return AddCond({ conds... });
+		AddCond({ conds... });
 	}
 
 	/// <summary>
@@ -582,9 +582,9 @@ public:
 	/// </summary>
 	template<typename... _CondTy>
 		requires std::conjunction_v<std::is_same<_CondTy, Const::TFCond>...>
-	bool RemoveCond(_CondTy... conds) const
+	void RemoveCond(_CondTy... conds) const
 	{
-		return RemoveCond({ conds... });
+		RemoveCond({ conds... });
 	}
 
 
@@ -649,7 +649,7 @@ using ILocalPlayer = IPlayerWrapper<true>;
 
 namespace utils
 {
-	PX_SDK_TF2 Angle_F 
+	[[nodiscard]] PX_SDK_TF2 Angle_F
 		GetAimAngle(const Vector3D_F& start, const Vector3D_F& end, bool useLocalPunchAng = false);
 }
 

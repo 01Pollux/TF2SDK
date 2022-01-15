@@ -39,87 +39,87 @@ public:
 		std::copy_n(other.begin(), _Size1, m_Data.begin());
 	}
 
-	_NODISCARD constexpr const_reference operator[](difference_type i) const noexcept
+	[[nodiscard]] constexpr const_reference operator[](difference_type i) const noexcept
 	{
 		return m_Data[i];
 	}
-	_NODISCARD constexpr reference operator[](difference_type i) noexcept
+	[[nodiscard]] constexpr reference operator[](difference_type i) noexcept
 	{
 		return m_Data[i];
 	}
 
-	_NODISCARD constexpr const_pointer data() const noexcept
+	[[nodiscard]] constexpr const_pointer data() const noexcept
 	{
 		m_Data.data();
 	}
-	_NODISCARD constexpr pointer data() noexcept
+	[[nodiscard]] constexpr pointer data() noexcept
 	{
 		m_Data.data();
 	}
 
 public:
-	_NODISCARD constexpr iterator begin() noexcept
+	[[nodiscard]] constexpr iterator begin() noexcept
 	{
 		return m_Data.begin();
 	}
 
-	_NODISCARD constexpr const_iterator begin() const noexcept
+	[[nodiscard]] constexpr const_iterator begin() const noexcept
 	{
 		return m_Data.begin();
 	}
 
-	_NODISCARD constexpr iterator end() noexcept
+	[[nodiscard]] constexpr iterator end() noexcept
 	{
 		return m_Data.end();
 	}
 
-	_NODISCARD constexpr const_iterator end() const noexcept
+	[[nodiscard]] constexpr const_iterator end() const noexcept
 	{
 		return m_Data.end();
 	}
 
-	_NODISCARD constexpr reverse_iterator rbegin() noexcept
+	[[nodiscard]] constexpr reverse_iterator rbegin() noexcept
 	{
 		return m_Data.rbegin();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator rbegin() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return m_Data.rbegin();
 	}
 
-	_NODISCARD constexpr reverse_iterator rend() noexcept
+	[[nodiscard]] constexpr reverse_iterator rend() noexcept
 	{
 		return m_Data.rend();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator rend() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator rend() const noexcept
 	{
 		return m_Data.rend();
 	}
 
-	_NODISCARD constexpr const_iterator cbegin() const noexcept
+	[[nodiscard]] constexpr const_iterator cbegin() const noexcept
 	{
 		return begin();
 	}
 
-	_NODISCARD constexpr const_iterator cend() const noexcept
+	[[nodiscard]] constexpr const_iterator cend() const noexcept
 	{
 		return end();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator crbegin() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return rbegin();
 	}
 
-	_NODISCARD constexpr const_reverse_iterator crend() const noexcept
+	[[nodiscard]] constexpr const_reverse_iterator crend() const noexcept
 	{
 		return rend();
 	}
 
 public:
-	_NODISCARD constexpr element_type get_column(difference_type col_idx) const noexcept
+	[[nodiscard]] constexpr element_type get_column(difference_type col_idx) const noexcept
 	{
 		element_type col{ };
 		auto colit = col.begin();
@@ -139,7 +139,7 @@ public:
 		}
 	}
 
-	_NODISCARD constexpr const element_type& get_row(difference_type row_idx) const noexcept
+	[[nodiscard]] constexpr const element_type& get_row(difference_type row_idx) const noexcept
 	{
 		return m_Data[row_idx];
 	}
@@ -149,7 +149,7 @@ public:
 		m_Data[row_idx] = row;
 	}
 
-	_NODISCARD constexpr MatrixAxB transpose() const noexcept
+	[[nodiscard]] constexpr MatrixAxB transpose() const noexcept
 	{
 		MatrixAxB matx{ };
 		constexpr size_t smallest = _Size0 < _Size1 ? _Size0 : _Size1;
@@ -161,7 +161,7 @@ public:
 		return matx;
 	}
 
-	_NODISCARD constexpr MatrixAxB mult(const MatrixAxB& other) const noexcept
+	[[nodiscard]] constexpr MatrixAxB mult(const MatrixAxB& other) const noexcept
 	{
 		MatrixAxB matx{ };
 		constexpr size_t smallest = _Size0 < _Size1 ? _Size0 : _Size1;
@@ -218,7 +218,5 @@ using Matrix4x3_D = MatrixAxB<double, 4, 3>;
 using Matrix4x4_I = MatrixAxB<int, 4, 4>;
 using Matrix4x4_F = MatrixAxB<float, 4, 4>;
 using Matrix4x4_D = MatrixAxB<double, 4, 4>;
-
-
 
 TF2_NAMESPACE_END();

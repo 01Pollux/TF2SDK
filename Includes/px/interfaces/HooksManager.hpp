@@ -65,17 +65,22 @@ public:
 	/// </summary>
 	/// <param name="order">insertion order</param>
 	/// <param name="id">callback id</param>
-	virtual void RemoveCallback(bool post, HookID id) noexcept abstract;
+	virtual void RemoveCallback(bool post, HookID id) abstract;
 
 	/// <summary>
 	/// get the last HookRes, only valid during post callbacks
 	/// </summary>
-	virtual MHookRes GetLastResults() noexcept abstract;
+	[[nodiscard]] virtual MHookRes GetLastResults() noexcept abstract;
 
 	/// <summary>
 	/// get the original detoured function
 	/// </summary>
-	virtual void* GetFunction() noexcept abstract;
+	[[nodiscard]] virtual void* GetFunction() noexcept abstract;
+
+	/// <summary>
+	/// get the address of stack pointer that was saved at the begining of function
+	/// </summary>
+	[[nodiscard]] virtual void* GetStackPointer() noexcept abstract;
 };
 
 class IGameData;
@@ -92,7 +97,14 @@ public:
 	/// <param name="pPlugin">Plugin owner</param>
 	/// <param name="lookupKey">key to be used for searching for pre-exisiting hooks</param>
 	/// <param name="pAddr">address of pre-existing function</param>
-	virtual IHookInstance* LoadHook(const std::vector<std::string>& keys, const char* hookName, void* pThis, IGameData* gamedata, IntPtr lookupKey = nullptr, IntPtr pAddr = nullptr) abstract;
+	[[nodiscard]] virtual IHookInstance* LoadHook(
+		const std::vector<std::string>& keys,
+		const char* hookName, 
+		IntPtr pThis,
+		IGameData* gamedata,
+		IntPtr lookupKey = nullptr,
+		IntPtr pAddr = nullptr
+	) abstract;
 
 	/// <summary>
 	/// Load a hook from Plugin's gamedata, fallback to the main gamedata if it doesn't exists
@@ -100,7 +112,13 @@ public:
 	/// </summary>
 	/// <param name="hookName">Entry name in config</param>
 	/// <param name="pPlugin">Plugin owner</param>
-	IHookInstance* LoadHook(const std::vector<std::string>& keys, const char* hookName, IGameData* gamedata, IntPtr lookupKey = nullptr, IntPtr pAddr = nullptr)
+	[[nodiscard]] IHookInstance* LoadHook(
+		const std::vector<std::string>& keys, 
+		const char* hookName,
+		IGameData* gamedata,
+		IntPtr lookupKey = nullptr,
+		IntPtr pAddr = nullptr
+	)
 	{
 		return LoadHook(keys, hookName, nullptr, gamedata, lookupKey, pAddr);
 	}
@@ -115,7 +133,7 @@ class ISHookToken
 {
 public:
 	ISHookToken() = default;
-	ISHookToken(IHookInstance* inst) : m_Instance(inst) { }
+	ISHookToken(IHookInstance* inst) noexcept : m_Instance(inst) { }
 
 	void attach(bool post, HookOrder order, const IHookInstance::CallbackType& callback)
 	{
@@ -129,17 +147,17 @@ public:
 		m_ID = IHookInstance::InvalidId;
 	}
 
-	operator bool() const noexcept
+	[[nodiscard]] operator bool() const noexcept
 	{
 		return m_ID != IHookInstance::InvalidId;
 	}
 
-	IHookInstance*& instance() noexcept
+	[[nodiscard]] IHookInstance*& instance() noexcept
 	{
 		return m_Instance;
 	}
 
-	const IHookInstance* instance() const noexcept
+	[[nodiscard]] const IHookInstance* instance() const noexcept
 	{
 		return m_Instance;
 	}
@@ -154,7 +172,7 @@ class IMHookToken
 {
 public:
 	IMHookToken() = default;
-	IMHookToken(IHookInstance* inst) : m_Instance(inst) { }
+	IMHookToken(IHookInstance* inst) noexcept : m_Instance(inst) { }
 
 	void attach(bool post, HookOrder order, const IHookInstance::CallbackType& callback)
 	{
@@ -178,12 +196,12 @@ public:
 		m_IDs.clear();
 	}
 
-	operator bool() const noexcept
+	[[nodiscard]] operator bool() const noexcept
 	{
 		return m_IDs.size() > 0;
 	}
 
-	size_t size() const noexcept
+	[[nodiscard]] size_t size() const noexcept
 	{
 		return m_IDs.size();
 	}

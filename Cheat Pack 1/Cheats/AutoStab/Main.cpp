@@ -4,6 +4,7 @@
 #include <tf2/entity/BasePlayer.hpp>
 #include <tf2/entity/BaseWeapon.hpp>
 #include <tf2/engine/GameTrace.hpp>
+#include <tf2/engine/ClientDll.hpp>
 
 #include <tf2/client/UserCmd.hpp>
 
@@ -72,6 +73,14 @@ px::MHookRes AutoBackstab::OnCreateMove(px::PassArgs* pArgs)
 		return{ };
 
 	tf2::IBaseWeapon pCurWpn(pMe->ActiveWeapon.get());
+
+	static tf2::Const::WeaponSlot last_slot = tf2::Const::WeaponSlot::Misc;
+	if (pCurWpn && pCurWpn->GetWeaponSlot() != last_slot)
+	{
+		last_slot = pCurWpn->GetWeaponSlot();
+		tf2::interfaces::EngineClient->Con_NPrintf(0, "Weapon: %x / %i / slot = %i", pCurWpn.get(), static_cast<int>(pCurWpn->ItemDefinitionIndex), last_slot);
+	}
+
 	if (!pCurWpn || pCurWpn->GetWeaponSlot() != tf2::Const::WeaponSlot::Melee)
 		return{ };
 

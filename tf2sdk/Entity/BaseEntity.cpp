@@ -172,20 +172,6 @@ void IBaseEntityInternal::EstimateAbsVelocity(Vector3D_F& vel) const
 	estimate_velocity(this, vel);
 }
 
-int IBaseEntityInternal::LookupAttachment(const char* name)
-{
-	static utils::MemberVFuncThunk<int> lookup_attachment{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "LookupAttachment").value_or(-1) };
-	assert(lookup_attachment);
-	return lookup_attachment(this);
-}
-
-bool IBaseEntityInternal::GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles)
-{
-	static utils::MemberVFuncThunk<bool, int, Vector3D_F&, Angle_F&> get_attachment{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "GetAttachment").value_or(-1) };
-	assert(get_attachment);
-	return get_attachment(this, attach_pt, origin, angles);
-}
-
 bool IBaseEntityInternal::ShouldCollide(Const::EntCollisionGroup groups, uint32_t mask)
 {
 	static utils::MemberVFuncThunk<bool, Const::EntCollisionGroup, uint32_t> should_collide{ interfaces::SDKManager::Get()->ReadOffset({ "CBaseEntity", "vtable"  }, "ShouldCollide").value_or(-1) };

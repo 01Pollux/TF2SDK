@@ -4,6 +4,8 @@
 #include <vector>
 #include <px/defines.hpp>
 
+class DetourCallContext;
+
 PX_NAMESPACE_BEGIN();
 
 class DataAndSize
@@ -18,22 +20,22 @@ public:
 		m_Data(size != 0 ? std::make_unique<data_arr>(size) : nullptr)
 	{ }
 
-	bool is_void() const noexcept
+	[[nodiscard]] bool is_void() const noexcept
 	{
 		return !m_Size;
 	}
 
-	data_ptr data() noexcept
+	[[nodiscard]] data_ptr data() noexcept
 	{
 		return m_Data.get();
 	}
 
-	const data_ptr data() const noexcept
+	[[nodiscard]] const data_ptr data() const noexcept
 	{
 		return m_Data.get();
 	}
 
-	size_t size() const noexcept
+	[[nodiscard]] size_t size() const noexcept
 	{
 		return m_Size;
 	}
@@ -48,7 +50,7 @@ private:
 
 class PassArgs
 {
-	friend class CallContext;
+	friend class DetourCallContext;
 public:
 	using data_type = DataAndSize::data_type;
 	using data_ptr = DataAndSize::data_ptr;
@@ -68,49 +70,52 @@ public:
 			size_t offs{ };
 			for (const auto& arg : args)
 			{
+				m_SizeInMem += arg.first;
+
 				m_CurData.emplace_back(arg.first);
 				m_NewData.emplace_back(arg.first);
+
 				m_ArgInfo[offs++].IsConst = arg.second;
 			}
 		}
 	}
 
-	const data_ptr get_ptr(size_t index, size_t offset = 0) const noexcept;
+	[[nodiscard]] const data_ptr get_ptr(size_t index, size_t offset = 0) const noexcept;
 
 	template<typename _Ty>
-	const _Ty* get_ptr(size_t index, size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty* get_ptr(size_t index, size_t offset = 0) const noexcept
 	{
 		return std::bit_cast<const _Ty*>(get_ptr(index, offset));
 	}
 
 	template<typename _Ty>
-	const _Ty& get(size_t index, size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty& get(size_t index, size_t offset = 0) const noexcept
 	{
 		return *std::bit_cast<const _Ty*>(get_ptr(index, offset));
 	}
 
 	template<typename _Ty = void>
-	const _Ty* get_this() const noexcept
+	[[nodiscard]] const _Ty* get_this() const noexcept
 	{
 		return m_ContainsThis ? *std::bit_cast<const _Ty**>(m_CurData[0].data()) : nullptr;
 	}
 
 	template<typename _Ty = void>
-	_Ty* get_this() noexcept
+	[[nodiscard]] _Ty* get_this() noexcept
 	{
 		return m_ContainsThis ? *std::bit_cast<_Ty**>(m_CurData[ThisPointer].data()) : nullptr;
 	}
 
-	const data_ptr get_new_ptr(size_t index, size_t offset = 0) const noexcept;
+	[[nodiscard]] const data_ptr get_new_ptr(size_t index, size_t offset = 0) const noexcept;
 
 	template<typename _Ty>
-	const _Ty* get_new_ptr(size_t index, size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty* get_new_ptr(size_t index, size_t offset = 0) const noexcept
 	{
 		return std::bit_cast<const _Ty*>(get_new_ptr(index, offset));
 	}
 
 	template<typename _Ty>
-	const _Ty& get_new(size_t index, size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty& get_new(size_t index, size_t offset = 0) const noexcept
 	{
 		return *std::bit_cast<const _Ty*>(get_new_ptr(index, offset));
 	}
@@ -127,21 +132,23 @@ public:
 	void reset(size_t index, size_t offset = 0);
 	void reset();
 
-	size_t size() const noexcept { return m_CurData.size(); }
-	size_t arg_size(size_t i) const noexcept { return m_CurData[i + (m_ContainsThis ? 1 : 0)].size(); }
+	[[nodiscard]] size_t size() const noexcept { return m_CurData.size(); }
+	[[nodiscard]] size_t arg_size(size_t i) const noexcept { return m_CurData[i + (m_ContainsThis ? 1 : 0)].size(); }
 
-	bool has_this_ptr() const noexcept { return m_ContainsThis; }
-	bool empty() const noexcept { return size() == (has_this_ptr() ? 1 : 0); }
+	[[nodiscard]] bool has_this_ptr() const noexcept { return m_ContainsThis; }
+	[[nodiscard]] bool empty() const noexcept { return size() == (has_this_ptr() ? 1 : 0); }
 
-	size_t is_const(size_t pos) const noexcept { return m_ArgInfo[pos].IsConst; }
-	size_t has_changed(size_t pos) const noexcept { return m_ArgInfo[pos].Changed; }
+	[[nodiscard]] size_t is_const(size_t pos) const noexcept { return m_ArgInfo[pos].IsConst; }
+	[[nodiscard]] size_t has_changed(size_t pos) const noexcept { return m_ArgInfo[pos].Changed; }
 
 protected:
 	struct ArgInfo
 	{
-		bool Changed{ };
-		bool IsConst{ };
+		bool Changed : 1 {};
+		bool IsConst : 1{ };
 	};
+
+	size_t m_SizeInMem{ };
 
 	std::vector<DataAndSize> m_CurData;
 	std::vector<DataAndSize> m_NewData;
@@ -154,7 +161,7 @@ protected:
 
 class PassRet
 {
-	friend class CallContext;
+	friend class DetourCallContext;
 public:
 	using data_type = DataAndSize::data_type;
 	using data_ptr = DataAndSize::data_ptr;
@@ -168,27 +175,27 @@ public:
 	const data_ptr get_ptr(size_t offset = 0) const noexcept;
 
 	template<typename _Ty>
-	const _Ty* get_ptr(size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty* get_ptr(size_t offset = 0) const noexcept
 	{
 		return std::bit_cast<const _Ty*>(get_ptr(offset));
 	}
 
 	template<typename _Ty>
-	const _Ty& get(size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty& get(size_t offset = 0) const noexcept
 	{
 		return *std::bit_cast<const _Ty*>(get_ptr(offset));
 	}
 
-	const data_ptr get_new_ptr(size_t offset = 0) const noexcept;
+	[[nodiscard]] const data_ptr get_new_ptr(size_t offset = 0) const noexcept;
 
 	template<typename _Ty>
-	const _Ty* get_new_ptr(size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty* get_new_ptr(size_t offset = 0) const noexcept
 	{
 		return std::bit_cast<const _Ty*>(get_new_ptr(offset));
 	}
 
 	template<typename _Ty>
-	const _Ty& get_new(size_t offset = 0) const noexcept
+	[[nodiscard]] const _Ty& get_new(size_t offset = 0) const noexcept
 	{
 		return *std::bit_cast<const _Ty*>(get_new_ptr(offset));
 	}
@@ -204,14 +211,14 @@ public:
 
 	void reset() noexcept;
 
-	size_t size() const noexcept { return m_CurData.size(); }
+	[[nodiscard]] size_t size() const noexcept { return m_CurData.size(); }
 
 	bool is_void() const noexcept
 	{
 		return m_NewData.is_void();
 	}
 
-	bool has_changed() const noexcept
+	[[nodiscard]] bool has_changed() const noexcept
 	{
 		return m_Changed;
 	}

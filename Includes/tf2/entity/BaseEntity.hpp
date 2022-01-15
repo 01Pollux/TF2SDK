@@ -26,14 +26,14 @@ public:
 	/// Get entity from current index
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	PX_SDK_TF2 static IBaseEntityInternal*
+	[[nodiscard]] PX_SDK_TF2 static IBaseEntityInternal*
 		GetEntity(int ent_index);
 
 	/// <summary>
 	/// Get entity from it's handle
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	PX_SDK_TF2 static IBaseEntityInternal*
+	[[nodiscard]] PX_SDK_TF2 static IBaseEntityInternal*
 		GetEntity(IBaseHandle ent_handle);
 
 	/// <summary>
@@ -41,20 +41,21 @@ public:
 	/// Must be used in-game, otherwise it's UB
 	/// </summary>
 	/// <returns>an entity pointer, nullptr if the entity doesn't exists</returns>
-	PX_SDK_TF2 static IBaseEntityInternal*
+	[[nodiscard]] PX_SDK_TF2 static IBaseEntityInternal*
 		GetLocalPlayer();
 
 	/// <summary>
 	/// Get highest entity index slot
 	/// Must be used in-game, otherwise it's UB
 	/// </summary>
-	PX_SDK_TF2 static int
+	[[nodiscard]] PX_SDK_TF2 static int
 		GetHighestEntityIndex();
 
 	/// <summary>
 	/// Test if the current entity is valid (not null and not dormant)
 	/// </summary>
-	static bool	BadEntity(IBaseEntityInternal* ent_ptr)
+	[[nodiscard]] static bool 
+		BadEntity(IBaseEntityInternal* ent_ptr)
 	{
 		return !ent_ptr || ent_ptr->IsDormantEx();
 	}
@@ -62,71 +63,72 @@ public:
 	/// <summary>
 	/// Test if the local client is valid (in game and not a bad entity)
 	/// </summary>
-	PX_SDK_TF2 static bool
+	[[nodiscard]] PX_SDK_TF2 static bool
 		BadLocal();
 
 	/// <summary>
 	/// Tests whether the entity is derived from CBaseCombatWeapon or not
 	/// </summary>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		IsBaseCombatWeapon() const noexcept;
 
 	/// <summary>
 	/// </summary>
 	/// <param name="is_pred">true to call GetPredDescMap, false to call GetDataDescMap</param>
-	PX_SDK_TF2 EntityDataMap*
+	[[nodiscard]] PX_SDK_TF2 EntityDataMap*
 		GetDataMap(bool is_pred) const noexcept;
 
 	/// <summary>
 	/// Get entity's bone cache by calling 'CBaseEntity::GetBoneCache'
 	/// </summary>
 	/// <returns></returns>
-	PX_SDK_TF2 const IBoneCache*
+	[[nodiscard]] PX_SDK_TF2 const IBoneCache*
 		GetBoneCache() const;
 
 	/// <summary>
 	/// Get entity bone info { bone cache, studio hitbox, studio hdr }
 	/// </summary>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		QueryBoneInfo(IBoneInfo&) const;
 
 	/// <summary>
 	/// Get entity's bone position from cache and output it to results on success
 	/// </summary>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		GetBonePosition(int bone_position, BoneResult& results) const;
 
 	/// <summary>
 	/// Sets entity's model by index by calling 'CBaseEntity::SetModelIndex'
 	/// </summary>
 	/// <param name="modelidx"></param>
-	PX_SDK_TF2 void
+	[[nodiscard]] PX_SDK_TF2 void
 		SetModel(int modelidx);
 
 	/// <summary>
 	/// Tests whether the entity is health kit
 	/// </summary>
 	/// <returns></returns>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		IsHealthKit() const noexcept;
 
 	/// <summary>
 	/// Tests whether the entity is a ghost
 	/// </summary>
 	/// <returns></returns>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		IsGhost() const noexcept;
 
 	/// <summary>
 	/// Get either local velocity or predicted velocity
 	/// </summary>
-	PX_SDK_TF2 void 
+	PX_SDK_TF2 void
 		EstimateAbsVelocity(Vector3D_F& vel) const;
 
 	/// <summary>
 	/// Tests whether the entity is class id
 	/// </summary>
-	bool IsClassID(Const::EntClassID id) const
+	[[nodiscard]] bool 
+		IsClassID(Const::EntClassID id) const
 	{
 		return this->GetClientClass()->ClassID == id;
 	}
@@ -135,29 +137,55 @@ public:
 	/// Get attachement's index by name
 	/// </summary>
 	/// <returns>-1 if the attachement doesn't exists</returns>
-	PX_SDK_TF2 int
-		LookupAttachment(const char* name);
+	[[nodiscard]] int LookupAttachment(const char* name) const
+	{
+		return this->GetClientRenderable()->LookupAttachment(name);
+	}
 
 	/// <summary>
 	/// Get attachement's original and angle by name
 	/// </summary>
 	/// <returns>false if the attachement doesn't exists</returns>
-	bool GetAttachment(const char* name, Vector3D_F& origin, Angle_F& angles)
+	[[nodiscard]] bool GetAttachment(const char* name, Vector3D_F& origin, Angle_F& angles) const
 	{
-		return GetAttachment(LookupAttachment(name), origin, angles);
+		IClientRenderable* pRender = this->GetClientRenderable();
+		return pRender->GetAttachment(pRender->LookupAttachment(name), origin, angles);
 	}
 
 	/// <summary>
 	/// Get attachement's original and angle by index
 	/// </summary>
 	/// <returns>false if the attachement doesn't exists</returns>
-	PX_SDK_TF2 bool
-		GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles);
+	[[nodiscard]] bool GetAttachment(const char* name, Matrix3x4_F& matrix) const
+	{
+		IClientRenderable* pRender = this->GetClientRenderable();
+		return pRender->GetAttachment(pRender->LookupAttachment(name), matrix);
+	}
+
+	/// <summary>
+	/// Get attachement's original and angle by name
+	/// </summary>
+	/// <returns>false if the attachement doesn't exists</returns>
+	[[nodiscard]] bool GetAttachment(int attach_pt, Vector3D_F& origin, Angle_F& angles) const
+	{
+		IClientRenderable* pRender = this->GetClientRenderable();
+		return pRender->GetAttachment(attach_pt, origin, angles);
+	}
+
+	/// <summary>
+	/// Get attachement's original and angle by index
+	/// </summary>
+	/// <returns>false if the attachement doesn't exists</returns>
+	[[nodiscard]] bool GetAttachment(int attach_pt, Matrix3x4_F& matrix) const
+	{
+		IClientRenderable* pRender = this->GetClientRenderable();
+		return pRender->GetAttachment(attach_pt, matrix);
+	}
 	
 	/// <summary>
 	/// Test if the entity should collide with current collision properties
 	/// </summary>
-	PX_SDK_TF2 bool
+	[[nodiscard]] PX_SDK_TF2 bool
 		ShouldCollide(Const::EntCollisionGroup groups, uint32_t mask);
 
 	/// <summary>
@@ -165,7 +193,8 @@ public:
 	/// this is the same as entindex, except it's not virtual
 	/// </summary>
 	/// <returns>-1 if the entity wasn't networkable</returns>
-	int GetEntIndex() const noexcept
+	[[nodiscard]] int
+		GetEntIndex() const noexcept
 	{
 		return m_EntIndex;
 	}
@@ -174,7 +203,8 @@ public:
 	/// Checks if the entity is dormant
 	/// this is the same as IsDormant, except it's not virtual
 	/// </summary>
-	bool IsDormantEx() const noexcept
+	[[nodiscard]] bool
+		IsDormantEx() const noexcept
 	{
 		return GetEntIndex() != -1 ? m_IsDormant : false;
 	}
@@ -288,12 +318,12 @@ public:
 		return Entity;
 	}
 
-	const EntityClassType* get() const noexcept
+	[[nodiscard]] const EntityClassType* get() const noexcept
 	{
 		return Entity;
 	}
 
-	EntityClassType* get() noexcept
+	[[nodiscard]] EntityClassType* get() noexcept
 	{
 		return Entity;
 	}
@@ -308,9 +338,9 @@ public:
 		return !EntityClassType::BadEntity(Entity);
 	}
 
-	bool operator==(const EntityClassType* other) const noexcept { return Entity == other; }
+	[[nodiscard]] bool operator==(const EntityClassType* other) const noexcept { return Entity == other; }
 
-	bool operator==(const IBaseEntityWrapper&) const = default;
+	[[nodiscard]] bool operator==(const IBaseEntityWrapper&) const = default;
 
 protected:
 	EntityClassType* Entity{ nullptr };

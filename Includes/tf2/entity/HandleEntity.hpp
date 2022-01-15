@@ -19,14 +19,14 @@ public:
 	IBaseHandle(unsigned long value) noexcept : Index(value) { }
 	IBaseHandle(int entry, int serial) noexcept : Index(entry | serial << Const::EHandle_EntryBits) { }
 	
-	int entry_index() const noexcept { return Index & Const::EHandle_EntryMask; }
-	int serial_number() const noexcept { return Index >> Const::EHandle_EntryBits; }
-	bool valid_entity() const noexcept;
+	[[nodiscard]] int entry_index() const noexcept { return Index & Const::EHandle_EntryMask; }
+	[[nodiscard]] int serial_number() const noexcept { return Index >> Const::EHandle_EntryBits; }
+	[[nodiscard]] bool valid_entity() const noexcept;
 
-	auto operator<=>(const IBaseHandle&) const = default;
+	[[nodiscard]] auto operator<=>(const IBaseHandle&) const = default;
 	IBaseHandle& operator=(nullptr_t) { Index = Const::EHandle_EntryInvalid; return *this; }
 
-	operator bool() const noexcept
+	[[nodiscard]] operator bool() const noexcept
 	{
 		return Index != Const::EHandle_EntryInvalid;
 	}

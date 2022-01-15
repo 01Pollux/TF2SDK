@@ -8,10 +8,10 @@ TF2_NAMESPACE_BEGIN();
 class EconItemAttribute
 {
 public:
-	uint32_t*			VTable;
+	uint32_t*			VTable{ };
 	uint16_t			AttributeDefinitionIndex;
 	float				FloatValue;
-	unsigned int		RefundableCurrency;
+	unsigned int		RefundableCurrency{ };
 
 public:
 	constexpr EconItemAttribute(uint16_t index, float value) noexcept :
@@ -34,31 +34,31 @@ public:
 	/// <summary>
 	/// get an attribute by index
 	/// </summary>
-	PX_SDK_TF2 float
+	[[nodiscard]] PX_SDK_TF2 float
 		GetAttribute(int index) noexcept;
 	/// <summary>
 	/// remove an attribute by index
 	/// </summary>
-	PX_SDK_TF2 void
+	[[nodiscard]] PX_SDK_TF2 void
 		RemoveAttribute(int index) noexcept;
 
 	/// <summary>
 	/// Get attributes count
 	/// </summary>
-	int GetNumAttributes() const noexcept { return Attributes.size(); }
+	[[nodiscard]] int GetNumAttributes() const noexcept { return Attributes.size(); }
 
 	/// <summary>
 	/// Get attribute value by name of an entity
 	/// </summary>
 	/// <param name="fail_value">default value to use if the attribute wasn't found</param>
-	PX_SDK_TF2 static int
+	[[nodiscard]] PX_SDK_TF2 static int
 		AttributeHookValue(int fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
 
 	/// <summary>
 	/// Get attribute value by name of an entity
 	/// </summary>
 	/// <param name="fail_value">default value to use if the attribute wasn't found</param>
-	PX_SDK_TF2 static float
+	[[nodiscard]] PX_SDK_TF2 static float
 		AttributeHookValue(float fail_value, const char* attribute_name, const IBaseEntityInternal* pEnt, utils::UtlVector<IBaseEntityInternal*>* pItemList = nullptr, bool is_global_string = true);
 };
 
@@ -101,7 +101,7 @@ public:
 	/// Get game's Econ schema
 	/// </summary>
 	/// <returns></returns>
-	PX_SDK_TF2 static IEconItemSchema* 
+	[[nodiscard]] PX_SDK_TF2 static IEconItemSchema*
 		Get();
 };
 
@@ -116,10 +116,10 @@ public:
 	};
 
 	virtual ~_IEconLootListDefinition() = default;
-	_NODISCARD virtual bool BPublicListContents() abstract;
-	_NODISCARD virtual const char* GetLootListHeaderLocalizationKey() abstract;
-	_NODISCARD virtual const char* GetLootListFooterLocalizationKey() abstract;
-	_NODISCARD virtual const char* GetLootListCollectionReference() abstract;
+	[[nodiscard]] virtual bool BPublicListContents() abstract;
+	[[nodiscard]] virtual const char* GetLootListHeaderLocalizationKey() abstract;
+	[[nodiscard]] virtual const char* GetLootListFooterLocalizationKey() abstract;
+	[[nodiscard]] virtual const char* GetLootListCollectionReference() abstract;
 	virtual void EnumerateUserFacingPotentialDrops(_Iterator*) abstract;
 };
 

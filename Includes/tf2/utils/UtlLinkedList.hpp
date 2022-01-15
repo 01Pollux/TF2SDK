@@ -57,10 +57,22 @@ public:
 	UtlLinkedList(const UtlLinkedList&) = delete;
 
 	// gets particular elements
-	_Ty& at(_IdxTy i);
-	const _Ty& at(_IdxTy i) const;
-	_Ty& operator[](_IdxTy i);
-	const _Ty& operator[](_IdxTy i) const;
+	[[nodiscard]] reference at(_IdxTy i)
+	{
+		return at_internal(i).m_Element;
+	}
+	[[nodiscard]] const_reference at(_IdxTy i) const
+	{
+		return at_internal(i).m_Element;
+	}
+	[[nodiscard]] reference operator[](_IdxTy i)
+	{
+		return at_internal(i).m_Element;
+	}
+	[[nodiscard]] const_reference operator[](_IdxTy i) const
+	{
+		return at_internal(i).m_Element;
+	}
 
 	// Make sure we have a particular amount of memory
 	void reserve(int num);
@@ -79,16 +91,16 @@ public:
 	_IdxTy	push_to_head();
 	_IdxTy	push_to_tail();
 
-	_IdxTy	push_before(_IdxTy before, const _Ty& src);
-	_IdxTy	push_after(_IdxTy after, const _Ty& src);
-	_IdxTy	push_to_head(const _Ty& src);
-	_IdxTy	push_to_tail(const _Ty& src);
+	_IdxTy	push_before(_IdxTy before, const_reference src);
+	_IdxTy	push_after(_IdxTy after, const_reference src);
+	_IdxTy	push_to_head(const_reference src);
+	_IdxTy	push_to_tail(const_reference src);
 
 	// find an element and return its index or invalid_index() if it couldn't be found.
-	_IdxTy		find(const _Ty& src) const;
+	[[nodiscard]] _IdxTy		find(const_reference src) const;
 
 	// Look for the element. If it exists, remove it and return true. Otherwise, return false.
-	bool	find_and_erase(const _Ty& src);
+	[[nodiscard]] bool	find_and_erase(const_reference src);
 
 	// Removal methods
 	void	erase(_IdxTy elem);
@@ -122,14 +134,14 @@ public:
 		return (head() == invalid_index());
 	}
 
-	_IdxTy	max_index() const;
-	_IdxTy	allocated_size() const { return m_NumAlloced; }
+	[[nodiscard]] _IdxTy	max_index() const;
+	[[nodiscard]] _IdxTy	allocated_size() const { return m_NumAlloced; }
 
 	// Traversing the list
-	_IdxTy  head() const;
-	_IdxTy  tail() const;
-	_IdxTy  previous(_IdxTy i) const;
-	_IdxTy  next(_IdxTy i) const;
+	[[nodiscard]] _IdxTy  head() const;
+	[[nodiscard]] _IdxTy  tail() const;
+	[[nodiscard]] _IdxTy  previous(_IdxTy i) const;
+	[[nodiscard]] _IdxTy  next(_IdxTy i) const;
 
 	struct const_iterator
 	{
@@ -142,12 +154,12 @@ public:
 		const_iterator(const UtlLinkedListElem_t<_Ty, _STy>* elements = nullptr) noexcept :
 			m_Ptr(elements) { }
 
-		_NODISCARD reference operator*() const noexcept
+		[[nodiscard]] reference operator*() const noexcept
 		{
 			return this->m_Ptr->m_Element;
 		}
 
-		_NODISCARD pointer operator->() const noexcept
+		[[nodiscard]] pointer operator->() const noexcept
 		{
 			return std::pointer_traits<pointer>::pointer_to(**this);
 		}
@@ -179,12 +191,12 @@ public:
 			return tmp;
 		}
 
-		_NODISCARD bool operator==(const const_iterator& right) const noexcept
+		[[nodiscard]] bool operator==(const const_iterator& right) const noexcept
 		{
 			return this->m_Ptr == right.m_Ptr;
 		}
 
-		_NODISCARD bool operator!=(const const_iterator& right) const noexcept
+		[[nodiscard]] bool operator!=(const const_iterator& right) const noexcept
 		{
 			return !(*this == m_Ptr->m_Element);
 		}
@@ -204,12 +216,12 @@ public:
 		iterator(const UtlLinkedListElem_t<_Ty, _STy>* elements = nullptr) noexcept :
 			m_Ptr(elements) { }
 
-		_NODISCARD reference operator*() const noexcept
+		[[nodiscard]] reference operator*() const noexcept
 		{
 			return this->m_Ptr->m_Element;
 		}
 
-		_NODISCARD pointer operator->() const noexcept
+		[[nodiscard]] pointer operator->() const noexcept
 		{
 			return std::pointer_traits<pointer>::pointer_to(**this);
 		}
@@ -241,12 +253,12 @@ public:
 			return tmp;
 		}
 
-		_NODISCARD bool operator==(const iterator& right) const noexcept
+		[[nodiscard]] bool operator==(const iterator& right) const noexcept
 		{
 			return this->m_Ptr->m_Element == right.m_Ptr->m_Element;
 		}
 
-		_NODISCARD bool operator!=(const iterator& right) const noexcept
+		[[nodiscard]] bool operator!=(const iterator& right) const noexcept
 		{
 			return !(*this == right);
 		}
@@ -255,39 +267,39 @@ public:
 		UtlLinkedListElem_t<_Ty, _STy>* m_Ptr;
 	};
 
-	const_iterator begin() const
+	[[nodiscard]] const_iterator begin() const
 	{
 		return const_iterator(this->at_internal(head()));
 	}
-	iterator begin()
+	[[nodiscard]] iterator begin()
 	{
 		return iterator(this->at_internal(head()));
 	}
 
-	const_iterator end() const
+	[[nodiscard]] const_iterator end() const
 	{
 		return const_iterator(this->at_internal(invalid_index()));
 	}
-	iterator end()
+	[[nodiscard]] iterator end()
 	{
 		return iterator(this->at_internal(invalid_index()));
 	}
 
 	// Are nodes in the list or valid?
-	bool  is_valid(_IdxTy i) const;
-	bool  exists(_IdxTy i) const;
+	[[nodiscard]] bool  is_valid(_IdxTy i) const;
+	[[nodiscard]] bool  exists(_IdxTy i) const;
 
 protected:
 	// What the linked list element looks like
 	using ListElem_t = UtlLinkedListElem_t<_Ty, _STy>;
 
 	// constructs the class
-	_IdxTy		alloc_internal(bool multilist = false);
+	[[nodiscard]] _IdxTy		alloc_internal(bool multilist = false);
 	void build_list();
 
 	// Gets at the list element....
-	ListElem_t& at_internal(_IdxTy i) { return m_Memory[i]; }
-	const ListElem_t& at_internal(_IdxTy i) const { return m_Memory[i]; }
+	[[nodiscard]] ListElem_t& at_internal(_IdxTy i) { return m_Memory[i]; }
+	[[nodiscard]] const ListElem_t& at_internal(_IdxTy i) const { return m_Memory[i]; }
 
 	_MTy	m_Memory;
 	_IdxTy	m_Head;
@@ -295,13 +307,13 @@ protected:
 	_IdxTy	m_FirstFree;
 	_IdxTy	m_ElementCount;		// The number actually in the list
 	_IdxTy	m_NumAlloced;		// The number of allocated elements
-	typename _MTy::Iterator_t	m_LastAlloc; // the last index allocated
+	typename _MTy::iterator_t	m_LastAlloc; // the last index allocated
 
 	// For debugging purposes; 
 	// it's in release builds so this can be used in libraries correctly
 	ListElem_t* m_DbgElements;
 
-	_MTy const& Memory() const
+	[[nodiscard]] const _MTy& Memory() const
 	{
 		return m_Memory;
 	}
@@ -348,35 +360,6 @@ void UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::build_list()
 	m_FirstFree = invalid_index();
 	m_ElementCount = 0;
 	m_NumAlloced = 0;
-}
-
-
-//-----------------------------------------------------------------------------
-// gets particular elements
-//-----------------------------------------------------------------------------
-
-template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline _Ty& UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::at(_IdxTy i)
-{
-	return at_internal(i).m_Element;
-}
-
-template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline const _Ty& UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::at(_IdxTy i) const
-{
-	return at_internal(i).m_Element;
-}
-
-template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline _Ty& UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::operator[](_IdxTy i)
-{
-	return at_internal(i).m_Element;
-}
-
-template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline const _Ty& UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::operator[](_IdxTy i) const
-{
-	return at_internal(i).m_Element;
 }
 
 //-----------------------------------------------------------------------------
@@ -512,7 +495,7 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::destroy()
 	m_NumAlloced = 0;
 
 	//Routing "m_LastAlloc = m_Memory.invalid_iterator();" through a local const to sidestep an internal compiler error on 360 builds
-	const typename _MTy::Iterator_t scInvalidIterator = m_Memory.invalid_iterator();
+	const typename _MTy::iterator_t scInvalidIterator = m_Memory.invalid_iterator();
 	m_LastAlloc = scInvalidIterator;
 	ResetDbgInfo();
 }
@@ -521,11 +504,11 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::destroy()
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
 void UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::destroy_and_delete()
 {
-	_IdxTy iNext;
-	for (_IdxTy i = head(); i != invalid_index(); i = iNext)
+	for (_IdxTy i = head(); i != invalid_index();)
 	{
-		iNext = next(i);
+		_IdxTy next_i = next(i);
 		delete at(i);
+		i = next_i;
 	}
 
 	destroy();
@@ -541,7 +524,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::alloc_internal(bool
 	_IdxTy elem;
 	if (m_FirstFree == invalid_index())
 	{
-		typename _MTy::Iterator_t it = m_Memory.is_valid_iterator(m_LastAlloc) ? m_Memory.next(m_LastAlloc) : m_Memory.first();
+		typename _MTy::iterator_t it = m_Memory.is_valid_iterator(m_LastAlloc) ? m_Memory.next(m_LastAlloc) : m_Memory.first();
 
 		if (!m_Memory.is_valid_iterator(it))
 		{
@@ -661,7 +644,7 @@ inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_tail
 //-----------------------------------------------------------------------------
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_before(_IdxTy before, const _Ty& src)
+_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_before(_IdxTy before, const_reference src)
 {
 	// Make a new node
 	_IdxTy   newNode = alloc_internal();
@@ -678,7 +661,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_before(_IdxTy 
 }
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_after(_IdxTy after, const _Ty& src)
+_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_after(_IdxTy after, const_reference src)
 {
 	// Make a new node
 	_IdxTy   newNode = alloc_internal();
@@ -695,13 +678,13 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_after(_IdxTy a
 }
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_head(const _Ty& src)
+inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_head(const_reference src)
 {
 	return push_after(invalid_index(), src);
 }
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_tail(const _Ty& src)
+inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_tail(const_reference src)
 {
 	return push_before(invalid_index(), src);
 }
@@ -712,7 +695,7 @@ inline _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::push_to_tail
 //-----------------------------------------------------------------------------
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::find(const _Ty& src) const
+_IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::find(const_reference src) const
 {
 	// Cache the invalidIndex to avoid two levels of function calls on each iteration.
 	_IdxTy invalidIndex = invalid_index();
@@ -726,7 +709,7 @@ _IdxTy UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::find(const _Ty& src
 
 
 template<typename _Ty, class _STy, bool _IsMultiList, class _IdxTy, class _MTy>
-bool UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::find_and_erase(const _Ty& src)
+bool UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::find_and_erase(const_reference src)
 {
 	_IdxTy i = find(src);
 	if (i == invalid_index())
@@ -759,7 +742,7 @@ void  UtlLinkedList<_Ty, _STy, _IsMultiList, _IdxTy, _MTy>::clear()
 
 	if constexpr (_IsMultiList)
 	{
-		for (typename _MTy::Iterator_t it = m_Memory.First(); it != m_Memory.invalid_iterator(); it = m_Memory.next(it))
+		for (typename _MTy::iterator_t it = m_Memory.First(); it != m_Memory.invalid_iterator(); it = m_Memory.next(it))
 		{
 			_IdxTy i = m_Memory.get_index(it);
 			if (is_valid(i)) // skip elements already in the free list

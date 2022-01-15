@@ -7,7 +7,7 @@ TF2_NAMESPACE_BEGIN();
 class TFPlayerResourceEntity
 {
 public:
-	static PX_SDK_TF2 TFPlayerResourceEntity* 
+	[[nodiscard]] static PX_SDK_TF2 TFPlayerResourceEntity*
 		Get();
 
 	PX_DECL_RECVPROP_A(TFPlayerResourceEntity, int,		Const::MaxPlayers,	Const::EntClassID::CTFPlayerResource,	"m_iPing",				Ping, 0);
@@ -30,7 +30,7 @@ public:
 	PX_DECL_RECVPROP_A(TFPlayerResourceEntity, float,	Const::MaxPlayers,	Const::EntClassID::CTFPlayerResource,	"m_flNextRespawnTime",	NextSpawnTime, 0);
 	PX_DECL_RECVPROP_A(TFPlayerResourceEntity, int,		Const::MaxPlayers,	Const::EntClassID::CTFPlayerResource,	"m_iChargeLevel",		ChargeLevel, 0);
 
-	bool IsValidPlayer(int index) const noexcept
+	[[nodiscard]] bool IsValidPlayer(int index) const noexcept
 	{
 		return IsConnected[index] && IsValid[index];
 	}
@@ -39,7 +39,7 @@ public:
 class TFMonsterResourceEntity
 {
 public:
-	static PX_SDK_TF2 TFMonsterResourceEntity*
+	[[nodiscard]] static PX_SDK_TF2 TFMonsterResourceEntity*
 		Get();
 
 	PX_DECL_RECVPROP(TFMonsterResourceEntity, int,		Const::EntClassID::CMonsterResource,		"m_iBossHealthPercentageByte",		HealthPerc, 0);
