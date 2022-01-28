@@ -159,7 +159,7 @@ namespace ImGui
 			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
 		};
 
-		if constexpr (_Size >= 4)
+		if constexpr (_Size < 4)
 			flags |= ImGuiColorEditFlags_NoAlpha;
 
 		if (ImGui::ColorPicker4(name, actual_color, flags))
