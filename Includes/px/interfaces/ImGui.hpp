@@ -2,7 +2,7 @@
 
 #include <array>
 #include <type_traits>
-#include <imgui/imgui.h>
+#include <imgui/imcxx/all_in_one.hpp>
 
 #include <px/console.hpp>
 #include <px/interfaces/InterfacesSys.hpp>
@@ -103,10 +103,10 @@ namespace ImGui
 	}
 
 	template<typename _Ty>
-	inline void Help(const px::ConVar<_Ty>& var)
+	inline void Help(const px::con_command& var)
 	{
-		if (var.has_description())
-			DrawHelp(var.description());
+		if (!var.help().empty())
+			DrawHelp(var.help().data(), var.help().data() + var.help().size());
 	}
 
 	inline void SameLineHelp(const char* text)
@@ -115,152 +115,12 @@ namespace ImGui
 		DrawHelp(text);
 	}
 
-	inline void SameLineHelp(const px::ConCommand& var)
+	inline void SameLineHelp(const px::con_command& var)
 	{
-		if (var.has_description())
+		if (!var.help().empty())
 		{
 			ImGui::SameLine();
-			DrawHelp(var.description().data(), var.description().data() + var.description().size());
+			DrawHelp(var.help().data(), var.help().data() + var.help().size());
 		}
-	}
-	
-	template<bool _x255 = true, typename _Ty, size_t _Size>
-	inline bool ColorEdit(const char* name, std::array<_Ty, _Size>& color, ImGuiColorEditFlags flags = 0)
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		float actual_color[4]{
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
-		};
-
-		if constexpr (_Size < 4)
-			flags |= ImGuiColorEditFlags_NoAlpha;
-
-		if (ImGui::ColorEdit4(name, actual_color, flags))
-		{
-			for (size_t i = 0; i < _Size; i++)
-				color[i] = static_cast<_Ty>(actual_color[i] * to_ratio);
-			return true;
-		}
-
-		return false;
-	}
-
-	template<bool _x255 = true, typename _Ty, size_t _Size>
-	inline bool ColorPicker(const char* name, std::array<_Ty, _Size>& color, ImGuiColorEditFlags flags = 0)
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		float actual_color[4]{
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
-		};
-
-		if constexpr (_Size < 4)
-			flags |= ImGuiColorEditFlags_NoAlpha;
-
-		if (ImGui::ColorPicker4(name, actual_color, flags))
-		{
-			for (size_t i = 0; i < _Size; i++)
-				color[i] = static_cast<_Ty>(actual_color[i] * to_ratio);
-			return true;
-		}
-
-		return false;
-	}
-
-	template<bool _x255 = true, typename _Ty>
-	inline bool ColorButton(const char* name, std::array<_Ty, 4>& color, ImGuiColorEditFlags flags = 0, ImVec2 size = { })
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		ImVec4 actual_color(
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			static_cast<float>(color[3]) / to_ratio
-		);
-
-		if (ImGui::ColorButton(name, actual_color, flags, size))
-		{
-			float* c(&actual_color.x);
-			for (size_t i = 0; i < 4; i++)
-				color[i] = static_cast<_Ty>(c[i] * to_ratio);
-			return true;
-		}
-
-		return false;
-	}
-
-	template<bool _x255 = true, typename _Ty, size_t _Size>
-	inline bool ColorEdit(const char* name, _Ty (&color)[_Size], ImGuiColorEditFlags flags = 0)
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		float actual_color[4]{
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
-		};
-
-		if constexpr (_Size < 4)
-			flags |= ImGuiColorEditFlags_NoAlpha;
-
-		if (ImGui::ColorEdit4(name, actual_color, flags))
-		{
-			for (size_t i = 0; i < _Size; i++)
-				color[i] = static_cast<_Ty>(actual_color[i] * to_ratio);
-			return true;
-		}
-
-		return false;
-	}
-
-	template<bool _x255 = true, typename _Ty, size_t _Size>
-	inline bool ColorPicker(const char* name, _Ty (&color)[_Size], ImGuiColorEditFlags flags = 0)
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		float actual_color[4]{
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
-		};
-
-		if constexpr (_Size >= 4)
-			flags |= ImGuiColorEditFlags_NoAlpha;
-
-		if (ImGui::ColorPicker4(name, actual_color, flags))
-		{
-			for (size_t i = 0; i < _Size; i++)
-				color[i] = static_cast<_Ty>(actual_color[i] * to_ratio);
-			return true;
-		}
-
-		return false;
-	}
-
-	template<bool _x255 = true, typename _Ty, size_t _Size>
-	inline bool ColorButton(const char* name, _Ty (&color)[_Size], ImGuiColorEditFlags flags = 0, ImVec2 size = { })
-	{
-		constexpr float to_ratio = _x255 ? 255.f : 1.f;
-		ImVec4 actual_color(
-			static_cast<float>(color[0]) / to_ratio,
-			static_cast<float>(color[1]) / to_ratio,
-			static_cast<float>(color[2]) / to_ratio,
-			(_Size >= 4 ? (static_cast<float>(color[3]) / to_ratio) : 1.f)
-		);
-
-		if (ImGui::ColorButton(name, actual_color, flags, size))
-		{
-			float* c(&actual_color.x);
-			for (size_t i = 0; i < 4; i++)
-				color[i] = static_cast<_Ty>(c[i] * to_ratio);
-			return true;
-		}
-
-		return false;
 	}
 }
