@@ -3,7 +3,7 @@
 #include <boost/system.hpp>
 
 #if BOOST_WINDOWS
-#define WIN32_MEAN_AND_LEAN
+#define WIN32_LEAN_AND_MEAN
 #include <boost/winapi/get_proc_address.hpp>
 #include <Windows.h>
 #include <WinBase.h>

@@ -4,8 +4,11 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <boost/stacktrace.hpp>
 #include <px/defines.hpp>
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <boost/stacktrace.hpp>
 
 PX_NAMESPACE_BEGIN(::profiler::types);
 

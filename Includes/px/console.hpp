@@ -2,7 +2,7 @@
 
 #include <array>
 #include <px/interfaces/InterfacesSys.hpp>
-#include <px/console/commands.hpp>
+#include <px/cmds.hpp>
 
 PX_NAMESPACE_BEGIN();
 
@@ -10,19 +10,20 @@ static constexpr const char* Interface_ConsoleManager = "IConsoleManager";
 
 class IConsoleManager : public IInterface
 {
-	friend class ConCommand;
-
-protected:
-	/// <summary>
-	/// Add console commands to plugin's commands
-	/// </summary>
-	virtual bool AddCommands(ConCommand* command) abstract;
-
 public:
+	/// <summary>
+	/// Adds console commands registered by the plugin
+	/// </summary>
+	void AddCommands(IPlugin* plugin)
+	{
+		AddCommands(plugin, cmd_manager::begin(), cmd_manager::end());
+		cmd_manager::clear();
+	}
+
 	/// <summary>
 	/// remove console command from plugin's commands
 	/// </summary>
-	virtual bool RemoveCommand(ConCommand* command) abstract;
+	virtual bool RemoveCommand(con_command* command) abstract;
 
 	/// <summary>
 	/// remove plugin's commands
@@ -30,24 +31,19 @@ public:
 	virtual bool RemoveCommands(IPlugin* plugin) abstract;
 
 	/// <summary>
+	/// find console commands by plugin
+	/// </summary>
+	[[nodiscard]] virtual std::vector<con_command*> FindCommands(IPlugin* plugin) abstract;
+
+	/// <summary>
 	/// find console command by name
 	/// </summary>
-	[[nodiscard]] virtual ConCommand* FindCommand(const std::string_view& name) abstract;
-
-	/// <summary>
-	/// find console commands by plugin
-	/// </summary>
-	[[nodiscard]] virtual std::vector<ConCommand*> FindCommands(IPlugin* plugin) abstract;
-
-	/// <summary>
-	/// find console commands by plugin
-	/// </summary>
-	[[nodiscard]] virtual std::vector<ConCommand*> FindCommands(const std::string_view& name) abstract;
+	[[nodiscard]] virtual con_command* FindCommand(std::string_view name) abstract;
 
 	/// <summary>
 	/// execute console command
 	/// </summary>
-	virtual void Execute(const std::string_view& cmds) abstract;
+	virtual void Execute(std::string_view cmds) abstract;
 
 	/// <summary>
 	/// clear entries in console
@@ -80,28 +76,16 @@ public:
 			msg
 		);
 	}
+
+protected:
+	/// <summary>
+	/// Add console commands to plugin's commands
+	/// </summary>
+	virtual void AddCommands(
+		IPlugin* plugin, 
+		con_command::entries_type::iterator begin,
+		con_command::entries_type::iterator end
+	) abstract;
 };
-
-
-inline bool ConCommand::Init(IPlugin* plugin, IConsoleManager* console_manager)
-{
-	bool init = false;
-	ConCommand::ConsoleManager = console_manager;
-	if (m_FirstCommand)
-	{
-		m_FirstCommand->m_Plugin = plugin;
-		init = console_manager->AddCommands(m_FirstCommand);
-		m_FirstCommand = nullptr;
-	}
-	return init;
-}
-
-inline void ConCommand::Print(const std::array<uint8_t, 4>& color, const std::string& str)
-{
-	ConCommand::ConsoleManager->Print(
-		color,
-		str
-	);
-}
 
 PX_NAMESPACE_END();
