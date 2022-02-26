@@ -148,7 +148,7 @@ protected:
 		bool IsConst : 1{ };
 	};
 
-	size_t m_SizeInMem{ };
+	size_t m_SizeInMem{};
 
 	std::vector<DataAndSize> m_CurData;
 	std::vector<DataAndSize> m_NewData;

@@ -58,6 +58,7 @@ namespace px
                                 string_view_t{ },
                                 mask->short_key
                             );
+                            break;
                         }
                         else
                         {
@@ -66,7 +67,7 @@ namespace px
                                 mask->no_value ? string_view_t{} : string_view_t{ iter->begin(), iter->end() },
                                 mask->short_key
                             );
-                            if (mask->no_value)
+                            if (!mask->no_value)
                                 ++iter;
                         }
                         
